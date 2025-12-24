@@ -31,7 +31,7 @@ export const actions: Actions = {
 		}
 
 		if (new_password.length < MINIMAL_PASSWORD_LENGTH) {
-			return fail(404, {
+			return fail(400, {
 				type: 'password',
 				error: 'New password must be at least 8 characters.',
 			})
@@ -56,7 +56,7 @@ export const actions: Actions = {
 		const username = form.get('username') as string
 
 		if (!username.length) {
-			return fail(404, { type: 'username', error: 'Username cannot be empty.' })
+			return fail(400, { type: 'username', error: 'Username cannot be empty.' })
 		}
 
 		const { success } = await query('UPDATE users SET username = ? WHERE id = 1', [
@@ -85,7 +85,7 @@ export const actions: Actions = {
 		const yes = form.get('yes') as string
 
 		if (yes.toLowerCase() !== 'yes') {
-			return fail(404, {
+			return fail(400, {
 				type: 'delete',
 				error: "Type 'Yes' (3 letters) to confirm this action.",
 			})

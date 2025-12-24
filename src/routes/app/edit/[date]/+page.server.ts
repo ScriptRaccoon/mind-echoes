@@ -30,7 +30,7 @@ export const actions: Actions = {
 		const date = event.params.date
 
 		if (!date) {
-			return fail(404, { error: 'Date is missing.' })
+			return fail(400, { error: 'Date is missing.' })
 		}
 
 		const form = await event.request.formData()
@@ -54,7 +54,7 @@ export const actions: Actions = {
 		const date = event.params.date
 
 		if (!date) {
-			return fail(404, { error: 'Date is missing.' })
+			return fail(400, { error: 'Date is missing.' })
 		}
 
 		const { success } = await query('DELETE FROM entries WHERE date = ?', [date])

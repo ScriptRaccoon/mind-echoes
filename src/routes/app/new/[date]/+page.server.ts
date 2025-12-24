@@ -7,7 +7,7 @@ export const actions: Actions = {
 		const date = event.params.date
 
 		if (!date) {
-			return fail(404, { error: 'Date is missing.' })
+			return fail(400, { error: 'Date is missing.' })
 		}
 
 		const form = await event.request.formData()
@@ -26,7 +26,7 @@ export const actions: Actions = {
 					? 'This date already has an entry.'
 					: 'Entry could not be created.'
 
-			const code = err.code === 'SQLITE_CONSTRAINT_UNIQUE' ? 404 : 500
+			const code = err.code === 'SQLITE_CONSTRAINT_UNIQUE' ? 409 : 500
 
 			return fail(code, { title, content, thanks, error })
 		}

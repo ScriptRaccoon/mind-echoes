@@ -21,21 +21,21 @@ export const actions: Actions = {
 		}
 
 		if (users.length) {
-			return fail(404, {
+			return fail(409, {
 				username,
 				error: 'A user has already been created before.',
 			})
 		}
 
 		if (!username) {
-			return fail(404, {
+			return fail(400, {
 				username,
 				error: 'Username cannot be empty.',
 			})
 		}
 
 		if (password.length < MINIMAL_PASSWORD_LENGTH) {
-			return fail(404, {
+			return fail(400, {
 				username,
 				error: 'Password must be at least 8 characters.',
 			})
