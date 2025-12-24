@@ -1,5 +1,6 @@
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { query } from '$lib/server/db'
+import { t, type Lang } from '$lib/translations/main'
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 
@@ -8,6 +9,7 @@ export const actions: Actions = {
 		const form = await event.request.formData()
 		const username = form.get('username') as string
 		const password = form.get('password') as string
+		const lang = event.cookies.get('lang') as Lang
 
 		const { rows: users, success: user_success } = await query<{ id: number }>(
 			'SELECT id FROM users',
@@ -16,28 +18,28 @@ export const actions: Actions = {
 		if (!user_success) {
 			return fail(500, {
 				username,
-				error: 'Cannot retrieve existing user.',
+				error: t('error.database', lang),
 			})
 		}
 
 		if (users.length) {
 			return fail(409, {
 				username,
-				error: 'A user has already been created before.',
+				error: t('error.user_created', lang),
 			})
 		}
 
 		if (!username) {
 			return fail(400, {
 				username,
-				error: 'Username cannot be empty.',
+				error: t('error.username_empty', lang),
 			})
 		}
 
 		if (password.length < MINIMAL_PASSWORD_LENGTH) {
 			return fail(400, {
 				username,
-				error: 'Password must be at least 8 characters.',
+				error: t('error.password_min', lang),
 			})
 		}
 
@@ -49,7 +51,7 @@ export const actions: Actions = {
 		)
 
 		if (!registration_success) {
-			return fail(500, { username, error: 'Registration failed.' })
+			return fail(500, { username, error: t('error.database', lang) })
 		}
 
 		return redirect(303, '/login?from=register')

@@ -1,13 +1,15 @@
 import { query } from '$lib/server/db'
+import { t, type Lang } from '$lib/translations/main'
 import type { Actions } from '@sveltejs/kit'
 import { fail, redirect } from '@sveltejs/kit'
 
 export const actions: Actions = {
 	default: async (event) => {
+		const lang = event.cookies.get('lang') as Lang
 		const date = event.params.date
 
 		if (!date) {
-			return fail(400, { error: 'Date is missing.' })
+			return fail(400, { error: t('error.date_missing', lang) })
 		}
 
 		const form = await event.request.formData()
@@ -23,8 +25,8 @@ export const actions: Actions = {
 		if (err) {
 			const error =
 				err.code === 'SQLITE_CONSTRAINT_UNIQUE'
-					? 'This date already has an entry.'
-					: 'Entry could not be created.'
+					? t('error.date_conflict', lang)
+					: t('error.database', lang)
 
 			const code = err.code === 'SQLITE_CONSTRAINT_UNIQUE' ? 409 : 500
 

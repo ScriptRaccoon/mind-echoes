@@ -3,8 +3,10 @@ import type { Actions } from '@sveltejs/kit'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { Entry } from '$lib/types'
+import { t, type Lang } from '$lib/translations/main'
 
 export const load: PageServerLoad = async (event) => {
+	const lang = event.cookies.get('lang') as Lang
 	const date = event.params.date
 
 	const { rows: entries, success } = await query<Entry>(
@@ -13,13 +15,13 @@ export const load: PageServerLoad = async (event) => {
 	)
 
 	if (!success) {
-		return error(500, 'Could not retrieve entry.')
+		return error(500, t('error.database', lang))
 	}
 
 	const entry = entries[0]
 
 	if (!entry) {
-		return error(404, 'No entry found for this date.')
+		return error(404, t('error.no_entry_found', lang))
 	}
 
 	return { entry }
@@ -27,10 +29,11 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	update: async (event) => {
+		const lang = event.cookies.get('lang') as Lang
 		const date = event.params.date
 
 		if (!date) {
-			return fail(400, { error: 'Date is missing.' })
+			return fail(400, { error: t('error.date_missing', lang) })
 		}
 
 		const form = await event.request.formData()
@@ -44,23 +47,24 @@ export const actions: Actions = {
 		)
 
 		if (!success) {
-			return fail(500, { error: 'Update failed.' })
+			return fail(500, { error: t('error.database', lang) })
 		}
 
-		return { message: 'Entry has been updated.' }
+		return { message: t('entry.updated', lang) }
 	},
 
 	delete: async (event) => {
+		const lang = event.cookies.get('lang') as Lang
 		const date = event.params.date
 
 		if (!date) {
-			return fail(400, { error: 'Date is missing.' })
+			return fail(400, { error: t('error.date_missing', lang) })
 		}
 
 		const { success } = await query('DELETE FROM entries WHERE date = ?', [date])
 
 		if (!success) {
-			return fail(500, { error: 'Entry could not be deleted.' })
+			return fail(500, { error: t('error.database', lang) })
 		}
 
 		return redirect(302, '/app')

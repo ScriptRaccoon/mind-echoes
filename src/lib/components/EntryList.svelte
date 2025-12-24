@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { t, type Lang } from '$lib/translations/main'
 	import type { Entry } from '$lib/types'
 
 	type Props = {
+		lang: Lang
 		entries: Entry[]
 	}
 
-	let { entries }: Props = $props()
+	let { lang, entries }: Props = $props()
 </script>
 
 <ol>
@@ -14,7 +16,7 @@
 			<a href="/app/edit/{entry.date}">
 				<span class="date">{entry.date}:</span>
 				<strong>
-					{entry.title || 'Untitled'}
+					{entry.title || t('untitled', lang)}
 				</strong>
 			</a>
 		</li>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { t } from '$lib/translations/main.js'
+
 	let { form, data } = $props()
 
 	let entry = $derived(data.entry)
@@ -10,31 +12,35 @@
 	}
 </script>
 
-<h1>Edit entry for {entry.date}</h1>
+<h1>{t('entry.edit_title', data.lang)} {entry.date}</h1>
 
 <form method="POST" action="?/update">
 	<div class="form-group">
-		<label for="title">Title</label>
+		<label for="title">{t('entry.title', data.lang)}</label>
 		<input type="text" name="title" id="title" value={entry.title} />
 	</div>
 
 	<div class="form-group">
-		<label for="content">What's on your mind?</label>
+		<label for="content">{t('entry.content', data.lang)}</label>
 		<textarea name="content" id="content">{entry.content}</textarea>
 	</div>
 
 	<div class="form-group">
-		<label for="thanks">What are 5 things you are grateful for?</label>
+		<label for="thanks">{t('entry.thanks', data.lang)}</label>
 		<textarea name="thanks" id="thanks">{entry.thanks}</textarea>
 	</div>
 
 	<div class="form-actions">
-		<button>Update</button>
+		<button>{t('update', data.lang)}</button>
 
 		{#if confirm_deletion}
-			<button class="danger" formaction="?/delete">Yes. Delete</button>
+			<button class="danger" formaction="?/delete">
+				{t('delete_yes', data.lang)}
+			</button>
 		{:else}
-			<button class="danger" type="button" onclick={handle_confirm_click}>Delete</button>
+			<button class="danger" type="button" onclick={handle_confirm_click}>
+				{t('delete', data.lang)}
+			</button>
 		{/if}
 	</div>
 </form>
@@ -44,7 +50,7 @@
 {/if}
 
 {#if confirm_deletion}
-	<p class="message">Are you sure to delete this entry?</p>
+	<p>{t('delete_sure', data.lang)}</p>
 {:else if form?.message}
 	<p class="message">{form.message}</p>
 {/if}

@@ -1,16 +1,34 @@
+<script lang="ts">
+	import { t, type Lang } from '$lib/translations/main'
+
+	type Props = {
+		lang: Lang
+	}
+
+	let { lang }: Props = $props()
+</script>
+
 <nav>
 	<ul>
 		<li>
-			<a href="/app">Diary</a>
+			<a href="/app">
+				{t('nav.diary', lang)}
+			</a>
 		</li>
 		<li>
-			<a href="/app/account">Account</a>
+			<a href="/app/account">
+				{t('nav.account', lang)}
+			</a>
 		</li>
 		<li>
-			<a href="/app/new">New entry</a>
+			<a href="/app/new">
+				{t('nav.new_entry', lang)}
+			</a>
 		</li>
 		<li>
-			<a href="/app/logout" data-sveltekit-preload-data="off">Logout</a>
+			<a href="/app/logout" data-sveltekit-preload-data="off">
+				{t('nav.logout', lang)}
+			</a>
 		</li>
 	</ul>
 </nav>

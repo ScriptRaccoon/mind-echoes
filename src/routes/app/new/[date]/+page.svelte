@@ -1,31 +1,32 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { t } from '$lib/translations/main.js'
 
-	let { form } = $props()
+	let { data, form } = $props()
 
 	let date = $derived(page.params.date)
 </script>
 
-<h1>New entry for {date}</h1>
+<h1>{t('entry.new_title', data.lang)} {date}</h1>
 
 <form method="POST">
 	<div class="form-group">
-		<label for="title">Title</label>
+		<label for="title">{t('entry.title', data.lang)}</label>
 		<input type="text" name="title" id="title" />
 	</div>
 
 	<div class="form-group">
-		<label for="content">What's on your mind?</label>
+		<label for="content">{t('entry.content', data.lang)}</label>
 		<textarea name="content" id="content"></textarea>
 	</div>
 
 	<div class="form-group">
-		<label for="thanks">What are 5 things you are grateful for?</label>
+		<label for="thanks">{t('entry.thanks', data.lang)}</label>
 		<textarea name="thanks" id="thanks"></textarea>
 	</div>
 
 	<div class="form-actions">
-		<button>Create</button>
+		<button>{t('create', data.lang)}</button>
 	</div>
 </form>
 

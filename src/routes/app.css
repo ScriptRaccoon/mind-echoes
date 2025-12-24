@@ -14,6 +14,7 @@
 	--font-color: #ddd;
 	--font-color-light: white;
 	--outline-color: #bbb;
+	--input-bg-color: #444;
 }
 
 body {
@@ -75,7 +76,8 @@ h2 {
 
 button,
 input,
-textarea {
+textarea,
+select {
 	color: inherit;
 	font: inherit;
 	border: none;
@@ -86,7 +88,7 @@ button:not(:disabled) {
 	cursor: pointer;
 }
 
-:is(button, input, textarea, a):focus-visible {
+:is(button, input, textarea, select, a):focus-visible {
 	outline: 1px solid var(--outline-color);
 }
 
@@ -106,9 +108,10 @@ textarea {
 	}
 
 	input,
-	textarea {
+	textarea,
+	select {
 		width: 100%;
-		background-color: #444;
+		background-color: var(--input-bg-color);
 		padding: 0.2rem 0.5rem;
 		border-radius: 0.2rem;
 	}

@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { query } from '$lib/server/db'
 import type { PageServerLoad } from '../$types'
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
+import { SUPPORTED_LANGUAGES, t, type Lang } from '$lib/translations/main'
 
 export const load: PageServerLoad = async (event) => {
 	const username = event.cookies.get('username') ?? ''
@@ -10,7 +11,16 @@ export const load: PageServerLoad = async (event) => {
 }
 
 export const actions: Actions = {
+	lang: async (event) => {
+		const form = await event.request.formData()
+		const lang_option = form.get('lang') as string
+		if (SUPPORTED_LANGUAGES.includes(lang_option)) {
+			event.cookies.set('lang', lang_option, { path: '/' })
+		}
+	},
+
 	password: async (event) => {
+		const lang = event.cookies.get('lang') as Lang
 		const form = await event.request.formData()
 		const current_password = form.get('current_password') as string
 		const new_password = form.get('new_password') as string
@@ -20,20 +30,26 @@ export const actions: Actions = {
 		)
 
 		if (!success || !rows.length) {
-			return fail(500, { type: 'password', error: 'Could not retrieve user.' })
+			return fail(500, {
+				type: 'password',
+				error: t('error.database', lang),
+			})
 		}
 
 		const user = rows[0]
 
 		const current_is_correct = await bcrypt.compare(current_password, user.password_hash)
 		if (!current_is_correct) {
-			return fail(401, { type: 'password', error: 'Current password is incorrect.' })
+			return fail(401, {
+				type: 'password',
+				error: t('error.current_password_incorrect', lang),
+			})
 		}
 
 		if (new_password.length < MINIMAL_PASSWORD_LENGTH) {
 			return fail(400, {
 				type: 'password',
-				error: 'New password must be at least 8 characters.',
+				error: t('error.password_min', lang),
 			})
 		}
 
@@ -45,18 +61,28 @@ export const actions: Actions = {
 		)
 
 		if (!update_success) {
-			return fail(500, { type: 'password', error: 'Could not update password.' })
+			return fail(500, {
+				type: 'password',
+				error: t('error.database', lang),
+			})
 		}
 
-		return { type: 'password', message: 'Password has been updated successfully.' }
+		return {
+			type: 'password',
+			message: t('password.updated', lang),
+		}
 	},
 
 	username: async (event) => {
+		const lang = event.cookies.get('lang') as Lang
 		const form = await event.request.formData()
 		const username = form.get('username') as string
 
 		if (!username.length) {
-			return fail(400, { type: 'username', error: 'Username cannot be empty.' })
+			return fail(400, {
+				type: 'username',
+				error: t('error.username_empty', lang),
+			})
 		}
 
 		const { success } = await query('UPDATE users SET username = ? WHERE id = 1', [
@@ -64,7 +90,10 @@ export const actions: Actions = {
 		])
 
 		if (!success) {
-			return fail(500, { type: 'username', error: 'Username could not be updated.' })
+			return fail(500, {
+				type: 'username',
+				error: t('error.database', lang),
+			})
 		}
 
 		event.cookies.set('username', username, {
@@ -76,24 +105,29 @@ export const actions: Actions = {
 
 		return {
 			type: 'username',
-			message: 'Username has been updated successfully.',
+			message: t('username.updated', lang),
 		}
 	},
 
 	delete: async (event) => {
+		const lang = event.cookies.get('lang') as Lang
 		const form = await event.request.formData()
-		const yes = form.get('yes') as string
+		const user_yes = form.get('yes') as string
+		const actual_yes = t('yes', lang)
 
-		if (yes.toLowerCase() !== 'yes') {
+		if (user_yes.toLowerCase() !== actual_yes.toLowerCase()) {
 			return fail(400, {
 				type: 'delete',
-				error: "Type 'Yes' (3 letters) to confirm this action.",
+				error: t('error.confirm_yes', lang),
 			})
 		}
 
 		const { success } = await query('DELETE from users')
 		if (!success) {
-			return fail(500, { type: 'delete', error: 'Data could not be deleted' })
+			return fail(500, {
+				type: 'delete',
+				error: t('error.database', lang),
+			})
 		}
 
 		event.cookies.delete('jwt', { path: '/' })

@@ -1,11 +1,17 @@
 <script lang="ts">
 	import './app.css'
+	import { t } from '$lib/translations/main'
+	import { onMount } from 'svelte'
 
-	let { children } = $props()
+	let { data, children } = $props()
+
+	onMount(() => {
+		document.documentElement.setAttribute('lang', data.lang)
+	})
 </script>
 
 <svelte:head>
-	<title>Diary</title>
+	<title>{t('title', data.lang)}</title>
 </svelte:head>
 
 <div class="container">
