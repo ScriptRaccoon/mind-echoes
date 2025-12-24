@@ -1,0 +1,40 @@
+<script lang="ts">
+	import type { Entry } from '$lib/types'
+
+	type Props = {
+		entries: Entry[]
+	}
+
+	let { entries }: Props = $props()
+</script>
+
+<ol>
+	{#each entries as entry (entry.id)}
+		<li>
+			<a href="/app/edit/{entry.date}">
+				<span class="date">{entry.date}:</span>
+				<strong>
+					{entry.title || 'Untitled'}
+				</strong>
+			</a>
+		</li>
+	{/each}
+</ol>
+
+<style>
+	ol {
+		list-style-type: none;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	li + li {
+		margin-top: 0.5rem;
+	}
+
+	.date {
+		margin-right: 0.25rem;
+	}
+</style>

@@ -39,14 +39,15 @@ body {
 
 a {
 	color: inherit;
+	text-underline-offset: 2px;
 }
 
 p {
-	padding-block: 1rem;
+	margin-block: 1rem;
 }
 
 h1 {
-	padding-block: 1rem;
+	margin-block: 1rem;
 }
 
 h1,
@@ -55,7 +56,7 @@ h2 {
 }
 
 h2 {
-	padding-block: 0.5rem;
+	margin-block: 0.5rem;
 }
 
 /* MESSAGES */
@@ -85,8 +86,12 @@ button:not(:disabled) {
 	cursor: pointer;
 }
 
-:is(button, input, textarea):focus-visible {
+:is(button, input, textarea, a):focus-visible {
 	outline: 1px solid var(--outline-color);
+}
+
+textarea {
+	resize: vertical;
 }
 
 /* FORMS */
@@ -100,7 +105,8 @@ button:not(:disabled) {
 		font-size: 0.875rem;
 	}
 
-	input {
+	input,
+	textarea {
 		width: 100%;
 		background-color: #444;
 		padding: 0.2rem 0.5rem;
@@ -109,6 +115,10 @@ button:not(:disabled) {
 }
 
 .form-actions {
+	display: flex;
+	gap: 0.5rem;
+	justify-content: space-between;
+
 	button {
 		background-color: var(--button-color);
 		color: var(--font-color-light);

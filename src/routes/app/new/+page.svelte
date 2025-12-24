@@ -1,0 +1,25 @@
+<script lang="ts">
+	let { form } = $props()
+
+	const today = new Date().toLocaleDateString('en-CA')
+
+	let selected_date = $derived<string>(form?.date ?? today)
+</script>
+
+<h1>New entry</h1>
+
+<form method="POST">
+	<div class="form-group">
+		<label for="date">Choose a date</label>
+
+		<input type="date" name="date" id="date" bind:value={selected_date} required />
+	</div>
+
+	<div class="form-actions">
+		<button>Continue</button>
+	</div>
+</form>
+
+{#if form?.error}
+	<p class="error">{form.error}</p>
+{/if}

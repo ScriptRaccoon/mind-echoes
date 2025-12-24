@@ -1,10 +1,13 @@
 <nav>
 	<ul>
 		<li>
-			<a href="/app">App</a>
+			<a href="/app">Diary</a>
 		</li>
 		<li>
 			<a href="/app/account">Account</a>
+		</li>
+		<li>
+			<a href="/app/new">New entry</a>
 		</li>
 		<li>
 			<a href="/app/logout" data-sveltekit-preload-data="off">Logout</a>
