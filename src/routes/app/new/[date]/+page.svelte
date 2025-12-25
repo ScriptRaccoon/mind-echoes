@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { t } from '$lib/translations/main.js'
+	import { format_date } from '$lib/utils.js'
 
 	let { data, form } = $props()
 
-	let date = $derived(page.params.date)
+	let date = $derived(page.params.date!)
 </script>
 
-<h1>{t('entry.new_title', data.lang)} {date}</h1>
+<h1>{t('entry.new_title', data.lang)} {format_date(date, data.lang)}</h1>
 
 <form method="POST">
 	<div class="form-group">

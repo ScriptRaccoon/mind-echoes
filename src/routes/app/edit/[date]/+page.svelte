@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { t } from '$lib/translations/main.js'
+	import { format_date } from '$lib/utils'
 
 	let { form, data } = $props()
 
@@ -12,7 +13,7 @@
 	}
 </script>
 
-<h1>{t('entry.edit_title', data.lang)} {entry.date}</h1>
+<h1>{t('entry.edit_title', data.lang)} {format_date(entry.date, data.lang)}</h1>
 
 <form method="POST" action="?/update">
 	<div class="form-group">
