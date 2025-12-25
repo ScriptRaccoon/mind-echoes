@@ -1,4 +1,5 @@
 import { query } from '$lib/server/db'
+import { encrypt } from '$lib/server/encryption'
 import { t, type Lang } from '$lib/translations/main'
 import type { Actions } from '@sveltejs/kit'
 import { fail, redirect } from '@sveltejs/kit'
@@ -17,9 +18,13 @@ export const actions: Actions = {
 		const content = form.get('content') as string
 		const thanks = form.get('thanks') as string
 
+		const title_enc = encrypt(title)
+		const content_enc = encrypt(content)
+		const thanks_enc = encrypt(thanks)
+
 		const { err } = await query(
-			'INSERT INTO entries (date, title, content, thanks) VALUES (?,?,?,?)',
-			[date, title, content, thanks],
+			'INSERT INTO entries (date, title_enc, content_enc, thanks_enc) VALUES (?,?,?,?)',
+			[date, title_enc, content_enc, thanks_enc],
 		)
 
 		if (err) {

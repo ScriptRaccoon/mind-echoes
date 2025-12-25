@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS entries (
     id INTEGER PRIMARY KEY,
     date timestamp NOT NULL UNIQUE,
-    title TEXT,
-    content TEXT,
-    thanks TEXT
+    title_enc TEXT NOT NULL,
+    content_enc TEXT NOT NULL,
+    thanks_enc TEXT NOT NULL
 );

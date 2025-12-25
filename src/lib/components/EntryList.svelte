@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { t, type Lang } from '$lib/translations/main'
-	import type { Entry } from '$lib/types'
+	import type { Entry_Summary } from '$lib/types'
 	import { format_date } from '$lib/utils'
 
 	type Props = {
 		lang: Lang
-		entries: Entry[]
+		entries: Entry_Summary[]
 	}
 
 	let { lang, entries }: Props = $props()
