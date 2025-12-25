@@ -1,7 +1,9 @@
+import { DB_AUTH_TOKEN, DB_URL } from '$env/static/private'
 import { createClient, type LibsqlError } from '@libsql/client'
 
 const db = createClient({
-	url: 'file:data/local.db',
+	authToken: DB_AUTH_TOKEN,
+	url: DB_URL,
 })
 
 async function adjust_database() {
