@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
 	import { t } from '$lib/translations/main'
 
 	let { form } = $props()
@@ -10,7 +11,7 @@
 
 <h1>{t('new.title')}</h1>
 
-<form method="POST">
+<form method="POST" use:enhance>
 	<div class="form-group">
 		<label for="date">{t('choose.date')}</label>
 		<input type="date" name="date" id="date" bind:value={selected_date} required />

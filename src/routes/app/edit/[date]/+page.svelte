@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
 	import { t } from '$lib/translations/main'
 	import { format_date } from '$lib/utils'
 
@@ -15,7 +16,7 @@
 
 <h1>{t('entry.edit_title')} {format_date(entry.date)}</h1>
 
-<form method="POST" action="?/update">
+<form method="POST" action="?/update" use:enhance>
 	<div class="form-group">
 		<label for="title">{t('entry.title')}</label>
 		<input type="text" name="title" id="title" value={entry.title} />
