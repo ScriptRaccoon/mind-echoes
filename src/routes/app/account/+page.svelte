@@ -88,6 +88,41 @@
 </section>
 
 <section>
+	<h2>{t('backup.create', lang)}</h2>
+
+	<form method="GET" action="/app/api/backup">
+		<div class="form-actions">
+			<button>{t('backup.download', lang)}</button>
+		</div>
+	</form>
+</section>
+
+<section>
+	<h2>{t('backup.restore', lang)}</h2>
+
+	<p>{t('backup.warning', lang)}</p>
+
+	<form method="POST" action="?/backup" enctype="multipart/form-data" use:enhance>
+		<div class="form-group">
+			<label for="file">{t('choose.file', lang)}</label>
+			<input type="file" name="file" id="file" required accept="application/json" />
+		</div>
+
+		<div class="form-actions">
+			<button>{t('backup.upload', lang)}</button>
+		</div>
+	</form>
+
+	{#if form?.error && form.type === 'backup'}
+		<p class="error">{form.error}</p>
+	{/if}
+
+	{#if form?.message && form.type === 'backup'}
+		<p class="message">{form.message}</p>
+	{/if}
+</section>
+
+<section>
 	<h2>{t('account.delete', lang)}</h2>
 
 	{#if confirm_deletion}

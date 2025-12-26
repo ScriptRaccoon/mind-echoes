@@ -54,5 +54,15 @@
 	"delete_yes": "Yes. Delete",
 	"delete_sure": "Are you sure to delete this entry?",
 	"error.no_entry_found": "No entry found for this date.",
-	"entry.updated": "Entry has been updated."
+	"entry.updated": "Entry has been updated.",
+	"backup.create": "Create Backup",
+	"backup.download": "Download backup file",
+	"backup.restore": "Restore Backup",
+	"backup.warning": "Warning: This will replace all saved data with the data in the backup file.",
+	"choose.file": "Choose a file",
+	"backup.upload": "Upload backup file",
+	"backup.success": "The data has been imported successfully.",
+	"error.file_json": "File needs to be a JSON file.",
+	"error.file_valid_json": "File content needs to be valid JSON.",
+	"error.invalid_entries": "Entries do not have the correct format."
 }

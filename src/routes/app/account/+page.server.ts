@@ -1,9 +1,11 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
-import { query } from '$lib/server/db'
+import { db, query } from '$lib/server/db'
 import type { PageServerLoad } from '../$types'
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { SUPPORTED_LANGUAGES, t, type Lang } from '$lib/translations/main'
+import { verify_entries } from '$lib/utils'
+import { encrypt_entry } from '$lib/server/encryption'
 
 export const load: PageServerLoad = async (event) => {
 	const username = event.cookies.get('username') ?? ''
@@ -106,6 +108,75 @@ export const actions: Actions = {
 		return {
 			type: 'username',
 			message: t('username.updated', lang),
+		}
+	},
+
+	backup: async (event) => {
+		const lang = event.cookies.get('lang') as Lang
+		const form = await event.request.formData()
+		const file = form.get('file')
+
+		const is_valid_file =
+			file instanceof File &&
+			file.type === 'application/json' &&
+			file.name.endsWith('.json')
+
+		if (!is_valid_file) {
+			return fail(400, {
+				type: 'backup',
+				error: t('error.file_json', lang),
+			})
+		}
+
+		const file_content = await file.text()
+
+		let entries: unknown = null
+
+		try {
+			entries = JSON.parse(file_content)
+		} catch (_) {
+			return fail(400, {
+				type: 'backup',
+				error: t('error.file_valid_json', lang),
+			})
+		}
+
+		if (!verify_entries(entries)) {
+			return fail(400, {
+				type: 'backup',
+				error: t('error.invalid_entries', lang),
+			})
+		}
+
+		const encoded_entries = entries.map(encrypt_entry)
+
+		const tx = await db.transaction('write')
+
+		try {
+			await tx.execute('DELETE FROM entries')
+
+			for (const entry of encoded_entries) {
+				await tx.execute({
+					sql: 'INSERT INTO entries (id, date, title_enc, content_enc, thanks_enc) VALUES (?,?,?,?,?)',
+					args: [
+						entry.id,
+						entry.date,
+						entry.title_enc,
+						entry.content_enc,
+						entry.thanks_enc,
+					],
+				})
+			}
+
+			await tx.commit()
+		} catch (err) {
+			console.error(err)
+			return fail(500, { type: 'backup', error: t('error.database', lang) })
+		}
+
+		return {
+			type: 'backup',
+			message: t('backup.success', lang),
 		}
 	},
 

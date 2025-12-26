@@ -54,5 +54,15 @@
 	"delete_yes": "Ja. Löschen",
 	"delete_sure": "Bist du sicher, dass du diesen Eintrag löschen möchtest?",
 	"error.no_entry_found": "Für dieses Datum wurde kein Eintrag gefunden.",
-	"entry.updated": "Der Eintrag wurde aktualisiert."
+	"entry.updated": "Der Eintrag wurde aktualisiert.",
+	"backup.create": "Datensicherung erstellen",
+	"backup.download": "Sicherungsdatei herunterladen",
+	"backup.restore": "Datensicherung wiederherstellen",
+	"backup.warning": "Warnung: Dies wird alle gespeicherten Daten durch die Daten in der Sicherheitsdatei ersetzen.",
+	"choose.file": "Wähle eine Datei",
+	"backup.upload": "Sicherungsdatei hochladen",
+	"backup.success": "Die Daten wurden erfolgreich importiert.",
+	"error.file_json": "Die Datei muss eine JSON-Datei sein.",
+	"error.file_valid_json": "Der Dateiinhalt muss gültiges JSON sein.",
+	"error.invalid_entries": "Die Einträge besitzen nicht das richtige Format."
 }
