@@ -14,12 +14,12 @@
 	}
 </script>
 
-<h1>{t('entry.edit_title')} {format_date(entry.date)}</h1>
+<h1 class="date">{format_date(entry.date)}</h1>
 
 <form method="POST" action="?/update" use:enhance>
 	<div class="form-group">
 		<label for="title">{t('entry.title')}</label>
-		<input type="text" name="title" id="title" value={entry.title} />
+		<input class="title" type="text" name="title" id="title" value={entry.title} />
 	</div>
 
 	<div class="form-group">
@@ -60,6 +60,10 @@
 <style>
 	.form-actions {
 		flex-direction: row-reverse;
+	}
+
+	.form-group {
+		margin-bottom: 1.5rem;
 	}
 
 	#content {

@@ -43,7 +43,7 @@
 	"continue": "Continue",
 	"error.date_missing": "Date is missing.",
 	"error.date_conflict": "This date already has an entry.",
-	"entry.new_title": "New entry for",
+	"entry.new": "New",
 	"entry.title": "Title",
 	"entry.content": "What's on your mind?",
 	"entry.thanks": "What are 5 things you are grateful for?",

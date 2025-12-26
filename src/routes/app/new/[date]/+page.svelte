@@ -9,12 +9,12 @@
 	let date = $derived(page.params.date!)
 </script>
 
-<h1>{t('entry.new_title')} {format_date(date)}</h1>
+<h1 class="date">{t('entry.new')} &ndash; {format_date(date)}</h1>
 
 <form method="POST" use:enhance>
 	<div class="form-group">
 		<label for="title">{t('entry.title')}</label>
-		<input type="text" name="title" id="title" />
+		<input class="title" type="text" name="title" id="title" />
 	</div>
 
 	<div class="form-group">
@@ -37,6 +37,10 @@
 {/if}
 
 <style>
+	.form-group {
+		margin-bottom: 1.5rem;
+	}
+
 	#content {
 		height: 10lh;
 	}

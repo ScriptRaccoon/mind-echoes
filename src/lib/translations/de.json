@@ -43,7 +43,7 @@
 	"continue": "Fortfahren",
 	"error.date_missing": "Das Datum fehlt.",
 	"error.date_conflict": "Zu diesem Datum gibt es bereits einen Eintrag.",
-	"entry.new_title": "Neuer Eintrag für",
+	"entry.new": "Neu",
 	"entry.title": "Titel",
 	"entry.content": "Was geht dir durch den Kopf?",
 	"entry.thanks": "Was sind 5 Dinge für die du dankbar bist?",
