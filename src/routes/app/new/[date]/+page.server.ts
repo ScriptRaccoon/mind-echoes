@@ -1,6 +1,6 @@
 import { query } from '$lib/server/db'
 import { encrypt } from '$lib/server/encryption'
-import { t, type Lang } from '$lib/translations/main'
+import { ts, type Lang } from '$lib/translations/main'
 import type { Actions } from '@sveltejs/kit'
 import { fail, redirect } from '@sveltejs/kit'
 
@@ -10,7 +10,7 @@ export const actions: Actions = {
 		const date = event.params.date
 
 		if (!date) {
-			return fail(400, { error: t('error.date_missing', lang) })
+			return fail(400, { error: ts('error.date_missing', lang) })
 		}
 
 		const form = await event.request.formData()
@@ -30,8 +30,8 @@ export const actions: Actions = {
 		if (err) {
 			const error =
 				err.code === 'SQLITE_CONSTRAINT_UNIQUE'
-					? t('error.date_conflict', lang)
-					: t('error.database', lang)
+					? ts('error.date_conflict', lang)
+					: ts('error.database', lang)
 
 			const code = err.code === 'SQLITE_CONSTRAINT_UNIQUE' ? 409 : 500
 

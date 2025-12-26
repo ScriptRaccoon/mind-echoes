@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit'
 import type { RequestHandler } from './$types'
-import { t, type Lang } from '$lib/translations/main'
+import { ts, type Lang } from '$lib/translations/main'
 import { query } from '$lib/server/db'
 import type { Entry_DB } from '$lib/types'
 import { error } from '@sveltejs/kit'
@@ -13,7 +13,7 @@ export const GET: RequestHandler = async (event) => {
 	)
 
 	if (!success) {
-		return error(500, t('error.database', lang))
+		return error(500, ts('error.database', lang))
 	}
 
 	const entries = rows.map(decrypt_entry)

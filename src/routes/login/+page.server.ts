@@ -5,14 +5,14 @@ import bcrypt from 'bcrypt'
 import type { PageServerLoad } from './$types'
 import { JWT_SECRET } from '$env/static/private'
 import { Rate_Limiter } from '$lib/server/ratelimit'
-import { t, type Lang } from '$lib/translations/main'
+import { ts, type Lang } from '$lib/translations/main'
 
 export const load: PageServerLoad = (event) => {
 	const lang = event.cookies.get('lang') as Lang
 
 	const LOGIN_MESSAGES: Record<string, undefined | string> = {
-		logout: t('login.from.logout', lang),
-		register: t('login.from.register', lang),
+		logout: ts('login.from.logout', lang),
+		register: ts('login.from.register', lang),
 	}
 
 	const from = event.url.searchParams.get('from') ?? ''
@@ -27,7 +27,7 @@ export const actions: Actions = {
 		const ip = event.getClientAddress()
 
 		if (!limiter.is_allowed(ip)) {
-			return fail(429, { error: t('error.login_attempts', lang) })
+			return fail(429, { error: ts('error.login_attempts', lang) })
 		}
 
 		const form = await event.request.formData()
@@ -38,13 +38,13 @@ export const actions: Actions = {
 		)
 
 		if (!success || !rows.length) {
-			return fail(500, { error: t('error.database', lang) })
+			return fail(500, { error: ts('error.database', lang) })
 		}
 
 		const { username, password_hash } = rows[0]
 
 		const is_correct = await bcrypt.compare(password, password_hash)
-		if (!is_correct) return fail(401, { error: t('error.password_incorrect', lang) })
+		if (!is_correct) return fail(401, { error: ts('error.password_incorrect', lang) })
 
 		limiter.clear(ip)
 

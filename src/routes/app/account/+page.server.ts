@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import { db, query } from '$lib/server/db'
 import type { PageServerLoad } from '../$types'
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
-import { SUPPORTED_LANGUAGES, t, type Lang } from '$lib/translations/main'
+import { SUPPORTED_LANGUAGES, ts, type Lang } from '$lib/translations/main'
 import { verify_entries } from '$lib/utils'
 import { encrypt_entry } from '$lib/server/encryption'
 
@@ -16,7 +16,7 @@ export const actions: Actions = {
 	lang: async (event) => {
 		const form = await event.request.formData()
 		const lang_option = form.get('lang') as string
-		if (SUPPORTED_LANGUAGES.includes(lang_option)) {
+		if ((SUPPORTED_LANGUAGES as readonly string[]).includes(lang_option)) {
 			event.cookies.set('lang', lang_option, { path: '/' })
 		}
 	},
@@ -34,7 +34,7 @@ export const actions: Actions = {
 		if (!success || !rows.length) {
 			return fail(500, {
 				type: 'password',
-				error: t('error.database', lang),
+				error: ts('error.database', lang),
 			})
 		}
 
@@ -44,14 +44,14 @@ export const actions: Actions = {
 		if (!current_is_correct) {
 			return fail(401, {
 				type: 'password',
-				error: t('error.current_password_incorrect', lang),
+				error: ts('error.current_password_incorrect', lang),
 			})
 		}
 
 		if (new_password.length < MINIMAL_PASSWORD_LENGTH) {
 			return fail(400, {
 				type: 'password',
-				error: t('error.password_min', lang),
+				error: ts('error.password_min', lang),
 			})
 		}
 
@@ -65,13 +65,13 @@ export const actions: Actions = {
 		if (!update_success) {
 			return fail(500, {
 				type: 'password',
-				error: t('error.database', lang),
+				error: ts('error.database', lang),
 			})
 		}
 
 		return {
 			type: 'password',
-			message: t('password.updated', lang),
+			message: ts('password.updated', lang),
 		}
 	},
 
@@ -83,7 +83,7 @@ export const actions: Actions = {
 		if (!username.length) {
 			return fail(400, {
 				type: 'username',
-				error: t('error.username_empty', lang),
+				error: ts('error.username_empty', lang),
 			})
 		}
 
@@ -94,7 +94,7 @@ export const actions: Actions = {
 		if (!success) {
 			return fail(500, {
 				type: 'username',
-				error: t('error.database', lang),
+				error: ts('error.database', lang),
 			})
 		}
 
@@ -107,7 +107,7 @@ export const actions: Actions = {
 
 		return {
 			type: 'username',
-			message: t('username.updated', lang),
+			message: ts('username.updated', lang),
 		}
 	},
 
@@ -124,7 +124,7 @@ export const actions: Actions = {
 		if (!is_valid_file) {
 			return fail(400, {
 				type: 'backup',
-				error: t('error.file_json', lang),
+				error: ts('error.file_json', lang),
 			})
 		}
 
@@ -137,14 +137,14 @@ export const actions: Actions = {
 		} catch (_) {
 			return fail(400, {
 				type: 'backup',
-				error: t('error.file_valid_json', lang),
+				error: ts('error.file_valid_json', lang),
 			})
 		}
 
 		if (!verify_entries(entries)) {
 			return fail(400, {
 				type: 'backup',
-				error: t('error.invalid_entries', lang),
+				error: ts('error.invalid_entries', lang),
 			})
 		}
 
@@ -171,12 +171,12 @@ export const actions: Actions = {
 			await tx.commit()
 		} catch (err) {
 			console.error(err)
-			return fail(500, { type: 'backup', error: t('error.database', lang) })
+			return fail(500, { type: 'backup', error: ts('error.database', lang) })
 		}
 
 		return {
 			type: 'backup',
-			message: t('backup.success', lang, encoded_entries.length.toString()),
+			message: ts('backup.success', lang, encoded_entries.length.toString()),
 		}
 	},
 
@@ -184,12 +184,12 @@ export const actions: Actions = {
 		const lang = event.cookies.get('lang') as Lang
 		const form = await event.request.formData()
 		const user_yes = form.get('yes') as string
-		const actual_yes = t('yes', lang)
+		const actual_yes = ts('yes', lang)
 
 		if (user_yes.toLowerCase() !== actual_yes.toLowerCase()) {
 			return fail(400, {
 				type: 'delete',
-				error: t('error.confirm_yes', lang),
+				error: ts('error.confirm_yes', lang),
 			})
 		}
 
@@ -202,7 +202,7 @@ export const actions: Actions = {
 		} catch (_) {
 			return fail(500, {
 				type: 'delete',
-				error: t('error.database', lang),
+				error: ts('error.database', lang),
 			})
 		}
 

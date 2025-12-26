@@ -1,6 +1,6 @@
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { query } from '$lib/server/db'
-import { t, type Lang } from '$lib/translations/main'
+import { ts, type Lang } from '$lib/translations/main'
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 
@@ -18,28 +18,28 @@ export const actions: Actions = {
 		if (!user_success) {
 			return fail(500, {
 				username,
-				error: t('error.database', lang),
+				error: ts('error.database', lang),
 			})
 		}
 
 		if (users.length) {
 			return fail(409, {
 				username,
-				error: t('error.user_created', lang),
+				error: ts('error.user_created', lang),
 			})
 		}
 
 		if (!username) {
 			return fail(400, {
 				username,
-				error: t('error.username_empty', lang),
+				error: ts('error.username_empty', lang),
 			})
 		}
 
 		if (password.length < MINIMAL_PASSWORD_LENGTH) {
 			return fail(400, {
 				username,
-				error: t('error.password_min', lang),
+				error: ts('error.password_min', lang),
 			})
 		}
 
@@ -51,7 +51,7 @@ export const actions: Actions = {
 		)
 
 		if (!registration_success) {
-			return fail(500, { username, error: t('error.database', lang) })
+			return fail(500, { username, error: ts('error.database', lang) })
 		}
 
 		return redirect(303, '/login?from=register')

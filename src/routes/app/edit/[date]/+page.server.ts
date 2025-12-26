@@ -3,7 +3,7 @@ import type { Actions } from '@sveltejs/kit'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { Entry, Entry_DB } from '$lib/types'
-import { t, type Lang } from '$lib/translations/main'
+import { ts, type Lang } from '$lib/translations/main'
 import { decrypt_entry, encrypt } from '$lib/server/encryption'
 
 export const load: PageServerLoad = async (event) => {
@@ -16,13 +16,13 @@ export const load: PageServerLoad = async (event) => {
 	)
 
 	if (!success) {
-		return error(500, t('error.database', lang))
+		return error(500, ts('error.database', lang))
 	}
 
 	const entry_enc = entries[0]
 
 	if (!entry_enc) {
-		return error(404, t('error.no_entry_found', lang))
+		return error(404, ts('error.no_entry_found', lang))
 	}
 
 	const entry: Entry = decrypt_entry(entry_enc)
@@ -36,7 +36,7 @@ export const actions: Actions = {
 		const date = event.params.date
 
 		if (!date) {
-			return fail(400, { error: t('error.date_missing', lang) })
+			return fail(400, { error: ts('error.date_missing', lang) })
 		}
 
 		const form = await event.request.formData()
@@ -54,10 +54,10 @@ export const actions: Actions = {
 		)
 
 		if (!success) {
-			return fail(500, { error: t('error.database', lang) })
+			return fail(500, { error: ts('error.database', lang) })
 		}
 
-		return { message: t('entry.updated', lang) }
+		return { message: ts('entry.updated', lang) }
 	},
 
 	delete: async (event) => {
@@ -65,13 +65,13 @@ export const actions: Actions = {
 		const date = event.params.date
 
 		if (!date) {
-			return fail(400, { error: t('error.date_missing', lang) })
+			return fail(400, { error: ts('error.date_missing', lang) })
 		}
 
 		const { success } = await query('DELETE FROM entries WHERE date = ?', [date])
 
 		if (!success) {
-			return fail(500, { error: t('error.database', lang) })
+			return fail(500, { error: ts('error.database', lang) })
 		}
 
 		return redirect(302, '/app')

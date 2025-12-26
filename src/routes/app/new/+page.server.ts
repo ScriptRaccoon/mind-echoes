@@ -1,5 +1,5 @@
 import { query } from '$lib/server/db'
-import { t, type Lang } from '$lib/translations/main'
+import { ts, type Lang } from '$lib/translations/main'
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 
 export const actions: Actions = {
@@ -9,7 +9,7 @@ export const actions: Actions = {
 		const date = form.get('date') as string
 
 		if (!date) {
-			return fail(400, { date, error: t('error.date_missing', lang) })
+			return fail(400, { date, error: ts('error.date_missing', lang) })
 		}
 
 		const { rows: entries, success } = await query<{ id: number }>(
@@ -18,11 +18,11 @@ export const actions: Actions = {
 		)
 
 		if (!success) {
-			return fail(500, { date, error: t('error.database', lang) })
+			return fail(500, { date, error: ts('error.database', lang) })
 		}
 
 		if (entries.length) {
-			return fail(409, { date, error: t('error.date_conflict', lang) })
+			return fail(409, { date, error: ts('error.date_conflict', lang) })
 		}
 
 		return redirect(303, `/app/new/${date}`)

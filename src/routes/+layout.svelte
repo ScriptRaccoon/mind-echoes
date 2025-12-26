@@ -1,17 +1,15 @@
 <script lang="ts">
 	import './app.css'
-	import { t } from '$lib/translations/main'
-	import { onMount } from 'svelte'
+	import { type LazyLang, t } from '$lib/translations/main'
+	import { setContext } from 'svelte'
 
 	let { data, children } = $props()
 
-	onMount(() => {
-		document.documentElement.setAttribute('lang', data.lang)
-	})
+	setContext<LazyLang>('lang', () => data.lang)
 </script>
 
 <svelte:head>
-	<title>{t('title', data.lang)}</title>
+	<title>{t('title')}</title>
 
 	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />

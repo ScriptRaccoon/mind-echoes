@@ -1,23 +1,22 @@
 <script lang="ts">
-	import { t, type Lang } from '$lib/translations/main'
+	import { t } from '$lib/translations/main'
 	import type { Entry_Summary } from '$lib/types'
 	import { format_date } from '$lib/utils'
 
 	type Props = {
-		lang: Lang
 		entries: Entry_Summary[]
 	}
 
-	let { lang, entries }: Props = $props()
+	let { entries }: Props = $props()
 </script>
 
 <ol>
 	{#each entries as entry (entry.id)}
 		<li>
 			<a href="/app/edit/{entry.date}">
-				<span class="date">{format_date(entry.date, lang)}:</span>
+				<span class="date">{format_date(entry.date)}:</span>
 				<strong>
-					{entry.title || t('untitled', lang)}
+					{entry.title || t('untitled')}
 				</strong>
 			</a>
 		</li>

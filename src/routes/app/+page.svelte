@@ -8,14 +8,14 @@
 	const entry_today_exists = $derived(data.entries.some((entry) => entry.date === today))
 </script>
 
-<h1>{t('diary_for', data.lang)} {data.username}</h1>
+<h1>{t('diary_for')} {data.username}</h1>
 
 {#if !entry_today_exists}
 	<p>
 		<a href="/app/new/{today}">
-			{t('add_today', data.lang)}
+			{t('add_today')}
 		</a>
 	</p>
 {/if}
 
-<EntryList lang={data.lang} entries={data.entries} />
+<EntryList entries={data.entries} />

@@ -9,18 +9,16 @@
 	function handle_confirm_click() {
 		confirm_deletion = true
 	}
-
-	let lang = $derived(data.lang)
 </script>
 
-<h1>{t('account.title', lang)}</h1>
+<h1>{t('account.title')}</h1>
 
 <section>
-	<h2>{t('change.language', lang)}</h2>
+	<h2>{t('change.language')}</h2>
 
 	<form method="POST" action="?/lang" use:enhance>
 		<div class="form-group">
-			<label for="lang">{t('choose.language', lang)}</label>
+			<label for="lang">{t('choose.language')}</label>
 			<select name="lang" id="lang">
 				{#each SUPPORTED_LANGUAGES as lang_option}
 					<option value={lang_option} selected={data.lang === lang_option}>
@@ -31,27 +29,27 @@
 		</div>
 
 		<div class="form-actions">
-			<button>{t('submit', lang)}</button>
+			<button>{t('submit')}</button>
 		</div>
 	</form>
 </section>
 
 <section>
-	<h2>{t('change.password', lang)}</h2>
+	<h2>{t('change.password')}</h2>
 
 	<form method="POST" action="?/password" use:enhance>
 		<div class="form-group">
-			<label for="current_password">{t('password.current', lang)}</label>
+			<label for="current_password">{t('password.current')}</label>
 			<input type="password" name="current_password" id="current_password" />
 		</div>
 
 		<div class="form-group">
-			<label for="new_password">{t('password.new', lang)}</label>
+			<label for="new_password">{t('password.new')}</label>
 			<input type="password" name="new_password" id="new_password" />
 		</div>
 
 		<div class="form-actions">
-			<button>{t('submit', lang)}</button>
+			<button>{t('submit')}</button>
 		</div>
 	</form>
 
@@ -65,16 +63,16 @@
 </section>
 
 <section>
-	<h2>{t('change.username', lang)}</h2>
+	<h2>{t('change.username')}</h2>
 
 	<form method="POST" action="?/username" use:enhance>
 		<div class="form-group">
-			<label for="username">{t('username.new', lang)}</label>
+			<label for="username">{t('username.new')}</label>
 			<input type="text" name="username" id="username" value={data.username} />
 		</div>
 
 		<div class="form-actions">
-			<button>{t('submit', lang)}</button>
+			<button>{t('submit')}</button>
 		</div>
 	</form>
 
@@ -88,19 +86,19 @@
 </section>
 
 <section>
-	<h2>{t('backup.create', lang)}</h2>
+	<h2>{t('backup.create')}</h2>
 
 	<form method="GET" action="/app/api/backup">
 		<div class="form-actions">
-			<button>{t('backup.download', lang)}</button>
+			<button>{t('backup.download')}</button>
 		</div>
 	</form>
 </section>
 
 <section>
-	<h2>{t('backup.restore', lang)}</h2>
+	<h2>{t('backup.restore')}</h2>
 
-	<p>{t('backup.warning', lang)}</p>
+	<p>{t('backup.warning')}</p>
 
 	<form method="POST" action="?/backup" enctype="multipart/form-data" use:enhance>
 		<div class="form-group">
@@ -112,11 +110,11 @@
 				accept="application/json"
 				class="sr-only"
 			/>
-			<label for="file">{t('choose.file', lang)}</label>
+			<label for="file">{t('choose.file')}</label>
 		</div>
 
 		<div class="form-actions">
-			<button>{t('backup.upload', lang)}</button>
+			<button>{t('backup.upload')}</button>
 		</div>
 	</form>
 
@@ -130,25 +128,25 @@
 </section>
 
 <section>
-	<h2>{t('account.delete', lang)}</h2>
+	<h2>{t('account.delete')}</h2>
 
 	{#if confirm_deletion}
-		<p>{t('account.warning', lang)}</p>
+		<p>{t('account.warning')}</p>
 
 		<form method="POST" action="?/delete" use:enhance>
 			<div class="form-group">
-				<label for="yes">{t('confirm_yes', lang)}</label>
+				<label for="yes">{t('confirm_yes')}</label>
 				<input type="text" name="yes" id="yes" />
 			</div>
 
 			<div class="form-actions">
-				<button class="danger">{t('delete.data', lang)}</button>
+				<button class="danger">{t('delete.data')}</button>
 			</div>
 		</form>
 	{:else}
 		<div class="form-actions">
 			<button class="danger" onclick={handle_confirm_click}>
-				{t('delete.data', lang)}
+				{t('delete.data')}
 			</button>
 		</div>
 	{/if}

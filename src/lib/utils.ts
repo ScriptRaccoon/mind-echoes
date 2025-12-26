@@ -1,7 +1,9 @@
-import type { Lang } from './translations/main'
+import { getContext } from 'svelte'
 import type { Entry } from './types'
+import type { LazyLang } from './translations/main'
 
-export function format_date(date: string, lang: Lang): string {
+export function format_date(date: string): string {
+	const lang = getContext<LazyLang>('lang')()
 	if (lang === 'de') return date.split('-').reverse().join('.')
 	return date
 }

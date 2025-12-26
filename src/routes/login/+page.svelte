@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { t } from '$lib/translations/main.js'
+	import { t } from '$lib/translations/main'
 
 	let { form, data } = $props()
 </script>
 
-<h1>{t('login.title', data.lang)}</h1>
+<h1>{t('login.title')}</h1>
 
 <form method="POST" use:enhance>
 	<div class="form-group">
-		<label for="password">{t('password', data.lang)}</label>
+		<label for="password">{t('password')}</label>
 		<input type="password" id="password" name="password" />
 	</div>
 
 	<div class="form-actions">
-		<button>{t('submit', data.lang)}</button>
+		<button>{t('submit')}</button>
 	</div>
 </form>
 
