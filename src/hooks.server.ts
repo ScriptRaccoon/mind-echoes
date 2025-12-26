@@ -1,13 +1,21 @@
 import { JWT_SECRET } from '$env/static/private'
+import { is_valid_device } from '$lib/server/devices'
 import {
 	get_language_from_cookie,
 	get_language_from_header,
 	set_language_cookie,
 } from '$lib/translations/request'
-import { redirect, type Handle } from '@sveltejs/kit'
+import { error, redirect, type Handle } from '@sveltejs/kit'
 import jwt from 'jsonwebtoken'
 
 export const handle: Handle = async ({ event, resolve }) => {
+	if (event.url.pathname !== '/device-registration') {
+		const device_token = event.cookies.get('device_token')
+		if (!device_token || !(await is_valid_device(device_token))) {
+			return error(401, 'Unauthorized device')
+		}
+	}
+
 	const requires_auth = event.url.pathname.startsWith('/app')
 	if (requires_auth) {
 		try {
