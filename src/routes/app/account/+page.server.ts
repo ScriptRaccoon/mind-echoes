@@ -193,8 +193,13 @@ export const actions: Actions = {
 			})
 		}
 
-		const { success } = await query('DELETE from users')
-		if (!success) {
+		const tx = await db.transaction('write')
+
+		try {
+			await tx.execute('DELETE FROM entries')
+			await tx.execute('DELETE FROM users')
+			await tx.commit()
+		} catch (_) {
 			return fail(500, {
 				type: 'delete',
 				error: t('error.database', lang),
