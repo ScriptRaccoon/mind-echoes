@@ -104,8 +104,15 @@
 
 	<form method="POST" action="?/backup" enctype="multipart/form-data" use:enhance>
 		<div class="form-group">
+			<input
+				type="file"
+				name="file"
+				id="file"
+				required
+				accept="application/json"
+				class="sr-only"
+			/>
 			<label for="file">{t('choose.file', lang)}</label>
-			<input type="file" name="file" id="file" required accept="application/json" />
 		</div>
 
 		<div class="form-actions">

@@ -101,7 +101,7 @@ textarea {
 .form-group {
 	margin-bottom: 1rem;
 
-	label {
+	label:not([for='file']) {
 		display: block;
 		margin-bottom: 0.1rem;
 		font-size: 0.875rem;
@@ -132,4 +132,37 @@ textarea {
 	button.danger {
 		background-color: var(--error-color);
 	}
+}
+
+/* FILE UPLOAD */
+
+input[type='file']:focus-visible + label {
+	outline: 1px solid var(--outline-color);
+}
+
+input[type='file']:valid + label::after {
+	content: ' ✓';
+}
+
+input[type='file'] + label {
+	display: inline-block;
+	cursor: pointer;
+	background-color: var(--button-color);
+	color: var(--font-color-light);
+	padding: 0.2rem 0.75rem;
+	border-radius: 0.2rem;
+}
+
+/* UTILS */
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
 }
