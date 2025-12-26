@@ -14,7 +14,9 @@
 	--font-color: #ddd;
 	--font-color-light: white;
 	--outline-color: #bbb;
-	--input-bg-color: #444;
+	--dark-outline-color: #444;
+	--input-bg-color: #202020;
+	--input-focus-color: #252525;
 }
 
 body {
@@ -89,7 +91,7 @@ button:not(:disabled) {
 }
 
 :is(button, input, textarea, select, a):focus-visible {
-	outline: 1px solid var(--outline-color);
+	outline: 1px solid var(--outline-color) !important;
 }
 
 textarea {
@@ -114,6 +116,11 @@ textarea {
 		background-color: var(--input-bg-color);
 		padding: 0.2rem 0.5rem;
 		border-radius: 0.2rem;
+		outline: 1px solid var(--dark-outline-color);
+
+		&:focus-visible {
+			background-color: var(--input-focus-color);
+		}
 	}
 }
 
