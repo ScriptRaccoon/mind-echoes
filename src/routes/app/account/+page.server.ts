@@ -2,7 +2,7 @@ import { fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import { db, query } from '$lib/server/db'
 import type { PageServerLoad } from '../$types'
-import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
+import { COOKIE_OPTIONS, MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { SUPPORTED_LANGUAGES, ts, type Lang } from '$lib/translations/main'
 import { verify_entries } from '$lib/utils'
 import { encrypt_entry } from '$lib/server/encryption'
@@ -98,12 +98,7 @@ export const actions: Actions = {
 			})
 		}
 
-		event.cookies.set('username', username, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'strict',
-			secure: true,
-		})
+		event.cookies.set('username', username, COOKIE_OPTIONS)
 
 		return {
 			type: 'username',
