@@ -176,7 +176,7 @@ export const actions: Actions = {
 
 		return {
 			type: 'backup',
-			message: t('backup.success', lang),
+			message: t('backup.success', lang, encoded_entries.length.toString()),
 		}
 	},
 

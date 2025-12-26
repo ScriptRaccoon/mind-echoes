@@ -61,7 +61,7 @@
 	"backup.warning": "Warnung: Dies wird alle gespeicherten Daten durch die Daten in der Sicherheitsdatei ersetzen.",
 	"choose.file": "Wähle eine Datei",
 	"backup.upload": "Sicherungsdatei hochladen",
-	"backup.success": "Die Daten wurden erfolgreich importiert.",
+	"backup.success": "Es wurden {{}} Einträge erfolgreich importiert.",
 	"error.file_json": "Die Datei muss eine JSON-Datei sein.",
 	"error.file_valid_json": "Der Dateiinhalt muss gültiges JSON sein.",
 	"error.invalid_entries": "Die Einträge besitzen nicht das richtige Format."

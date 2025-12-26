@@ -10,8 +10,15 @@ export const SUPPORTED_LANGUAGES = ['de', 'en']
 
 export type Lang = 'de' | 'en'
 
-export function t(key: keyof typeof translations.en, lang: Lang): string {
+export function t(
+	key: keyof typeof translations.en,
+	lang: Lang,
+	replacer?: string,
+): string {
 	const obj = translations[lang]
-	if (key in obj) return obj[key as keyof typeof obj]
+	if (key in obj) {
+		const txt = obj[key as keyof typeof obj]
+		return replacer ? txt.replace('{{}}', replacer) : txt
+	}
 	return key
 }
