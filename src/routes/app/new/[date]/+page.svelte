@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import { page } from '$app/state'
 	import { t } from '$lib/translations/main'
-	import { format_date } from '$lib/utils'
+	import { format_date, resize_textarea } from '$lib/utils'
 
 	let { form } = $props()
 
@@ -19,12 +19,12 @@
 
 	<div class="form-group">
 		<label for="content">{t('entry.content')}</label>
-		<textarea name="content" id="content"></textarea>
+		<textarea name="content" id="content" {@attach resize_textarea}></textarea>
 	</div>
 
 	<div class="form-group">
 		<label for="thanks">{t('entry.thanks')}</label>
-		<textarea name="thanks" id="thanks"></textarea>
+		<textarea name="thanks" id="thanks" {@attach resize_textarea}></textarea>
 	</div>
 
 	<div class="form-actions">
@@ -39,13 +39,5 @@
 <style>
 	.form-group {
 		margin-bottom: 1.5rem;
-	}
-
-	#content {
-		height: 10lh;
-	}
-
-	#thanks {
-		height: 6lh;
 	}
 </style>

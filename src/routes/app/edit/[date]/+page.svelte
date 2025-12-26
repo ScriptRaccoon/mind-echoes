@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { t } from '$lib/translations/main'
-	import { format_date } from '$lib/utils'
+	import { format_date, resize_textarea } from '$lib/utils'
 
 	let { form, data } = $props()
 
@@ -24,12 +24,16 @@
 
 	<div class="form-group">
 		<label for="content">{t('entry.content')}</label>
-		<textarea name="content" id="content">{entry.content}</textarea>
+		<textarea name="content" id="content" {@attach resize_textarea}
+			>{entry.content}
+		</textarea>
 	</div>
 
 	<div class="form-group">
 		<label for="thanks">{t('entry.thanks')}</label>
-		<textarea name="thanks" id="thanks">{entry.thanks}</textarea>
+		<textarea name="thanks" id="thanks" {@attach resize_textarea}
+			>{entry.thanks}
+		</textarea>
 	</div>
 
 	<div class="form-actions">
@@ -64,13 +68,5 @@
 
 	.form-group {
 		margin-bottom: 1.5rem;
-	}
-
-	#content {
-		height: 10lh;
-	}
-
-	#thanks {
-		height: 6lh;
 	}
 </style>
