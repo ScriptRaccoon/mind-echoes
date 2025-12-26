@@ -8,16 +8,18 @@ export function format_date(date: string): string {
 	return date
 }
 
-function verify_entry(obj: unknown): obj is Entry {
+function is_object(val: unknown): val is Record<string, unknown> {
+	return typeof val === 'object' && val !== null && !Array.isArray(val)
+}
+
+function verify_entry(val: unknown): val is Entry {
 	return (
-		typeof obj === 'object' &&
-		obj !== null &&
-		Object.keys(obj).sort().join(',') === 'content,date,id,thanks,title' &&
-		typeof obj['id' as keyof typeof obj] === 'number' &&
-		typeof obj['date' as keyof typeof obj] === 'string' &&
-		typeof obj['title' as keyof typeof obj] === 'string' &&
-		typeof obj['content' as keyof typeof obj] === 'string' &&
-		typeof obj['thanks' as keyof typeof obj] === 'string'
+		is_object(val) &&
+		typeof val.id === 'number' &&
+		typeof val.date === 'string' &&
+		typeof val.title === 'string' &&
+		typeof val.content === 'string' &&
+		typeof val.thanks === 'string'
 	)
 }
 
