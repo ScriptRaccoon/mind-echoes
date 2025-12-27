@@ -1,17 +1,19 @@
 <script lang="ts">
+	import { t } from '$lib/translations/main'
+
 	let { form } = $props()
 </script>
 
-<h1>Device Registration</h1>
+<h1>{t('device.registration')}</h1>
 
 <form method="POST">
 	<div class="form-group">
-		<label for="device">Device Label</label>
+		<label for="device">{t('device.label')}</label>
 		<input type="text" name="device" id="device" required />
 	</div>
 
 	<div class="form-actions">
-		<button>Submit</button>
+		<button>{t('submit')}</button>
 	</div>
 </form>
 
@@ -21,6 +23,6 @@
 	<p class="message">{form.message}</p>
 
 	<p>
-		<a href="/login">Login</a>
+		<a href="/login">{t('login.title')}</a>
 	</p>
 {/if}

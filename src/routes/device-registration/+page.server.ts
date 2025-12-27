@@ -1,19 +1,24 @@
 import { ENABLE_DEVICE_REGISTRATION } from '$env/static/private'
 import { DEVICE_COOKIE_OPTIONS } from '$lib/server/config'
 import { query } from '$lib/server/db'
+import { ts, type Lang } from '$lib/translations/main'
 import { error, fail, type Actions } from '@sveltejs/kit'
 import crypto from 'crypto'
 
-export const load = async () => {
+export const load = async (event) => {
+	const lang = event.cookies.get('lang') as Lang
+
 	if (ENABLE_DEVICE_REGISTRATION !== 'true') {
-		error(404, 'Not Found')
+		error(404, ts('error.not_found', lang))
 	}
 }
 
 export const actions: Actions = {
 	default: async (event) => {
-		if (!ENABLE_DEVICE_REGISTRATION) {
-			return fail(405, 'Registration not allowed')
+		const lang = event.cookies.get('lang') as Lang
+
+		if (ENABLE_DEVICE_REGISTRATION !== 'true') {
+			return fail(405, { error: ts('error.registration_not_allowed', lang) })
 		}
 
 		const form = await event.request.formData()
@@ -30,9 +35,9 @@ export const actions: Actions = {
 		)
 
 		if (!success) {
-			return fail(500, { error: 'Internal Server Error' })
+			return fail(500, { error: ts('error.database', lang) })
 		}
 
-		return { message: 'Device has been registered.' }
+		return { message: ts('device.registered', lang) }
 	},
 }

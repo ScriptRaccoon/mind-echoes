@@ -64,5 +64,10 @@
 	"backup.success": "Es wurden {{}} Einträge erfolgreich importiert.",
 	"error.file_json": "Die Datei muss eine JSON-Datei sein.",
 	"error.file_valid_json": "Der Dateiinhalt muss gültiges JSON sein.",
-	"error.invalid_entries": "Die Einträge besitzen nicht das richtige Format."
+	"error.invalid_entries": "Die Einträge besitzen nicht das richtige Format.",
+	"device.registration": "Geräte-Registrierung",
+	"device.label": "Bezeichnung des Geräts",
+	"device.registered": "Das Gerät wurde registriert.",
+	"error.not_found": "Not Found",
+	"error.registration_not_allowed": "Registrierung ist nicht erlaubt."
 }
