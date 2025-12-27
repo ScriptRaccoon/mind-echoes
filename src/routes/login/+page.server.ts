@@ -6,7 +6,7 @@ import type { PageServerLoad } from './$types'
 import { JWT_SECRET } from '$env/static/private'
 import { Rate_Limiter } from '$lib/server/ratelimit'
 import { ts } from '$lib/translations/main'
-import { COOKIE_OPTIONS } from '$lib/server/config'
+import { COOKIE_JWT, COOKIE_OPTIONS, COOKIE_USERNAME } from '$lib/server/config'
 import { get_language } from '$lib/translations/request'
 
 export const load: PageServerLoad = (event) => {
@@ -52,8 +52,8 @@ export const actions: Actions = {
 
 		const token = jwt.sign({ sub: 'user' }, JWT_SECRET, { expiresIn: '1w' })
 
-		event.cookies.set('jwt', token, COOKIE_OPTIONS)
-		event.cookies.set('username', username, COOKIE_OPTIONS)
+		event.cookies.set(COOKIE_JWT, token, COOKIE_OPTIONS)
+		event.cookies.set(COOKIE_USERNAME, username, COOKIE_OPTIONS)
 
 		return redirect(303, '/app')
 	},

@@ -1,5 +1,10 @@
 export const MINIMAL_PASSWORD_LENGTH = 8
 
+export const COOKIE_LANG = 'lang'
+export const COOKIE_JWT = 'jwt'
+export const COOKIE_DEVICE_TOKEN = 'device_token'
+export const COOKIE_USERNAME = 'username'
+
 export const COOKIE_OPTIONS = {
 	httpOnly: true,
 	path: '/',

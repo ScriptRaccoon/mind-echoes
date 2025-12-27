@@ -1,5 +1,5 @@
 import { ENABLE_DEVICE_REGISTRATION } from '$env/static/private'
-import { DEVICE_COOKIE_OPTIONS } from '$lib/server/config'
+import { COOKIE_DEVICE_TOKEN, DEVICE_COOKIE_OPTIONS } from '$lib/server/config'
 import { query } from '$lib/server/db'
 import { ts } from '$lib/translations/main'
 import { get_language } from '$lib/translations/request'
@@ -28,7 +28,7 @@ export const actions: Actions = {
 		const raw_token = crypto.randomBytes(32).toString('hex')
 		const token_hash = crypto.createHash('sha256').update(raw_token).digest('hex')
 
-		event.cookies.set('device_token', raw_token, DEVICE_COOKIE_OPTIONS)
+		event.cookies.set(COOKIE_DEVICE_TOKEN, raw_token, DEVICE_COOKIE_OPTIONS)
 
 		const { success } = await query(
 			'INSERT INTO devices (label, token_hash) VALUES (?,?)',

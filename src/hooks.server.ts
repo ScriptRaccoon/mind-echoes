@@ -1,4 +1,5 @@
 import { JWT_SECRET } from '$env/static/private'
+import { COOKIE_DEVICE_TOKEN, COOKIE_JWT } from '$lib/server/config'
 import { is_valid_device } from '$lib/server/devices'
 import {
 	get_language_from_cookie,
@@ -10,7 +11,7 @@ import jwt from 'jsonwebtoken'
 
 export const handle: Handle = async ({ event, resolve }) => {
 	if (event.url.pathname !== '/device-registration') {
-		const device_token = event.cookies.get('device_token')
+		const device_token = event.cookies.get(COOKIE_DEVICE_TOKEN)
 		if (!device_token || !(await is_valid_device(device_token))) {
 			return error(401, 'Unauthorized device')
 		}
@@ -19,7 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const requires_auth = event.url.pathname.startsWith('/app')
 	if (requires_auth) {
 		try {
-			const token = event.cookies.get('jwt')
+			const token = event.cookies.get(COOKIE_JWT)
 			if (!token) throw new Error('No token')
 			jwt.verify(token, JWT_SECRET)
 		} catch (_) {
