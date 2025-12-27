@@ -193,6 +193,7 @@ export const actions: Actions = {
 		try {
 			await tx.execute('DELETE FROM entries')
 			await tx.execute('DELETE FROM users')
+			await tx.execute('DELETE FROM devices')
 			await tx.commit()
 		} catch (_) {
 			return fail(500, {
