@@ -5,11 +5,12 @@ import bcrypt from 'bcrypt'
 import type { PageServerLoad } from './$types'
 import { JWT_SECRET } from '$env/static/private'
 import { Rate_Limiter } from '$lib/server/ratelimit'
-import { ts, type Lang } from '$lib/translations/main'
+import { ts } from '$lib/translations/main'
 import { COOKIE_OPTIONS } from '$lib/server/config'
+import { get_language } from '$lib/translations/request'
 
 export const load: PageServerLoad = (event) => {
-	const lang = event.cookies.get('lang') as Lang
+	const lang = get_language(event.cookies)
 
 	const LOGIN_MESSAGES: Record<string, undefined | string> = {
 		logout: ts('login.from.logout', lang),
@@ -24,7 +25,7 @@ const limiter = new Rate_Limiter({ limit: 5, window_ms: 60_000 })
 
 export const actions: Actions = {
 	default: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 		const ip = event.getClientAddress()
 
 		if (!limiter.is_allowed(ip)) {

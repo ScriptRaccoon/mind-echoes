@@ -9,6 +9,10 @@ export function get_language_from_cookie(cookies: Cookies): Lang | null {
 	return null
 }
 
+export function get_language(cookies: Cookies): Lang {
+	return get_language_from_cookie(cookies) ?? 'en'
+}
+
 export function set_language_cookie(cookies: Cookies, lang: Lang): void {
 	cookies.set('lang', lang, { path: '/' })
 }

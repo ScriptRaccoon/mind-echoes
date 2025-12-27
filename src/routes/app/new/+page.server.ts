@@ -1,10 +1,11 @@
 import { query } from '$lib/server/db'
-import { ts, type Lang } from '$lib/translations/main'
+import { ts } from '$lib/translations/main'
+import { get_language } from '$lib/translations/request'
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 
 export const actions: Actions = {
 	default: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 		const form = await event.request.formData()
 		const date = form.get('date') as string
 

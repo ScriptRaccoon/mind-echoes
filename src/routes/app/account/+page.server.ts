@@ -6,6 +6,7 @@ import { COOKIE_OPTIONS, MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { SUPPORTED_LANGUAGES, ts, type Lang } from '$lib/translations/main'
 import { verify_entries } from '$lib/utils'
 import { encrypt_entry } from '$lib/server/encryption'
+import { get_language, set_language_cookie } from '$lib/translations/request'
 
 export const load: PageServerLoad = async (event) => {
 	const username = event.cookies.get('username') ?? ''
@@ -17,12 +18,12 @@ export const actions: Actions = {
 		const form = await event.request.formData()
 		const lang_option = form.get('lang') as string
 		if ((SUPPORTED_LANGUAGES as readonly string[]).includes(lang_option)) {
-			event.cookies.set('lang', lang_option, { path: '/' })
+			set_language_cookie(event.cookies, lang_option as Lang)
 		}
 	},
 
 	password: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 		const form = await event.request.formData()
 		const current_password = form.get('current_password') as string
 		const new_password = form.get('new_password') as string
@@ -76,7 +77,7 @@ export const actions: Actions = {
 	},
 
 	username: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 		const form = await event.request.formData()
 		const username = form.get('username') as string
 
@@ -107,7 +108,7 @@ export const actions: Actions = {
 	},
 
 	backup: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 		const form = await event.request.formData()
 		const file = form.get('file')
 
@@ -176,7 +177,7 @@ export const actions: Actions = {
 	},
 
 	delete: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 		const form = await event.request.formData()
 		const user_yes = form.get('yes') as string
 		const actual_yes = ts('yes', lang)

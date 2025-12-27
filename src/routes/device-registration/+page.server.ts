@@ -1,12 +1,13 @@
 import { ENABLE_DEVICE_REGISTRATION } from '$env/static/private'
 import { DEVICE_COOKIE_OPTIONS } from '$lib/server/config'
 import { query } from '$lib/server/db'
-import { ts, type Lang } from '$lib/translations/main'
+import { ts } from '$lib/translations/main'
+import { get_language } from '$lib/translations/request'
 import { error, fail, type Actions } from '@sveltejs/kit'
 import crypto from 'crypto'
 
 export const load = async (event) => {
-	const lang = event.cookies.get('lang') as Lang
+	const lang = get_language(event.cookies)
 
 	if (ENABLE_DEVICE_REGISTRATION !== 'true') {
 		error(404, ts('error.not_found', lang))
@@ -15,7 +16,7 @@ export const load = async (event) => {
 
 export const actions: Actions = {
 	default: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 
 		if (ENABLE_DEVICE_REGISTRATION !== 'true') {
 			return fail(405, { error: ts('error.registration_not_allowed', lang) })

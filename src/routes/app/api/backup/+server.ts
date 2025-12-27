@@ -1,13 +1,14 @@
 import { json } from '@sveltejs/kit'
 import type { RequestHandler } from './$types'
-import { ts, type Lang } from '$lib/translations/main'
+import { ts } from '$lib/translations/main'
 import { query } from '$lib/server/db'
 import type { Entry_DB } from '$lib/types'
 import { error } from '@sveltejs/kit'
 import { decrypt_entry } from '$lib/server/encryption'
+import { get_language } from '$lib/translations/request'
 
 export const GET: RequestHandler = async (event) => {
-	const lang = event.cookies.get('lang') as Lang
+	const lang = get_language(event.cookies)
 	const { rows, success } = await query<Entry_DB>(
 		'SELECT id, date, title_enc, content_enc, thanks_enc FROM entries ORDER BY date',
 	)

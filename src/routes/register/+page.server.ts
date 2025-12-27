@@ -1,15 +1,17 @@
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { query } from '$lib/server/db'
-import { ts, type Lang } from '$lib/translations/main'
+import { ts } from '$lib/translations/main'
+import { get_language } from '$lib/translations/request'
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 
 export const actions: Actions = {
 	default: async (event) => {
+		const lang = get_language(event.cookies)
+
 		const form = await event.request.formData()
 		const username = form.get('username') as string
 		const password = form.get('password') as string
-		const lang = event.cookies.get('lang') as Lang
 
 		const { rows: users, success: user_success } = await query<{ id: number }>(
 			'SELECT id FROM users',

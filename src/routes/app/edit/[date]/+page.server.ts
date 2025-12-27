@@ -3,11 +3,12 @@ import type { Actions } from '@sveltejs/kit'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import type { Entry, Entry_DB } from '$lib/types'
-import { ts, type Lang } from '$lib/translations/main'
+import { ts } from '$lib/translations/main'
 import { decrypt_entry, encrypt } from '$lib/server/encryption'
+import { get_language } from '$lib/translations/request'
 
 export const load: PageServerLoad = async (event) => {
-	const lang = event.cookies.get('lang') as Lang
+	const lang = get_language(event.cookies)
 	const date = event.params.date
 
 	const { rows: entries, success } = await query<Entry_DB>(
@@ -32,7 +33,7 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	update: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 		const date = event.params.date
 
 		if (!date) {
@@ -61,7 +62,7 @@ export const actions: Actions = {
 	},
 
 	delete: async (event) => {
-		const lang = event.cookies.get('lang') as Lang
+		const lang = get_language(event.cookies)
 		const date = event.params.date
 
 		if (!date) {
