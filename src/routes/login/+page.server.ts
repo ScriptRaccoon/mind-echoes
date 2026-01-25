@@ -3,15 +3,11 @@ import { fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import type { PageServerLoad } from './$types'
 import { Rate_Limiter } from '$lib/server/ratelimit'
-import { ts } from '$lib/translations/main'
-import { get_language } from '$lib/translations/request'
 import { set_auth_cookie } from '$lib/server/auth'
 
 export const load: PageServerLoad = (event) => {
-	const lang = get_language(event.cookies)
-
 	const LOGIN_MESSAGES: Record<string, undefined | string> = {
-		logout: ts('login.from.logout', lang),
+		logout: 'You have been logged out successfully.',
 	}
 
 	const from = event.url.searchParams.get('from') ?? ''
@@ -22,11 +18,10 @@ const limiter = new Rate_Limiter({ limit: 5, window_ms: 60_000 })
 
 export const actions: Actions = {
 	default: async (event) => {
-		const lang = get_language(event.cookies)
 		const ip = event.getClientAddress()
 
 		if (!limiter.is_allowed(ip)) {
-			return fail(429, { error: ts('error.login_attempts', lang) })
+			return fail(429, { error: 'Too many login attempts. Please try again later.' })
 		}
 
 		const form = await event.request.formData()
@@ -39,17 +34,17 @@ export const actions: Actions = {
 		}>('SELECT id, password_hash FROM users WHERE username = ?', [username])
 
 		if (!success) {
-			return fail(500, { error: ts('error.database', lang) })
+			return fail(500, { error: 'Database error.' })
 		}
 
 		if (!rows.length) {
-			return fail(401, { error: ts('error.password_username_incorrect', lang) })
+			return fail(401, { error: 'Username or password are incorrect.' })
 		}
 
 		const { id, password_hash } = rows[0]
 
 		const is_correct = await bcrypt.compare(password, password_hash)
-		if (!is_correct) return fail(401, { error: ts('error.password_incorrect', lang) })
+		if (!is_correct) return fail(401, { error: 'Incorrect password.' })
 
 		limiter.clear(ip)
 

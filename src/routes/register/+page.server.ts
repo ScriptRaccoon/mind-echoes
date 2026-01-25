@@ -1,7 +1,5 @@
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { query } from '$lib/server/db'
-import { ts } from '$lib/translations/main'
-import { get_language } from '$lib/translations/request'
 import { fail, redirect } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import type { Actions } from './$types'
@@ -9,8 +7,6 @@ import { set_auth_cookie } from '$lib/server/auth'
 
 export const actions: Actions = {
 	default: async (event) => {
-		const lang = get_language(event.cookies)
-
 		const form = await event.request.formData()
 		const username = form.get('username') as string
 		const password = form.get('password') as string
@@ -18,14 +14,14 @@ export const actions: Actions = {
 		if (!username) {
 			return fail(400, {
 				username,
-				error: ts('error.username_empty', lang),
+				error: 'Username cannot be empty.',
 			})
 		}
 
 		if (password.length < MINIMAL_PASSWORD_LENGTH) {
 			return fail(400, {
 				username,
-				error: ts('error.password_min', lang),
+				error: 'Password must be at least 8 characters long.',
 			})
 		}
 
@@ -39,7 +35,7 @@ export const actions: Actions = {
 		if (!success || !rows.length) {
 			return fail(500, {
 				username,
-				error: ts('error.database', lang),
+				error: 'Database error.',
 			})
 		}
 

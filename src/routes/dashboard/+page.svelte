@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import EntryList from '$lib/components/EntryList.svelte'
-	import { t } from '$lib/translations/main'
 
 	let { data } = $props()
 
@@ -9,13 +8,11 @@
 	const entry_today_exists = $derived(data.entries.some((entry) => entry.date === today))
 </script>
 
-<h1>{t('diary_for')} {page.data.user?.username}</h1>
+<h1>{'Diary for'} {page.data.user?.username}</h1>
 
 {#if !entry_today_exists}
 	<p>
-		<a href="/new/{today}">
-			{t('add_today')}
-		</a>
+		<a href="/new/{today}"> Add today's entry </a>
 	</p>
 {/if}
 

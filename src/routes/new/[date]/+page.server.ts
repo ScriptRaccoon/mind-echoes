@@ -1,7 +1,5 @@
 import { query } from '$lib/server/db'
 import { encrypt } from '$lib/server/encryption'
-import { ts } from '$lib/translations/main'
-import { get_language } from '$lib/translations/request'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 
@@ -10,7 +8,6 @@ export const actions: Actions = {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
-		const lang = get_language(event.cookies)
 		const date = event.params.date
 
 		const form = await event.request.formData()
@@ -30,8 +27,8 @@ export const actions: Actions = {
 		if (err) {
 			const error =
 				err.code === 'SQLITE_CONSTRAINT_UNIQUE'
-					? ts('error.date_conflict', lang)
-					: ts('error.database', lang)
+					? 'An entry already exists for this date.'
+					: 'Database error.'
 
 			const code = err.code === 'SQLITE_CONSTRAINT_UNIQUE' ? 409 : 500
 

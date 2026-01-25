@@ -3,8 +3,6 @@ import {
 	save_device_cookie,
 	save_device_token_in_database,
 } from '$lib/server/devices'
-import { ts } from '$lib/translations/main'
-import { get_language } from '$lib/translations/request'
 import { error, fail } from '@sveltejs/kit'
 import type { Actions } from './$types'
 
@@ -13,13 +11,11 @@ export const actions: Actions = {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
-		const lang = get_language(event.cookies)
-
 		const form = await event.request.formData()
 		const device_label = form.get('device_label') as string
 
 		if (!device_label) {
-			return fail(400, { error: ts('error.device.label', lang) })
+			return fail(400, { error: 'Device label cannot be empty' })
 		}
 
 		const device_token = create_device_token()
@@ -27,11 +23,11 @@ export const actions: Actions = {
 		const success = save_device_token_in_database(user.id, device_label, device_token)
 
 		if (!success) {
-			return fail(500, { error: ts('error.database', lang) })
+			return fail(500, { error: 'Database error.' })
 		}
 
 		save_device_cookie(event, device_token)
 
-		return { message: ts('device.registered', lang) }
+		return { message: 'Device has been registered.' }
 	},
 }

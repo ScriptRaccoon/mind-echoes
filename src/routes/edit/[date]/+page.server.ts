@@ -2,15 +2,12 @@ import { query } from '$lib/server/db'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import type { Entry, Entry_DB } from '$lib/types'
-import { ts } from '$lib/translations/main'
 import { decrypt_entry, encrypt } from '$lib/server/encryption'
-import { get_language } from '$lib/translations/request'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
 	if (!user) error(401, 'Unauthorized')
 
-	const lang = get_language(event.cookies)
 	const date = event.params.date
 
 	const { rows: entries, success } = await query<Entry_DB>(
@@ -19,13 +16,13 @@ export const load: PageServerLoad = async (event) => {
 	)
 
 	if (!success) {
-		error(500, ts('error.database', lang))
+		error(500, 'Database error.')
 	}
 
 	const entry_enc = entries[0]
 
 	if (!entry_enc) {
-		error(404, ts('error.no_entry_found', lang))
+		error(404, 'No entry found for this date.')
 	}
 
 	const entry: Entry = decrypt_entry(entry_enc)
@@ -38,7 +35,6 @@ export const actions: Actions = {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
-		const lang = get_language(event.cookies)
 		const date = event.params.date
 
 		const form = await event.request.formData()
@@ -56,17 +52,16 @@ export const actions: Actions = {
 		)
 
 		if (!success) {
-			return fail(500, { error: ts('error.database', lang) })
+			return fail(500, { error: 'Database error.' })
 		}
 
-		return { message: ts('entry.updated', lang) }
+		return { message: 'Entry has been updated.' }
 	},
 
 	delete: async (event) => {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
-		const lang = get_language(event.cookies)
 		const date = event.params.date
 
 		const { success } = await query(
@@ -75,7 +70,7 @@ export const actions: Actions = {
 		)
 
 		if (!success) {
-			return fail(500, { error: ts('error.database', lang) })
+			return fail(500, { error: 'Database error.' })
 		}
 
 		redirect(302, '/dashboard')

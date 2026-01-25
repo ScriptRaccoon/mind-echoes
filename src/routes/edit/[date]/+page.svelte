@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { t } from '$lib/translations/main'
-	import { format_date, resize_textarea } from '$lib/utils'
+	import { resize_textarea } from '$lib/utils'
 
 	let { form, data } = $props()
 
@@ -14,38 +13,36 @@
 	}
 </script>
 
-<h1 class="date">{format_date(entry.date)}</h1>
+<h1 class="date">{entry.date}</h1>
 
 <form method="POST" action="?/update" use:enhance>
 	<div class="form-group">
-		<label for="title">{t('entry.title')}</label>
+		<label for="title">Title</label>
 		<input class="title" type="text" name="title" id="title" value={entry.title} />
 	</div>
 
 	<div class="form-group">
-		<label for="content">{t('entry.content')}</label>
+		<label for="content">What's on your mind?</label>
 		<textarea name="content" id="content" {@attach resize_textarea}
 			>{entry.content}
 		</textarea>
 	</div>
 
 	<div class="form-group">
-		<label for="thanks">{t('entry.thanks')}</label>
+		<label for="thanks">What are 5 things you are grateful for?</label>
 		<textarea name="thanks" id="thanks" {@attach resize_textarea}
 			>{entry.thanks}
 		</textarea>
 	</div>
 
 	<div class="form-actions">
-		<button>{t('update')}</button>
+		<button>Update</button>
 
 		{#if confirm_deletion}
-			<button class="danger" formaction="?/delete">
-				{t('delete_yes')}
-			</button>
+			<button class="danger" formaction="?/delete"> Yes, delete </button>
 		{:else}
 			<button class="danger" type="button" onclick={handle_confirm_click}>
-				{t('delete')}
+				Delete
 			</button>
 		{/if}
 	</div>
@@ -56,7 +53,7 @@
 {/if}
 
 {#if confirm_deletion}
-	<p>{t('delete_sure')}</p>
+	<p>Are you sure you want to delete this entry?</p>
 {:else if form?.message}
 	<p class="message">{form.message}</p>
 {/if}

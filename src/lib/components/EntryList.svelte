@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/translations/main'
 	import type { Entry_Summary } from '$lib/types'
-	import { format_date } from '$lib/utils'
 
 	type Props = {
 		entries: Entry_Summary[]
@@ -14,9 +12,9 @@
 	{#each entries as entry (entry.id)}
 		<li>
 			<a href="/edit/{entry.date}">
-				<span class="date">{format_date(entry.date)}:</span>
+				<span class="date">{entry.date}:</span>
 				<strong>
-					{entry.title || t('untitled')}
+					{entry.title || 'Untitled'}
 				</strong>
 			</a>
 		</li>

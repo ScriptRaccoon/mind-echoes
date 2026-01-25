@@ -1,1 +1,1 @@
-tsx scripts/translation-check.ts
+pnpm check

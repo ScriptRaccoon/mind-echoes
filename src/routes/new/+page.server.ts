@@ -1,6 +1,4 @@
 import { query } from '$lib/server/db'
-import { ts } from '$lib/translations/main'
-import { get_language } from '$lib/translations/request'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 
@@ -9,12 +7,11 @@ export const actions: Actions = {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
-		const lang = get_language(event.cookies)
 		const form = await event.request.formData()
 		const date = form.get('date') as string
 
 		if (!date) {
-			return fail(400, { date, error: ts('error.date_missing', lang) })
+			return fail(400, { date, error: 'Date is missing.' })
 		}
 
 		const { rows: entries, success } = await query<{ id: number }>(
@@ -23,11 +20,11 @@ export const actions: Actions = {
 		)
 
 		if (!success) {
-			return fail(500, { date, error: ts('error.database', lang) })
+			return fail(500, { date, error: 'Database error.' })
 		}
 
 		if (entries.length) {
-			return fail(409, { date, error: ts('error.date_conflict', lang) })
+			return fail(409, { date, error: 'An entry already exists for this date.' })
 		}
 
 		redirect(303, `/new/${date}`)

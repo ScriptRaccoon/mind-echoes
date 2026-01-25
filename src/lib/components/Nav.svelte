@@ -1,40 +1,31 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { t } from '$lib/translations/main'
 </script>
 
 <nav>
 	<ul>
 		{#if page.data.user}
 			<li>
-				<a href="/dashboard">
-					{t('nav.diary')}
-				</a>
+				<a href="/dashboard">Diary</a>
 			</li>
 			<li>
-				<a href="/account">
-					{t('nav.account')}
-				</a>
+				<a href="/account">Account</a>
 			</li>
 			<li>
-				<a href="/new">
-					{t('nav.new_entry')}
-				</a>
+				<a href="/new">New entry</a>
 			</li>
 			<li>
-				<a href="/logout" data-sveltekit-preload-data="off">
-					{t('nav.logout')}
-				</a>
+				<a href="/logout" data-sveltekit-preload-data="off">Logout</a>
 			</li>
 		{:else}
 			<li>
-				<a href="/">{t('nav.home')} </a>
+				<a href="/">Home</a>
 			</li>
 			<li>
-				<a href="/login">{t('nav.login')}</a>
+				<a href="/login">Login</a>
 			</li>
 			<li>
-				<a href="/register">{t('nav.register')}</a>
+				<a href="/register">Register</a>
 			</li>
 		{/if}
 	</ul>

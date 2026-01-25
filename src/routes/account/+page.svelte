@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { page } from '$app/state'
-	import { SUPPORTED_LANGUAGES, t } from '$lib/translations/main'
 
 	let { data, form } = $props()
 
@@ -12,45 +11,24 @@
 	}
 </script>
 
-<h1>{t('account.title')}</h1>
+<h1>Account</h1>
 
 <section>
-	<h2>{t('change.language')}</h2>
-
-	<form method="POST" action="?/lang" use:enhance>
-		<div class="form-group">
-			<label for="lang">{t('choose.language')}</label>
-			<select name="lang" id="lang">
-				{#each SUPPORTED_LANGUAGES as lang_option}
-					<option value={lang_option} selected={data.lang === lang_option}>
-						{lang_option}
-					</option>
-				{/each}
-			</select>
-		</div>
-
-		<div class="form-actions">
-			<button>{t('submit')}</button>
-		</div>
-	</form>
-</section>
-
-<section>
-	<h2>{t('change.password')}</h2>
+	<h2>Change password</h2>
 
 	<form method="POST" action="?/password" use:enhance>
 		<div class="form-group">
-			<label for="current_password">{t('password.current')}</label>
+			<label for="current_password">Current password</label>
 			<input type="password" name="current_password" id="current_password" required />
 		</div>
 
 		<div class="form-group">
-			<label for="new_password">{t('password.new')}</label>
+			<label for="new_password">New password</label>
 			<input type="password" name="new_password" id="new_password" required />
 		</div>
 
 		<div class="form-actions">
-			<button>{t('submit')}</button>
+			<button>Submit</button>
 		</div>
 	</form>
 
@@ -64,11 +42,11 @@
 </section>
 
 <section>
-	<h2>{t('change.username')}</h2>
+	<h2>Change username</h2>
 
 	<form method="POST" action="?/username" use:enhance>
 		<div class="form-group">
-			<label for="username">{t('username.new')}</label>
+			<label for="username">New username</label>
 			<input
 				type="text"
 				name="username"
@@ -79,7 +57,7 @@
 		</div>
 
 		<div class="form-actions">
-			<button>{t('submit')}</button>
+			<button>Submit</button>
 		</div>
 	</form>
 
@@ -93,7 +71,7 @@
 </section>
 
 <section>
-	<h2>{t('devices')}</h2>
+	<h2>Devices</h2>
 	<ul class="device-list">
 		{#each data.devices as device (device.id)}
 			<li>
@@ -104,26 +82,24 @@
 </section>
 
 <section>
-	<h2>{t('account.delete')}</h2>
+	<h2>Delete account</h2>
 
 	{#if confirm_deletion}
-		<p>{t('account.warning')}</p>
+		<p>Warning: This action cannot be undone. All your data will be lost.</p>
 
 		<form method="POST" action="?/delete" use:enhance>
 			<div class="form-group">
-				<label for="yes">{t('confirm_yes')}</label>
+				<label for="yes">Type "Yes" to confirm.</label>
 				<input type="text" name="yes" id="yes" />
 			</div>
 
 			<div class="form-actions">
-				<button class="danger">{t('delete.data')}</button>
+				<button class="danger">Delete my data</button>
 			</div>
 		</form>
 	{:else}
 		<div class="form-actions">
-			<button class="danger" onclick={handle_confirm_click}>
-				{t('delete.data')}
-			</button>
+			<button class="danger" onclick={handle_confirm_click}> Delete my data </button>
 		</div>
 	{/if}
 
