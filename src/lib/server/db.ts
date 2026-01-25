@@ -6,15 +6,13 @@ const db = createClient({
 	url: DB_URL,
 })
 
-async function adjust_database() {
+export async function initialize_db() {
 	try {
 		await db.execute('PRAGMA foreign_keys = ON;')
 	} catch (err) {
 		console.error((err as LibsqlError).message)
 	}
 }
-
-adjust_database()
 
 export async function query<T = any>(
 	sql: string,
