@@ -1,19 +1,14 @@
-type Options = {
-	limit: number
-	window_ms: number
-}
-
 type State = {
 	count: number
 	window_start: number
 }
 
-export class Rate_Limiter {
+export class RateLimiter {
 	private limit: number
 	private window_ms: number
 	private map = new Map<string, State>()
 
-	constructor(options: Options) {
+	constructor(options: { limit: number; window_ms: number }) {
 		this.limit = options.limit
 		this.window_ms = options.window_ms
 	}
@@ -22,23 +17,25 @@ export class Rate_Limiter {
 		const now = Date.now()
 		const state = this.map.get(ip)
 
-		if (!state) {
-			this.map.set(ip, { count: 1, window_start: now })
-			return true
-		}
+		if (!state) return true
 
 		if (now - state.window_start >= this.window_ms) {
-			state.window_start = now
-			state.count = 1
 			return true
 		}
 
-		if (state.count >= this.limit) {
-			return false
+		return state.count < this.limit
+	}
+
+	record(ip: string): void {
+		const now = Date.now()
+		const state = this.map.get(ip)
+
+		if (!state || now - state.window_start >= this.window_ms) {
+			this.map.set(ip, { count: 1, window_start: now })
+			return
 		}
 
 		state.count++
-		return true
 	}
 
 	clear(ip: string): void {
