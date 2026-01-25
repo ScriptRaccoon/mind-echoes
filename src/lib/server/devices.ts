@@ -37,12 +37,12 @@ export async function save_device_token_in_database(
 ) {
 	const token_hash = hash_token(token)
 
-	const { success } = await query(
+	const { err } = await query(
 		'INSERT INTO devices (user_id, label, token_hash) VALUES (?,?,?)',
 		[user_id, label, token_hash],
 	)
 
-	return success
+	return err !== null
 }
 
 function hash_token(token: string): string {

@@ -9,12 +9,12 @@ export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
 	if (!user) error(401, 'Unauthorized')
 
-	const { rows: devices, success } = await query<{ id: number; label: string }>(
+	const { rows: devices, err } = await query<{ id: number; label: string }>(
 		'SELECT id, label FROM devices WHERE user_id = ?',
 		[user.id],
 	)
 
-	if (!success) {
+	if (err) {
 		error(500, 'Database error.')
 	}
 
@@ -30,12 +30,12 @@ export const actions: Actions = {
 		const current_password = form.get('current_password') as string
 		const new_password = form.get('new_password') as string
 
-		const { rows, success } = await query<{ password_hash: string }>(
+		const { rows, err } = await query<{ password_hash: string }>(
 			'SELECT password_hash FROM users WHERE id = ?',
 			[user.id],
 		)
 
-		if (!success || !rows.length) {
+		if (err || !rows.length) {
 			return fail(500, {
 				type: 'password',
 				error: 'Database error.',
@@ -61,12 +61,12 @@ export const actions: Actions = {
 
 		const new_password_hash = await bcrypt.hash(new_password, 10)
 
-		const { success: update_success } = await query(
+		const { err: update_err } = await query(
 			'UPDATE users SET password_hash = ? WHERE id = ?',
 			[new_password_hash, user.id],
 		)
 
-		if (!update_success) {
+		if (update_err) {
 			return fail(500, {
 				type: 'password',
 				error: 'Database error.',
@@ -93,12 +93,12 @@ export const actions: Actions = {
 			})
 		}
 
-		const { success } = await query('UPDATE users SET username = ? WHERE id = ?', [
+		const { err } = await query('UPDATE users SET username = ? WHERE id = ?', [
 			username,
 			user.id,
 		])
 
-		if (!success) {
+		if (err) {
 			return fail(500, {
 				type: 'username',
 				error: 'Database error.',
@@ -130,9 +130,9 @@ export const actions: Actions = {
 			})
 		}
 
-		const { success } = await query('DELETE FROM users WHERE id = ?', [user.id])
+		const { err } = await query('DELETE FROM users WHERE id = ?', [user.id])
 
-		if (!success) {
+		if (err) {
 			return fail(500, {
 				type: 'delete',
 				error: 'Database error.',

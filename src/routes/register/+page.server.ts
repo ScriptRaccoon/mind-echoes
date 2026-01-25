@@ -27,12 +27,12 @@ export const actions: Actions = {
 
 		const password_hash = await bcrypt.hash(password, 10)
 
-		const { rows, success } = await query<{ id: number }>(
+		const { rows, err } = await query<{ id: number }>(
 			'INSERT INTO users (username, password_hash) VALUES (?,?) RETURNING id',
 			[username, password_hash],
 		)
 
-		if (!success || !rows.length) {
+		if (err || !rows.length) {
 			return fail(500, {
 				username,
 				error: 'Database error.',

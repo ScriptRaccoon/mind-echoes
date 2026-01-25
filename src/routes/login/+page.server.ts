@@ -28,12 +28,12 @@ export const actions: Actions = {
 		const username = form.get('username') as string
 		const password = form.get('password') as string
 
-		const { rows, success } = await query<{
+		const { rows, err } = await query<{
 			id: number
 			password_hash: string
 		}>('SELECT id, password_hash FROM users WHERE username = ?', [username])
 
-		if (!success) {
+		if (err) {
 			return fail(500, { error: 'Database error.' })
 		}
 

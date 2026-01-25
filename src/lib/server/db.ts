@@ -20,21 +20,19 @@ export async function query<T = any>(
 ): Promise<
 	| {
 			rows: T[]
-			success: true
 			err: null
 	  }
 	| {
 			rows: null
-			success: false
 			err: LibsqlError
 	  }
 > {
 	try {
 		const res = args ? await db.execute(sql, args) : await db.execute(sql)
-		return { rows: res.rows as T[], success: true, err: null }
+		return { rows: res.rows as T[], err: null }
 	} catch (err) {
 		const libsql_error = err as LibsqlError
 		console.error(libsql_error)
-		return { rows: null, err: libsql_error, success: false }
+		return { rows: null, err: libsql_error }
 	}
 }

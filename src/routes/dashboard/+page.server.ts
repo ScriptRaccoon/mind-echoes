@@ -8,12 +8,12 @@ export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
 	if (!user) error(401, 'Unauthorized')
 
-	const { rows: entries_enc, success } = await query<Entry_DB_Summary>(
+	const { rows: entries_enc, err } = await query<Entry_DB_Summary>(
 		'SELECT id, date, title_enc FROM entries WHERE user_id = ? ORDER BY date DESC',
 		[user.id],
 	)
 
-	if (!success) {
+	if (err) {
 		error(500, 'Database error.')
 	}
 

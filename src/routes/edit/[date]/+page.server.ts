@@ -10,12 +10,12 @@ export const load: PageServerLoad = async (event) => {
 
 	const date = event.params.date
 
-	const { rows: entries, success } = await query<Entry_DB>(
+	const { rows: entries, err } = await query<Entry_DB>(
 		'SELECT id, date, title_enc, content_enc, thanks_enc FROM entries WHERE date = ? AND user_id = ?',
 		[date, user.id],
 	)
 
-	if (!success) {
+	if (err) {
 		error(500, 'Database error.')
 	}
 
@@ -46,12 +46,12 @@ export const actions: Actions = {
 		const content_enc = encrypt(content)
 		const thanks_enc = encrypt(thanks)
 
-		const { success } = await query(
+		const { err } = await query(
 			'UPDATE entries SET title_enc = ?, content_enc = ?, thanks_enc = ? WHERE date = ? AND user_id = ?',
 			[title_enc, content_enc, thanks_enc, date, user.id],
 		)
 
-		if (!success) {
+		if (err) {
 			return fail(500, { error: 'Database error.' })
 		}
 
@@ -64,12 +64,12 @@ export const actions: Actions = {
 
 		const date = event.params.date
 
-		const { success } = await query(
-			'DELETE FROM entries WHERE date = ? AND user_id = ?',
-			[date, user.id],
-		)
+		const { err } = await query('DELETE FROM entries WHERE date = ? AND user_id = ?', [
+			date,
+			user.id,
+		])
 
-		if (!success) {
+		if (err) {
 			return fail(500, { error: 'Database error.' })
 		}
 
