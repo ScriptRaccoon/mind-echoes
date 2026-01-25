@@ -43,7 +43,7 @@ export const actions: Actions = {
 
 		if (!rows.length) {
 			limiter.record(ip)
-			return fail(401, { error: 'Username or password are incorrect' })
+			return fail(401, { error: 'Invalid credentials' })
 		}
 
 		const { id, password_hash } = rows[0]
@@ -51,7 +51,7 @@ export const actions: Actions = {
 		const is_correct = await bcrypt.compare(password, password_hash)
 		if (!is_correct) {
 			limiter.record(ip)
-			return fail(401, { error: 'Incorrect password' })
+			return fail(401, { error: 'Invalid credentials' })
 		}
 
 		limiter.clear(ip)
