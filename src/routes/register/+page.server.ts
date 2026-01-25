@@ -39,13 +39,13 @@ export const actions: Actions = {
 
 		if (err) {
 			if (is_constraint_error(err)) {
-				return fail(409, { username, error: 'Username is already taken.' })
+				return fail(409, { username, error: 'Username is already taken' })
 			}
-			return fail(500, { username, error: 'Database error.' })
+			return fail(500, { username, error: 'Database error' })
 		}
 
 		if (!rows.length) {
-			return fail(500, { username, error: 'Database error.' })
+			return fail(500, { username, error: 'Database error' })
 		}
 
 		const { id } = rows[0]

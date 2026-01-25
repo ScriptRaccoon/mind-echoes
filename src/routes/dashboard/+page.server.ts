@@ -14,7 +14,7 @@ export const load: PageServerLoad = async (event) => {
 	)
 
 	if (err) {
-		error(500, 'Database error.')
+		error(500, 'Database error')
 	}
 
 	const entries: Entry_Summary[] = entries_enc.map(decrypt_entry_summary)

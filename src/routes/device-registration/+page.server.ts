@@ -23,11 +23,11 @@ export const actions: Actions = {
 		const success = save_device_token_in_database(user.id, device_label, device_token)
 
 		if (!success) {
-			return fail(500, { error: 'Database error.' })
+			return fail(500, { error: 'Database error' })
 		}
 
 		save_device_cookie(event, device_token)
 
-		return { message: 'Device has been registered.' }
+		return { message: 'Device has been registered' }
 	},
 }

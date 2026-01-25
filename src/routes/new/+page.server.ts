@@ -11,7 +11,7 @@ export const actions: Actions = {
 		const date = form.get('date') as string
 
 		if (!date) {
-			return fail(400, { date, error: 'Date is missing.' })
+			return fail(400, { date, error: 'Date is missing' })
 		}
 
 		const { rows: entries, err } = await query<{ id: number }>(
@@ -20,11 +20,11 @@ export const actions: Actions = {
 		)
 
 		if (err) {
-			return fail(500, { date, error: 'Database error.' })
+			return fail(500, { date, error: 'Database error' })
 		}
 
 		if (entries.length) {
-			return fail(409, { date, error: 'An entry already exists for this date.' })
+			return fail(409, { date, error: 'An entry already exists for this date' })
 		}
 
 		redirect(303, `/new/${date}`)

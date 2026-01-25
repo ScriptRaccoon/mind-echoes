@@ -18,13 +18,13 @@ export const load: PageServerLoad = async (event) => {
 	)
 
 	if (err) {
-		error(500, 'Database error.')
+		error(500, 'Database error')
 	}
 
 	const entry_enc = entries[0]
 
 	if (!entry_enc) {
-		error(404, 'No entry found for this date.')
+		error(404, 'No entry found for this date')
 	}
 
 	const entry: Entry = decrypt_entry(entry_enc)
@@ -78,10 +78,10 @@ export const actions: Actions = {
 		)
 
 		if (err) {
-			return fail(500, { error: 'Database error.' })
+			return fail(500, { error: 'Database error' })
 		}
 
-		return { message: 'Entry has been updated.' }
+		return { message: 'Entry has been updated' }
 	},
 
 	delete: async (event) => {
@@ -96,7 +96,7 @@ export const actions: Actions = {
 		])
 
 		if (err) {
-			return fail(500, { error: 'Database error.' })
+			return fail(500, { error: 'Database error' })
 		}
 
 		redirect(302, '/dashboard')

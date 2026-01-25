@@ -16,7 +16,7 @@ export const load: PageServerLoad = async (event) => {
 	)
 
 	if (err) {
-		error(500, 'Database error.')
+		error(500, 'Database error')
 	}
 
 	return { devices }
@@ -50,10 +50,10 @@ export const actions: Actions = {
 				return fail(409, {
 					type: 'username',
 					username,
-					error: 'Username is already taken.',
+					error: 'Username is already taken',
 				})
 			}
-			return fail(500, { type: 'username', username, error: 'Database error.' })
+			return fail(500, { type: 'username', username, error: 'Database error' })
 		}
 
 		user.username = username
@@ -63,7 +63,7 @@ export const actions: Actions = {
 		return {
 			type: 'username',
 			username,
-			message: 'Username has been updated successfully.',
+			message: 'Username has been updated successfully',
 		}
 	},
 
@@ -81,14 +81,14 @@ export const actions: Actions = {
 		)
 
 		if (err || !rows.length) {
-			return fail(500, { type: 'password', error: 'Database error.' })
+			return fail(500, { type: 'password', error: 'Database error' })
 		}
 
 		const { password_hash } = rows[0]
 
 		const current_is_correct = await bcrypt.compare(current_password, password_hash)
 		if (!current_is_correct) {
-			return fail(401, { type: 'password', error: 'Current password is incorrect.' })
+			return fail(401, { type: 'password', error: 'Current password is incorrect' })
 		}
 
 		const password_parsed = v.safeParse(password_schema, new_password)
@@ -108,10 +108,10 @@ export const actions: Actions = {
 		)
 
 		if (update_err) {
-			return fail(500, { type: 'password', error: 'Database error.' })
+			return fail(500, { type: 'password', error: 'Database error' })
 		}
 
-		return { type: 'password', message: 'Password has been updated successfully.' }
+		return { type: 'password', message: 'Password has been updated successfully' }
 	},
 
 	delete: async (event) => {
@@ -125,14 +125,14 @@ export const actions: Actions = {
 		if (user_yes.toLowerCase() !== actual_yes.toLowerCase()) {
 			return fail(400, {
 				type: 'delete',
-				error: 'Type "Yes" (3 letters) to confirm this action.',
+				error: 'Type "Yes" (3 letters) to confirm this action',
 			})
 		}
 
 		const { err } = await query('DELETE FROM users WHERE id = ?', [user.id])
 
 		if (err) {
-			return fail(500, { type: 'delete', error: 'Database error.' })
+			return fail(500, { type: 'delete', error: 'Database error' })
 		}
 
 		delete_auth_cookie(event)

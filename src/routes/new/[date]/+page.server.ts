@@ -61,10 +61,10 @@ export const actions: Actions = {
 
 		if (err) {
 			if (is_constraint_error(err)) {
-				const msg = 'An entry already exists for this date.'
+				const msg = 'An entry already exists for this date'
 				return fail(409, { title, content, thanks, error: msg })
 			}
-			return fail(500, { title, content, thanks, error: 'Database error.' })
+			return fail(500, { title, content, thanks, error: 'Database error' })
 		}
 
 		redirect(302, '/dashboard')

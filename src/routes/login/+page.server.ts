@@ -7,7 +7,7 @@ import { set_auth_cookie } from '$lib/server/auth'
 
 export const load: PageServerLoad = (event) => {
 	const LOGIN_MESSAGES: Record<string, undefined | string> = {
-		logout: 'You have been logged out successfully.',
+		logout: 'You have been logged out successfully',
 	}
 
 	const from = event.url.searchParams.get('from') ?? ''
@@ -38,12 +38,12 @@ export const actions: Actions = {
 		}>('SELECT id, password_hash FROM users WHERE username = ?', [username])
 
 		if (err) {
-			return fail(500, { error: 'Database error.' })
+			return fail(500, { error: 'Database error' })
 		}
 
 		if (!rows.length) {
 			limiter.record(ip)
-			return fail(401, { error: 'Username or password are incorrect.' })
+			return fail(401, { error: 'Username or password are incorrect' })
 		}
 
 		const { id, password_hash } = rows[0]
@@ -51,7 +51,7 @@ export const actions: Actions = {
 		const is_correct = await bcrypt.compare(password, password_hash)
 		if (!is_correct) {
 			limiter.record(ip)
-			return fail(401, { error: 'Incorrect password.' })
+			return fail(401, { error: 'Incorrect password' })
 		}
 
 		limiter.clear(ip)
