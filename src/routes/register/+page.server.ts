@@ -1,9 +1,10 @@
-import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { is_constraint_error, query } from '$lib/server/db'
 import { fail, redirect } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import type { Actions } from './$types'
 import { set_auth_cookie } from '$lib/server/auth'
+import * as v from 'valibot'
+import { password_schema, username_schema } from '$lib/server/schemas'
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -11,17 +12,21 @@ export const actions: Actions = {
 		const username = form.get('username') as string
 		const password = form.get('password') as string
 
-		if (!username) {
+		const username_parsed = v.safeParse(username_schema, username)
+
+		if (!username_parsed.success) {
 			return fail(400, {
 				username,
-				error: 'Username cannot be empty.',
+				error: username_parsed.issues[0].message,
 			})
 		}
 
-		if (password.length < MINIMAL_PASSWORD_LENGTH) {
+		const password_parsed = v.safeParse(password_schema, password)
+
+		if (!password_parsed.success) {
 			return fail(400, {
-				username,
-				error: 'Password must be at least 8 characters long.',
+				password,
+				error: password_parsed.issues[0].message,
 			})
 		}
 

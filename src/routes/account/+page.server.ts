@@ -1,9 +1,10 @@
 import { error, fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import { is_constraint_error, query } from '$lib/server/db'
-import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
 import type { PageServerLoad } from './$types'
+import * as v from 'valibot'
+import { username_schema, password_schema } from '$lib/server/schemas'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
@@ -29,10 +30,13 @@ export const actions: Actions = {
 		const form = await event.request.formData()
 		const username = form.get('username') as string
 
-		if (!username.length) {
+		const username_parsed = v.safeParse(username_schema, username)
+
+		if (!username_parsed.success) {
 			return fail(400, {
 				type: 'username',
-				error: 'Username cannot be empty.',
+				username,
+				error: username_parsed.issues[0].message,
 			})
 		}
 
@@ -43,9 +47,13 @@ export const actions: Actions = {
 
 		if (err) {
 			if (is_constraint_error(err)) {
-				return fail(409, { username, error: 'Username is already taken.' })
+				return fail(409, {
+					type: 'username',
+					username,
+					error: 'Username is already taken.',
+				})
 			}
-			return fail(500, { username, error: 'Database error.' })
+			return fail(500, { type: 'username', username, error: 'Database error.' })
 		}
 
 		user.username = username
@@ -54,6 +62,7 @@ export const actions: Actions = {
 
 		return {
 			type: 'username',
+			username,
 			message: 'Username has been updated successfully.',
 		}
 	},
@@ -72,26 +81,22 @@ export const actions: Actions = {
 		)
 
 		if (err || !rows.length) {
-			return fail(500, {
-				type: 'password',
-				error: 'Database error.',
-			})
+			return fail(500, { type: 'password', error: 'Database error.' })
 		}
 
 		const { password_hash } = rows[0]
 
 		const current_is_correct = await bcrypt.compare(current_password, password_hash)
 		if (!current_is_correct) {
-			return fail(401, {
-				type: 'password',
-				error: 'Current password is incorrect.',
-			})
+			return fail(401, { type: 'password', error: 'Current password is incorrect.' })
 		}
 
-		if (new_password.length < MINIMAL_PASSWORD_LENGTH) {
+		const password_parsed = v.safeParse(password_schema, new_password)
+
+		if (!password_parsed.success) {
 			return fail(400, {
 				type: 'password',
-				error: 'Password must be at least 8 characters long.',
+				error: password_parsed.issues[0].message,
 			})
 		}
 
@@ -103,16 +108,10 @@ export const actions: Actions = {
 		)
 
 		if (update_err) {
-			return fail(500, {
-				type: 'password',
-				error: 'Database error.',
-			})
+			return fail(500, { type: 'password', error: 'Database error.' })
 		}
 
-		return {
-			type: 'password',
-			message: 'Password has been updated successfully.',
-		}
+		return { type: 'password', message: 'Password has been updated successfully.' }
 	},
 
 	delete: async (event) => {
@@ -133,10 +132,7 @@ export const actions: Actions = {
 		const { err } = await query('DELETE FROM users WHERE id = ?', [user.id])
 
 		if (err) {
-			return fail(500, {
-				type: 'delete',
-				error: 'Database error.',
-			})
+			return fail(500, { type: 'delete', error: 'Database error.' })
 		}
 
 		delete_auth_cookie(event)

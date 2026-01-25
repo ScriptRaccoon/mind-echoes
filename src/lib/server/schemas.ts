@@ -1,0 +1,20 @@
+import * as v from 'valibot'
+
+export const username_schema = v.pipe(
+	v.string('Username must be a string'),
+	v.nonEmpty('Username is required'),
+	v.maxLength(100, 'Username must be at most 100 characters long'),
+	v.regex(
+		/^[A-Za-z0-9_-]+$/,
+		'Username may only contain letters, digits, underscores, and dashes',
+	),
+)
+
+export const password_schema = v.pipe(
+	v.string('Password must be a string'),
+	v.nonEmpty('Password is required'),
+	v.minLength(8, 'Password must be at least 8 characters long'),
+	v.maxLength(100, 'Password must be at most 100 characters long'),
+	v.regex(/\d/, 'Password must contain at least one digit'),
+	v.regex(/[A-Za-z]/, 'Password must contain at least one letter'),
+)

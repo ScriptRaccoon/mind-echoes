@@ -1,7 +1,3 @@
-export const MINIMAL_PASSWORD_LENGTH = 8
-
-export const COOKIE_LANG = 'lang'
-
 export const COOKIE_DEVICE_TOKEN = 'device_token'
 
 export const COOKIE_OPTIONS = {

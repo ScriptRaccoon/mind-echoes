@@ -32,6 +32,7 @@
 	"dependencies": {
 		"@libsql/client": "^0.15.15",
 		"bcrypt": "^6.0.0",
-		"jsonwebtoken": "^9.0.3"
+		"jsonwebtoken": "^9.0.3",
+		"valibot": "^1.2.0"
 	}
 }
