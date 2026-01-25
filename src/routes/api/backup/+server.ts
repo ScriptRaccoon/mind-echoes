@@ -18,7 +18,7 @@ export const GET: RequestHandler = async (event) => {
 	)
 
 	if (!success) {
-		return error(500, ts('error.database', lang))
+		error(500, ts('error.database', lang))
 	}
 
 	const entries = rows.map(decrypt_entry)

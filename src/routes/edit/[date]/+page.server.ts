@@ -19,13 +19,13 @@ export const load: PageServerLoad = async (event) => {
 	)
 
 	if (!success) {
-		return error(500, ts('error.database', lang))
+		error(500, ts('error.database', lang))
 	}
 
 	const entry_enc = entries[0]
 
 	if (!entry_enc) {
-		return error(404, ts('error.no_entry_found', lang))
+		error(404, ts('error.no_entry_found', lang))
 	}
 
 	const entry: Entry = decrypt_entry(entry_enc)

@@ -21,7 +21,7 @@ export const load: PageServerLoad = async (event) => {
 	)
 
 	if (!success) {
-		return error(500, ts('error.database', lang))
+		error(500, ts('error.database', lang))
 	}
 
 	return { devices }
