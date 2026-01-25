@@ -14,19 +14,7 @@ export async function initialize_db() {
 	}
 }
 
-export async function query<T = any>(
-	sql: string,
-	args?: any[],
-): Promise<
-	| {
-			rows: T[]
-			err: null
-	  }
-	| {
-			rows: null
-			err: LibsqlError
-	  }
-> {
+export async function query<T = any>(sql: string, args?: any[]) {
 	try {
 		const res = args ? await db.execute(sql, args) : await db.execute(sql)
 		return { rows: res.rows as T[], err: null }
