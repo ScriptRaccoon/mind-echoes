@@ -3,7 +3,7 @@ import {
 	save_device_cookie,
 	save_device_token_in_database,
 } from '$lib/server/devices'
-import { error, fail } from '@sveltejs/kit'
+import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 
 export const actions: Actions = {
@@ -28,6 +28,6 @@ export const actions: Actions = {
 
 		save_device_cookie(event, device_token)
 
-		return { message: 'Device has been registered' }
+		redirect(303, '/dashboard')
 	},
 }

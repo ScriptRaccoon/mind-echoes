@@ -17,10 +17,4 @@
 
 {#if form?.error}
 	<p class="error">{form.error}</p>
-{:else if form?.message}
-	<p class="message">{form.message}</p>
-
-	<!-- <p>
-		<a href="/login">Login</a>
-	</p> -->
 {/if}
