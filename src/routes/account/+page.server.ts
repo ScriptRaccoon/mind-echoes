@@ -139,4 +139,28 @@ export const actions: Actions = {
 
 		redirect(302, '/')
 	},
+
+	remove_device: async (event) => {
+		const user = event.locals.user
+		if (!user) error(401, 'Unauthorized')
+
+		const form = await event.request.formData()
+
+		const device_id = form.get('device_id') as string
+
+		if (!device_id) {
+			return fail(400, { type: 'device', error: 'Device ID is required' })
+		}
+
+		const { err } = await query('DELETE FROM devices WHERE user_id = ? AND id = ?', [
+			user.id,
+			device_id,
+		])
+
+		if (err) {
+			return fail(400, { type: 'device', error: 'Database error' })
+		}
+
+		return { type: 'device', message: 'Device has been removed' }
+	},
 }

@@ -75,10 +75,24 @@
 	<ul class="device-list">
 		{#each data.devices as device (device.id)}
 			<li>
-				{device.label}
+				<form action="?/remove_device" method="POST" use:enhance class="device-form">
+					<span>{device.label}</span>
+					<input type="hidden" name="device_id" value={device.id} />
+					<div class="form-actions">
+						<button>Remove</button>
+					</div>
+				</form>
 			</li>
 		{/each}
 	</ul>
+
+	{#if form?.error && form.type === 'device'}
+		<p class="error">{form.error}</p>
+	{/if}
+
+	{#if form?.message && form.type === 'device'}
+		<p class="message">{form.message}</p>
+	{/if}
 </section>
 
 <section>
@@ -115,5 +129,11 @@
 
 	.device-list {
 		padding-left: 2rem;
+	}
+
+	.device-form {
+		margin-bottom: 0.5rem;
+		display: flex;
+		justify-content: space-between;
 	}
 </style>
