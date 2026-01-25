@@ -50,13 +50,3 @@ export function decrypt_entry_summary(e: Entry_DB_Summary): Entry_Summary {
 		title: decrypt(e.title_enc),
 	}
 }
-
-export function encrypt_entry(e: Entry): Entry_DB {
-	return {
-		id: e.id,
-		date: e.date,
-		title_enc: encrypt(e.title),
-		content_enc: encrypt(e.content),
-		thanks_enc: encrypt(e.thanks),
-	}
-}

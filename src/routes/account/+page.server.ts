@@ -1,10 +1,8 @@
 import { error, fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
-import { db, query } from '$lib/server/db'
+import { query } from '$lib/server/db'
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { SUPPORTED_LANGUAGES, ts, type Lang } from '$lib/translations/main'
-import { verify_entries } from '$lib/utils'
-import { encrypt_entry } from '$lib/server/encryption'
 import { get_language, set_language_cookie } from '$lib/translations/request'
 import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
 import type { PageServerLoad } from './$types'
@@ -130,79 +128,6 @@ export const actions: Actions = {
 		return {
 			type: 'username',
 			message: ts('username.updated', lang),
-		}
-	},
-
-	backup: async (event) => {
-		const user = event.locals.user
-		if (!user) error(401, 'Unauthorized')
-
-		const lang = get_language(event.cookies)
-		const form = await event.request.formData()
-		const file = form.get('file')
-
-		const is_valid_file =
-			file instanceof File &&
-			file.type === 'application/json' &&
-			file.name.endsWith('.json')
-
-		if (!is_valid_file) {
-			return fail(400, {
-				type: 'backup',
-				error: ts('error.file_json', lang),
-			})
-		}
-
-		const file_content = await file.text()
-
-		let entries: unknown = null
-
-		try {
-			entries = JSON.parse(file_content)
-		} catch (_) {
-			return fail(400, {
-				type: 'backup',
-				error: ts('error.file_valid_json', lang),
-			})
-		}
-
-		if (!verify_entries(entries)) {
-			return fail(400, {
-				type: 'backup',
-				error: ts('error.invalid_entries', lang),
-			})
-		}
-
-		const encoded_entries = entries.map(encrypt_entry)
-
-		const tx = await db.transaction('write')
-
-		try {
-			await tx.execute('DELETE FROM entries')
-
-			for (const entry of encoded_entries) {
-				await tx.execute({
-					sql: 'INSERT INTO entries (id, date, title_enc, content_enc, thanks_enc, user_id) VALUES (?,?,?,?,?,?)',
-					args: [
-						entry.id,
-						entry.date,
-						entry.title_enc,
-						entry.content_enc,
-						entry.thanks_enc,
-						user.id,
-					],
-				})
-			}
-
-			await tx.commit()
-		} catch (err) {
-			console.error(err)
-			return fail(500, { type: 'backup', error: ts('error.database', lang) })
-		}
-
-		return {
-			type: 'backup',
-			message: ts('backup.success', lang, encoded_entries.length.toString()),
 		}
 	},
 

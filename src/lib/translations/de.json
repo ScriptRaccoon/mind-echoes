@@ -57,19 +57,8 @@
 	"delete_sure": "Möchtest du diesen Eintrag wirklich löschen?",
 	"error.no_entry_found": "Für dieses Datum wurde kein Eintrag gefunden.",
 	"entry.updated": "Der Eintrag wurde aktualisiert.",
-	"backup.create": "Datensicherung erstellen",
-	"backup.download": "Sicherungsdatei herunterladen",
-	"backup.restore": "Datensicherung wiederherstellen",
-	"backup.warning": "Warnung: Dadurch werden alle gespeicherten Daten durch die Daten aus der Sicherungsdatei ersetzt.",
-	"choose.file": "Datei auswählen",
-	"backup.upload": "Sicherungsdatei hochladen",
-	"backup.success": "{{}} Einträge wurden erfolgreich importiert.",
-	"error.file_json": "Die Datei muss eine JSON-Datei sein.",
-	"error.file_valid_json": "Der Dateiinhalt muss gültiges JSON sein.",
-	"error.invalid_entries": "Die Einträge haben nicht das korrekte Format.",
 	"devices": "Geräte",
 	"device.registration": "Geräteregistrierung",
 	"device.label": "Gerätebezeichnung",
-	"device.registered": "Das Gerät wurde registriert.",
-	"error.not_found": "Not Found"
+	"device.registered": "Das Gerät wurde registriert."
 }

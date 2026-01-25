@@ -104,48 +104,6 @@
 </section>
 
 <section>
-	<h2>{t('backup.create')}</h2>
-
-	<form method="GET" action="/api/backup">
-		<div class="form-actions">
-			<button>{t('backup.download')}</button>
-		</div>
-	</form>
-</section>
-
-<section>
-	<h2>{t('backup.restore')}</h2>
-
-	<p>{t('backup.warning')}</p>
-
-	<form method="POST" action="?/backup" enctype="multipart/form-data" use:enhance>
-		<div class="form-group">
-			<input
-				type="file"
-				name="file"
-				id="file"
-				required
-				accept="application/json"
-				class="sr-only"
-			/>
-			<label for="file">{t('choose.file')}</label>
-		</div>
-
-		<div class="form-actions">
-			<button>{t('backup.upload')}</button>
-		</div>
-	</form>
-
-	{#if form?.error && form.type === 'backup'}
-		<p class="error">{form.error}</p>
-	{/if}
-
-	{#if form?.message && form.type === 'backup'}
-		<p class="message">{form.message}</p>
-	{/if}
-</section>
-
-<section>
 	<h2>{t('account.delete')}</h2>
 
 	{#if confirm_deletion}
