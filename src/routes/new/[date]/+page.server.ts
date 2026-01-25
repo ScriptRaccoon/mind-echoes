@@ -2,17 +2,16 @@ import { query } from '$lib/server/db'
 import { encrypt } from '$lib/server/encryption'
 import { ts } from '$lib/translations/main'
 import { get_language } from '$lib/translations/request'
-import type { Actions } from '@sveltejs/kit'
-import { fail, redirect } from '@sveltejs/kit'
+import { error, fail, redirect } from '@sveltejs/kit'
+import type { Actions } from './$types'
 
 export const actions: Actions = {
 	default: async (event) => {
+		const user = event.locals.user
+		if (!user) error(401, 'Unauthorized')
+
 		const lang = get_language(event.cookies)
 		const date = event.params.date
-
-		if (!date) {
-			return fail(400, { error: ts('error.date_missing', lang) })
-		}
 
 		const form = await event.request.formData()
 		const title = form.get('title') as string
@@ -24,8 +23,8 @@ export const actions: Actions = {
 		const thanks_enc = encrypt(thanks)
 
 		const { err } = await query(
-			'INSERT INTO entries (date, title_enc, content_enc, thanks_enc) VALUES (?,?,?,?)',
-			[date, title_enc, content_enc, thanks_enc],
+			'INSERT INTO entries (date, title_enc, content_enc, thanks_enc, user_id) VALUES (?,?,?,?,?)',
+			[date, title_enc, content_enc, thanks_enc, user.id],
 		)
 
 		if (err) {

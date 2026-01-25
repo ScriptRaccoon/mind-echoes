@@ -14,24 +14,6 @@ export const actions: Actions = {
 		const username = form.get('username') as string
 		const password = form.get('password') as string
 
-		const { rows: users, success: user_success } = await query<{ id: number }>(
-			'SELECT id FROM users',
-		)
-
-		if (!user_success) {
-			return fail(500, {
-				username,
-				error: ts('error.database', lang),
-			})
-		}
-
-		if (users.length) {
-			return fail(409, {
-				username,
-				error: ts('error.user_created', lang),
-			})
-		}
-
 		if (!username) {
 			return fail(400, {
 				username,
@@ -48,13 +30,16 @@ export const actions: Actions = {
 
 		const password_hash = await bcrypt.hash(password, 10)
 
-		const { success: registration_success } = await query(
-			'INSERT INTO users (id, username, password_hash) VALUES (?,?,?)',
-			[1, username, password_hash],
+		const { success } = await query(
+			'INSERT INTO users (username, password_hash) VALUES (?,?)',
+			[username, password_hash],
 		)
 
-		if (!registration_success) {
-			return fail(500, { username, error: ts('error.database', lang) })
+		if (!success) {
+			return fail(500, {
+				username,
+				error: ts('error.database', lang),
+			})
 		}
 
 		return redirect(303, '/login?from=register')

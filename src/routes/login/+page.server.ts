@@ -1,13 +1,11 @@
 import { query } from '$lib/server/db'
-import jwt from 'jsonwebtoken'
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import type { PageServerLoad } from './$types'
-import { JWT_SECRET } from '$env/static/private'
 import { Rate_Limiter } from '$lib/server/ratelimit'
 import { ts } from '$lib/translations/main'
-import { COOKIE_JWT, COOKIE_OPTIONS, COOKIE_USERNAME } from '$lib/server/config'
 import { get_language } from '$lib/translations/request'
+import { set_auth_cookie } from '$lib/server/auth'
 
 export const load: PageServerLoad = (event) => {
 	const lang = get_language(event.cookies)
@@ -33,27 +31,30 @@ export const actions: Actions = {
 		}
 
 		const form = await event.request.formData()
+		const username = form.get('username') as string
 		const password = form.get('password') as string
 
-		const { rows, success } = await query<{ username: string; password_hash: string }>(
-			'SELECT username, password_hash FROM users WHERE id = 1',
-		)
+		const { rows, success } = await query<{
+			id: number
+			password_hash: string
+		}>('SELECT id, password_hash FROM users WHERE username = ?', [username])
 
-		if (!success || !rows.length) {
+		if (!success) {
 			return fail(500, { error: ts('error.database', lang) })
 		}
 
-		const { username, password_hash } = rows[0]
+		if (!rows.length) {
+			return fail(401, { error: ts('error.password_username_incorrect', lang) })
+		}
+
+		const { id, password_hash } = rows[0]
 
 		const is_correct = await bcrypt.compare(password, password_hash)
 		if (!is_correct) return fail(401, { error: ts('error.password_incorrect', lang) })
 
 		limiter.clear(ip)
 
-		const token = jwt.sign({ sub: 'user' }, JWT_SECRET, { expiresIn: '1w' })
-
-		event.cookies.set(COOKIE_JWT, token, COOKIE_OPTIONS)
-		event.cookies.set(COOKIE_USERNAME, username, COOKIE_OPTIONS)
+		set_auth_cookie(event, { id, username })
 
 		return redirect(303, '/dashboard')
 	},

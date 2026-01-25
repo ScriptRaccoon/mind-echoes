@@ -9,8 +9,13 @@
 
 <form method="POST" use:enhance>
 	<div class="form-group">
+		<label for="username">{t('username')}</label>
+		<input type="text" id="username" name="username" required />
+	</div>
+
+	<div class="form-group">
 		<label for="password">{t('password')}</label>
-		<input type="password" id="password" name="password" />
+		<input type="password" id="password" name="password" required />
 	</div>
 
 	<div class="form-actions">

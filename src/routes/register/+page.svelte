@@ -7,8 +7,6 @@
 
 <h1>{t('register.title')}</h1>
 
-<p>{t('register.hint')}</p>
-
 <form method="POST" use:enhance>
 	<div class="form-group">
 		<label for="username">{t('username')}</label>

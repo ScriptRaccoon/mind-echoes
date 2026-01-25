@@ -8,9 +8,13 @@ import { decrypt_entry } from '$lib/server/encryption'
 import { get_language } from '$lib/translations/request'
 
 export const GET: RequestHandler = async (event) => {
+	const user = event.locals.user
+	if (!user) error(401, 'Unauthorized')
+
 	const lang = get_language(event.cookies)
 	const { rows, success } = await query<Entry_DB>(
-		'SELECT id, date, title_enc, content_enc, thanks_enc FROM entries ORDER BY date',
+		'SELECT id, date, title_enc, content_enc, thanks_enc FROM entries WHERE user_id = ? ORDER BY date',
+		[user.id],
 	)
 
 	if (!success) {

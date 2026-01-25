@@ -1,34 +1,30 @@
-import { JWT_SECRET } from '$env/static/private'
-import { COOKIE_DEVICE_TOKEN, COOKIE_JWT } from '$lib/server/config'
+import { ENABLE_DEVICE_REGISTRATION } from '$env/static/private'
+import { authenticate } from '$lib/server/auth'
+import { COOKIE_DEVICE_TOKEN } from '$lib/server/config'
 import { is_valid_device } from '$lib/server/devices'
 import {
 	get_language_from_cookie,
 	get_language_from_header,
 	set_language_cookie,
 } from '$lib/translations/request'
-import { error, redirect, type Handle } from '@sveltejs/kit'
-import jwt from 'jsonwebtoken'
+import { redirect, type Handle } from '@sveltejs/kit'
 
 const auth_routes = ['/account', '/api', '/dashboard', '/edit', '/new']
 
 export const handle: Handle = async ({ event, resolve }) => {
-	if (event.url.pathname !== '/device-registration') {
-		const device_token = event.cookies.get(COOKIE_DEVICE_TOKEN)
-		if (!device_token || !(await is_valid_device(device_token))) {
-			return error(401, 'Unauthorized device')
-		}
-	}
+	const device_token = event.cookies.get(COOKIE_DEVICE_TOKEN)
+	const device_is_valid = !!device_token && (await is_valid_device(device_token))
+
+	authenticate(event)
 
 	const requires_auth = auth_routes.some((route) => event.url.pathname.startsWith(route))
 
-	if (requires_auth) {
-		try {
-			const token = event.cookies.get(COOKIE_JWT)
-			if (!token) throw new Error('No token')
-			jwt.verify(token, JWT_SECRET)
-		} catch (_) {
-			return redirect(307, '/login')
-		}
+	if (requires_auth && !event.locals.user) {
+		return redirect(307, '/login')
+	}
+
+	if (ENABLE_DEVICE_REGISTRATION === 'true' && requires_auth && !device_is_valid) {
+		return redirect(307, '/device-registration')
 	}
 
 	const language_in_cookie = get_language_from_cookie(event.cookies)

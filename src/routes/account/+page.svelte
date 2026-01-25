@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import { page } from '$app/state'
 	import { SUPPORTED_LANGUAGES, t } from '$lib/translations/main'
 
 	let { data, form } = $props()
@@ -40,12 +41,12 @@
 	<form method="POST" action="?/password" use:enhance>
 		<div class="form-group">
 			<label for="current_password">{t('password.current')}</label>
-			<input type="password" name="current_password" id="current_password" />
+			<input type="password" name="current_password" id="current_password" required />
 		</div>
 
 		<div class="form-group">
 			<label for="new_password">{t('password.new')}</label>
-			<input type="password" name="new_password" id="new_password" />
+			<input type="password" name="new_password" id="new_password" required />
 		</div>
 
 		<div class="form-actions">
@@ -68,7 +69,13 @@
 	<form method="POST" action="?/username" use:enhance>
 		<div class="form-group">
 			<label for="username">{t('username.new')}</label>
-			<input type="text" name="username" id="username" value={data.username} />
+			<input
+				type="text"
+				name="username"
+				id="username"
+				value={page.data.user?.username ?? ''}
+				required
+			/>
 		</div>
 
 		<div class="form-actions">

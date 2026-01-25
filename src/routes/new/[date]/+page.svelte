@@ -14,7 +14,7 @@
 <form method="POST" use:enhance>
 	<div class="form-group">
 		<label for="title">{t('entry.title')}</label>
-		<input class="title" type="text" name="title" id="title" />
+		<input class="title" type="text" name="title" id="title" required />
 	</div>
 
 	<div class="form-group">

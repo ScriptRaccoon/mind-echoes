@@ -8,10 +8,9 @@ export const db = createClient({
 
 async function adjust_database() {
 	try {
-		await db.execute('PRAGMA foreign_keys = ON')
+		await db.execute('PRAGMA foreign_keys = ON;')
 	} catch (err) {
-		const libsql_error = err as LibsqlError
-		console.error(libsql_error.message)
+		console.error((err as LibsqlError).message)
 	}
 }
 

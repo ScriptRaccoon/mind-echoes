@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state'
 	import EntryList from '$lib/components/EntryList.svelte'
 	import { t } from '$lib/translations/main'
 
@@ -8,7 +9,7 @@
 	const entry_today_exists = $derived(data.entries.some((entry) => entry.date === today))
 </script>
 
-<h1>{t('diary_for')} {data.username}</h1>
+<h1>{t('diary_for')} {page.data.user?.username}</h1>
 
 {#if !entry_today_exists}
 	<p>

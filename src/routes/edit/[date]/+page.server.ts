@@ -1,19 +1,21 @@
 import { query } from '$lib/server/db'
-import type { Actions } from '@sveltejs/kit'
 import { error, fail, redirect } from '@sveltejs/kit'
-import type { PageServerLoad } from './$types'
+import type { Actions, PageServerLoad } from './$types'
 import type { Entry, Entry_DB } from '$lib/types'
 import { ts } from '$lib/translations/main'
 import { decrypt_entry, encrypt } from '$lib/server/encryption'
 import { get_language } from '$lib/translations/request'
 
 export const load: PageServerLoad = async (event) => {
+	const user = event.locals.user
+	if (!user) error(401, 'Unauthorized')
+
 	const lang = get_language(event.cookies)
 	const date = event.params.date
 
 	const { rows: entries, success } = await query<Entry_DB>(
-		'SELECT id, date, title_enc, content_enc, thanks_enc FROM entries WHERE date = ?',
-		[date],
+		'SELECT id, date, title_enc, content_enc, thanks_enc FROM entries WHERE date = ? AND user_id = ?',
+		[date, user.id],
 	)
 
 	if (!success) {
@@ -33,12 +35,11 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	update: async (event) => {
+		const user = event.locals.user
+		if (!user) error(401, 'Unauthorized')
+
 		const lang = get_language(event.cookies)
 		const date = event.params.date
-
-		if (!date) {
-			return fail(400, { error: ts('error.date_missing', lang) })
-		}
 
 		const form = await event.request.formData()
 		const title = form.get('title') as string
@@ -50,8 +51,8 @@ export const actions: Actions = {
 		const thanks_enc = encrypt(thanks)
 
 		const { success } = await query(
-			'UPDATE entries SET title_enc = ?, content_enc = ?, thanks_enc = ? WHERE date = ?',
-			[title_enc, content_enc, thanks_enc, date],
+			'UPDATE entries SET title_enc = ?, content_enc = ?, thanks_enc = ? WHERE date = ? AND user_id = ?',
+			[title_enc, content_enc, thanks_enc, date, user.id],
 		)
 
 		if (!success) {
@@ -62,14 +63,16 @@ export const actions: Actions = {
 	},
 
 	delete: async (event) => {
+		const user = event.locals.user
+		if (!user) error(401, 'Unauthorized')
+
 		const lang = get_language(event.cookies)
 		const date = event.params.date
 
-		if (!date) {
-			return fail(400, { error: ts('error.date_missing', lang) })
-		}
-
-		const { success } = await query('DELETE FROM entries WHERE date = ?', [date])
+		const { success } = await query(
+			'DELETE FROM entries WHERE date = ? AND user_id = ?',
+			[date, user.id],
+		)
 
 		if (!success) {
 			return fail(500, { error: ts('error.database', lang) })
