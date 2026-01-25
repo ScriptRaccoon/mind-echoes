@@ -88,7 +88,7 @@
 <section>
 	<h2>{t('backup.create')}</h2>
 
-	<form method="GET" action="/app/api/backup">
+	<form method="GET" action="/api/backup">
 		<div class="form-actions">
 			<button>{t('backup.download')}</button>
 		</div>

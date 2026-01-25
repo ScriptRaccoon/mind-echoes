@@ -75,6 +75,6 @@ export const actions: Actions = {
 			return fail(500, { error: ts('error.database', lang) })
 		}
 
-		return redirect(302, '/app')
+		return redirect(302, '/dashboard')
 	},
 }

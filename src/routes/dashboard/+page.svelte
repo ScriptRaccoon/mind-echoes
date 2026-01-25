@@ -12,7 +12,7 @@
 
 {#if !entry_today_exists}
 	<p>
-		<a href="/app/new/{today}">
+		<a href="/new/{today}">
 			{t('add_today')}
 		</a>
 	</p>

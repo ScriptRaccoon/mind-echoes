@@ -13,7 +13,7 @@
 <ol>
 	{#each entries as entry (entry.id)}
 		<li>
-			<a href="/app/edit/{entry.date}">
+			<a href="/edit/{entry.date}">
 				<span class="date">{format_date(entry.date)}:</span>
 				<strong>
 					{entry.title || t('untitled')}

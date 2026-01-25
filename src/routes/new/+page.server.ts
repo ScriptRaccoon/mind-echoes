@@ -1,7 +1,8 @@
 import { query } from '$lib/server/db'
 import { ts } from '$lib/translations/main'
 import { get_language } from '$lib/translations/request'
-import { fail, redirect, type Actions } from '@sveltejs/kit'
+import { fail, redirect } from '@sveltejs/kit'
+import type { Actions } from './$types'
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -26,6 +27,6 @@ export const actions: Actions = {
 			return fail(409, { date, error: ts('error.date_conflict', lang) })
 		}
 
-		return redirect(303, `/app/new/${date}`)
+		return redirect(303, `/new/${date}`)
 	},
 }

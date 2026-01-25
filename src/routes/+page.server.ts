@@ -10,5 +10,5 @@ export const load: PageServerLoad = async (event) => {
 	if (!success) {
 		return error(500, ts('error.database', lang))
 	}
-	return rows.length ? redirect(303, '/app') : redirect(303, '/register')
+	return rows.length ? redirect(303, '/dashboard') : redirect(303, '/register')
 }

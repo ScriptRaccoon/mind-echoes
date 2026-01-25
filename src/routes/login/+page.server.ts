@@ -55,6 +55,6 @@ export const actions: Actions = {
 		event.cookies.set(COOKIE_JWT, token, COOKIE_OPTIONS)
 		event.cookies.set(COOKIE_USERNAME, username, COOKIE_OPTIONS)
 
-		return redirect(303, '/app')
+		return redirect(303, '/dashboard')
 	},
 }

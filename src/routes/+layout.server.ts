@@ -1,4 +1,3 @@
-import type { Lang } from '$lib/translations/main'
 import { get_language } from '$lib/translations/request'
 import type { LayoutServerLoad } from './$types'
 

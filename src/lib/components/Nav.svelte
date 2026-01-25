@@ -5,22 +5,22 @@
 <nav>
 	<ul>
 		<li>
-			<a href="/app">
+			<a href="/dashboard">
 				{t('nav.diary')}
 			</a>
 		</li>
 		<li>
-			<a href="/app/account">
+			<a href="/account">
 				{t('nav.account')}
 			</a>
 		</li>
 		<li>
-			<a href="/app/new">
+			<a href="/new">
 				{t('nav.new_entry')}
 			</a>
 		</li>
 		<li>
-			<a href="/app/logout" data-sveltekit-preload-data="off">
+			<a href="/logout" data-sveltekit-preload-data="off">
 				{t('nav.logout')}
 			</a>
 		</li>

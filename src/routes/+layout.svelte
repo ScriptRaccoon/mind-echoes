@@ -2,6 +2,7 @@
 	import './app.css'
 	import { type LazyLang, t } from '$lib/translations/main'
 	import { setContext } from 'svelte'
+	import Nav from '$lib/components/Nav.svelte'
 
 	let { data, children } = $props()
 
@@ -18,6 +19,8 @@
 	<meta name="apple-mobile-web-app-title" content={t('title')} />
 	<link rel="manifest" href="/site.webmanifest" />
 </svelte:head>
+
+<Nav />
 
 <div class="container">
 	{@render children()}

@@ -1,7 +1,7 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import { db, query } from '$lib/server/db'
-import type { PageServerLoad } from '../$types'
+import type { PageServerLoad } from './$types'
 import {
 	COOKIE_OPTIONS,
 	COOKIE_USERNAME,

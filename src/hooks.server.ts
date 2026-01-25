@@ -9,6 +9,8 @@ import {
 import { error, redirect, type Handle } from '@sveltejs/kit'
 import jwt from 'jsonwebtoken'
 
+const auth_routes = ['/account', '/api', '/dashboard', '/edit', '/new']
+
 export const handle: Handle = async ({ event, resolve }) => {
 	if (event.url.pathname !== '/device-registration') {
 		const device_token = event.cookies.get(COOKIE_DEVICE_TOKEN)
@@ -17,7 +19,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	const requires_auth = event.url.pathname.startsWith('/app')
+	const requires_auth = auth_routes.some((route) => event.url.pathname.startsWith(route))
+
 	if (requires_auth) {
 		try {
 			const token = event.cookies.get(COOKIE_JWT)
