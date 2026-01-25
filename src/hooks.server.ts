@@ -20,7 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const requires_auth = auth_routes.some((route) => event.url.pathname.startsWith(route))
 
 	if (requires_auth && !event.locals.user) {
-		return redirect(307, '/login')
+		redirect(307, '/login')
 	}
 
 	if (ENABLE_DEVICE_REGISTRATION === 'true' && requires_auth && !device_is_valid) {

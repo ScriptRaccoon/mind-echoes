@@ -4,5 +4,5 @@ import { delete_auth_cookie } from '$lib/server/auth'
 
 export const GET: RequestHandler = (event) => {
 	delete_auth_cookie(event)
-	return redirect(307, '/login?from=logout')
+	redirect(307, '/login?from=logout')
 }

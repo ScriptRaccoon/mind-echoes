@@ -38,6 +38,6 @@ export const actions: Actions = {
 			return fail(code, { title, content, thanks, error })
 		}
 
-		return redirect(302, '/dashboard')
+		redirect(302, '/dashboard')
 	},
 }

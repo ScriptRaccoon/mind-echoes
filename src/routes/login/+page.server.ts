@@ -56,6 +56,6 @@ export const actions: Actions = {
 
 		set_auth_cookie(event, { id, username })
 
-		return redirect(303, '/dashboard')
+		redirect(303, '/dashboard')
 	},
 }
