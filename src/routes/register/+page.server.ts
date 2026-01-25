@@ -5,6 +5,7 @@ import { get_language } from '$lib/translations/request'
 import { fail, redirect } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import type { Actions } from './$types'
+import { set_auth_cookie } from '$lib/server/auth'
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -30,18 +31,22 @@ export const actions: Actions = {
 
 		const password_hash = await bcrypt.hash(password, 10)
 
-		const { success } = await query(
-			'INSERT INTO users (username, password_hash) VALUES (?,?)',
+		const { rows, success } = await query<{ id: number }>(
+			'INSERT INTO users (username, password_hash) VALUES (?,?) RETURNING id',
 			[username, password_hash],
 		)
 
-		if (!success) {
+		if (!success || !rows.length) {
 			return fail(500, {
 				username,
 				error: ts('error.database', lang),
 			})
 		}
 
-		return redirect(303, '/login?from=register')
+		const { id } = rows[0]
+
+		set_auth_cookie(event, { id, username })
+
+		redirect(303, '/device-registration')
 	},
 }

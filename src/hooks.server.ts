@@ -1,7 +1,5 @@
-import { ENABLE_DEVICE_REGISTRATION } from '$env/static/private'
 import { authenticate } from '$lib/server/auth'
-import { COOKIE_DEVICE_TOKEN } from '$lib/server/config'
-import { is_valid_device } from '$lib/server/devices'
+import { is_known_device } from '$lib/server/devices'
 import {
 	get_language_from_cookie,
 	get_language_from_header,
@@ -12,9 +10,6 @@ import { redirect, type Handle } from '@sveltejs/kit'
 const auth_routes = ['/account', '/api', '/dashboard', '/edit', '/new']
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const device_token = event.cookies.get(COOKIE_DEVICE_TOKEN)
-	const device_is_valid = !!device_token && (await is_valid_device(device_token))
-
 	authenticate(event)
 
 	const requires_auth = auth_routes.some((route) => event.url.pathname.startsWith(route))
@@ -23,8 +18,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		redirect(307, '/login')
 	}
 
-	if (ENABLE_DEVICE_REGISTRATION === 'true' && requires_auth && !device_is_valid) {
-		return redirect(307, '/device-registration')
+	const known = await is_known_device(event)
+
+	if (requires_auth && !known) {
+		redirect(307, '/device-registration')
 	}
 
 	const language_in_cookie = get_language_from_cookie(event.cookies)

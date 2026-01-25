@@ -8,8 +8,8 @@
 
 <form method="POST">
 	<div class="form-group">
-		<label for="device">{t('device.label')}</label>
-		<input type="text" name="device" id="device" required />
+		<label for="device_label">{t('device.label')}</label>
+		<input type="text" name="device_label" id="device_label" required />
 	</div>
 
 	<div class="form-actions">
@@ -22,7 +22,7 @@
 {:else if form?.message}
 	<p class="message">{form.message}</p>
 
-	<p>
+	<!-- <p>
 		<a href="/login">{t('login.title')}</a>
-	</p>
+	</p> -->
 {/if}

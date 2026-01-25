@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS devices (
     user_id INTEGER NOT NULL,
     label TEXT NOT NULL,
     token_hash TEXT NOT NULL UNIQUE,
-    FOREIGN KEY user_id REFERENCES users (id) ON DELETE CASCADE
+    created_at TEXT NOT NULL DEFAULT current_timestamp,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_devices_user ON devices (user_id);

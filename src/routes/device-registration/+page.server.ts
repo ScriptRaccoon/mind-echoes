@@ -1,43 +1,36 @@
-import { ENABLE_DEVICE_REGISTRATION } from '$env/static/private'
-import { COOKIE_DEVICE_TOKEN, DEVICE_COOKIE_OPTIONS } from '$lib/server/config'
-import { query } from '$lib/server/db'
+import {
+	create_device_token,
+	save_device_cookie,
+	save_device_token_in_database,
+} from '$lib/server/devices'
 import { ts } from '$lib/translations/main'
 import { get_language } from '$lib/translations/request'
-import { error, fail, type Actions } from '@sveltejs/kit'
-import crypto from 'crypto'
-
-export const load = async (event) => {
-	const lang = get_language(event.cookies)
-
-	if (ENABLE_DEVICE_REGISTRATION !== 'true') {
-		error(404, ts('error.not_found', lang))
-	}
-}
+import { error, fail } from '@sveltejs/kit'
+import type { Actions } from './$types'
 
 export const actions: Actions = {
 	default: async (event) => {
+		const user = event.locals.user
+		if (!user) error(401, 'Unauthorized')
+
 		const lang = get_language(event.cookies)
 
-		if (ENABLE_DEVICE_REGISTRATION !== 'true') {
-			return fail(405, { error: ts('error.registration_not_allowed', lang) })
+		const form = await event.request.formData()
+		const device_label = form.get('device_label') as string
+
+		if (!device_label) {
+			return fail(400, { error: ts('error.device.label', lang) })
 		}
 
-		const form = await event.request.formData()
-		const device_label = form.get('device') as string
+		const device_token = create_device_token()
 
-		const raw_token = crypto.randomBytes(32).toString('hex')
-		const token_hash = crypto.createHash('sha256').update(raw_token).digest('hex')
-
-		event.cookies.set(COOKIE_DEVICE_TOKEN, raw_token, DEVICE_COOKIE_OPTIONS)
-
-		const { success } = await query(
-			'INSERT INTO devices (label, token_hash) VALUES (?,?)',
-			[device_label, token_hash],
-		)
+		const success = save_device_token_in_database(user.id, device_label, device_token)
 
 		if (!success) {
 			return fail(500, { error: ts('error.database', lang) })
 		}
+
+		save_device_cookie(event, device_token)
 
 		return { message: ts('device.registered', lang) }
 	},

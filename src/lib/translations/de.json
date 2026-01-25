@@ -3,7 +3,6 @@
 	"home.title": "Startseite",
 	"login.title": "Anmeldung",
 	"login.from.logout": "Du wurdest erfolgreich abgemeldet.",
-	"login.from.register": "Die Registrierung war erfolgreich. Du kannst dich jetzt anmelden.",
 	"password": "Passwort",
 	"username": "Benutzername",
 	"submit": "Absenden",
@@ -15,6 +14,7 @@
 	"error.password_username_incorrect": "Benutzername oder Passwort sind falsch.",
 	"error.login_attempts": "Zu viele Anmeldeversuche. Bitte versuche es später erneut.",
 	"error.current_password_incorrect": "Das aktuelle Passwort ist falsch.",
+	"error.device.label": "Gerätebezeichnung darf nicht leer sein.",
 	"nav.diary": "Tagebuch",
 	"nav.account": "Konto",
 	"nav.new_entry": "Neuer Eintrag",
@@ -67,9 +67,9 @@
 	"error.file_json": "Die Datei muss eine JSON-Datei sein.",
 	"error.file_valid_json": "Der Dateiinhalt muss gültiges JSON sein.",
 	"error.invalid_entries": "Die Einträge haben nicht das korrekte Format.",
+	"devices": "Geräte",
 	"device.registration": "Geräteregistrierung",
 	"device.label": "Gerätebezeichnung",
 	"device.registered": "Das Gerät wurde registriert.",
-	"error.not_found": "Not Found",
-	"error.registration_not_allowed": "Die Registrierung ist nicht erlaubt."
+	"error.not_found": "Not Found"
 }

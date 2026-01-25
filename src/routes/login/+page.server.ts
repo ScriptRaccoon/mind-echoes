@@ -12,7 +12,6 @@ export const load: PageServerLoad = (event) => {
 
 	const LOGIN_MESSAGES: Record<string, undefined | string> = {
 		logout: ts('login.from.logout', lang),
-		register: ts('login.from.register', lang),
 	}
 
 	const from = event.url.searchParams.get('from') ?? ''

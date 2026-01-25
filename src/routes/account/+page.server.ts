@@ -7,6 +7,25 @@ import { verify_entries } from '$lib/utils'
 import { encrypt_entry } from '$lib/server/encryption'
 import { get_language, set_language_cookie } from '$lib/translations/request'
 import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
+import type { PageServerLoad } from './$types'
+
+export const load: PageServerLoad = async (event) => {
+	const user = event.locals.user
+	if (!user) error(401, 'Unauthorized')
+
+	const lang = get_language(event.cookies)
+
+	const { rows: devices, success } = await query<{ id: number; label: string }>(
+		'SELECT id, label FROM devices WHERE user_id = ?',
+		[user.id],
+	)
+
+	if (!success) {
+		return error(500, ts('error.database', lang))
+	}
+
+	return { devices }
+}
 
 export const actions: Actions = {
 	lang: async (event) => {

@@ -93,6 +93,17 @@
 </section>
 
 <section>
+	<h2>{t('devices')}</h2>
+	<ul class="device-list">
+		{#each data.devices as device (device.id)}
+			<li>
+				{device.label}
+			</li>
+		{/each}
+	</ul>
+</section>
+
+<section>
 	<h2>{t('backup.create')}</h2>
 
 	<form method="GET" action="/api/backup">
@@ -166,5 +177,9 @@
 <style>
 	section + section {
 		margin-top: 2rem;
+	}
+
+	.device-list {
+		padding-left: 2rem;
 	}
 </style>

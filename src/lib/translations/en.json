@@ -3,7 +3,6 @@
 	"home.title": "Home",
 	"login.title": "Login",
 	"login.from.logout": "You have been logged out successfully.",
-	"login.from.register": "Registration successful. You can now log in.",
 	"password": "Password",
 	"username": "Username",
 	"submit": "Submit",
@@ -15,6 +14,7 @@
 	"error.password_username_incorrect": "Username or password are incorrect.",
 	"error.login_attempts": "Too many login attempts. Please try again later.",
 	"error.current_password_incorrect": "Current password is incorrect.",
+	"error.device.label": "Device label cannot be empty",
 	"nav.diary": "Diary",
 	"nav.account": "Account",
 	"nav.new_entry": "New entry",
@@ -67,9 +67,9 @@
 	"error.file_json": "The file must be a JSON file.",
 	"error.file_valid_json": "The file contents must be valid JSON.",
 	"error.invalid_entries": "Entries are not in the correct format.",
+	"devices": "Devices",
 	"device.registration": "Device registration",
 	"device.label": "Device label",
 	"device.registered": "Device has been registered.",
-	"error.not_found": "Not Found",
-	"error.registration_not_allowed": "Registration is not allowed."
+	"error.not_found": "Not Found"
 }

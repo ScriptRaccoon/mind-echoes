@@ -30,6 +30,6 @@ export const actions: Actions = {
 			return fail(409, { date, error: ts('error.date_conflict', lang) })
 		}
 
-		return redirect(303, `/new/${date}`)
+		redirect(303, `/new/${date}`)
 	},
 }
