@@ -3,6 +3,8 @@ import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import type { Entry, Entry_DB } from '$lib/types'
 import { decrypt_entry, encrypt } from '$lib/server/encryption'
+import * as v from 'valibot'
+import { title_schema, content_schema, thanks_schema } from '$lib/server/schemas'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
@@ -42,6 +44,39 @@ export const actions: Actions = {
 		const content = form.get('content') as string
 		const thanks = form.get('thanks') as string
 
+		const title_parsed = v.safeParse(title_schema, title)
+
+		if (!title_parsed.success) {
+			return fail(400, {
+				title,
+				content,
+				thanks,
+				error: title_parsed.issues[0].message,
+			})
+		}
+
+		const content_parsed = v.safeParse(content_schema, content)
+
+		if (!content_parsed.success) {
+			return fail(400, {
+				title,
+				content,
+				thanks,
+				error: content_parsed.issues[0].message,
+			})
+		}
+
+		const thanks_parsed = v.safeParse(thanks_schema, thanks)
+
+		if (!thanks_parsed.success) {
+			return fail(400, {
+				title,
+				content,
+				thanks,
+				error: thanks_parsed.issues[0].message,
+			})
+		}
+
 		const title_enc = encrypt(title)
 		const content_enc = encrypt(content)
 		const thanks_enc = encrypt(thanks)
@@ -52,10 +87,10 @@ export const actions: Actions = {
 		)
 
 		if (err) {
-			return fail(500, { error: 'Database error.' })
+			return fail(500, { title, content, thanks, error: 'Database error.' })
 		}
 
-		return { message: 'Entry has been updated.' }
+		return { title, content, thanks, message: 'Entry has been updated.' }
 	},
 
 	delete: async (event) => {

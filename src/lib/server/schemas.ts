@@ -18,3 +18,19 @@ export const password_schema = v.pipe(
 	v.regex(/\d/, 'Password must contain at least one digit'),
 	v.regex(/[A-Za-z]/, 'Password must contain at least one letter'),
 )
+
+export const title_schema = v.pipe(
+	v.string('Title must be a string'),
+	v.nonEmpty('Title is required'),
+	v.maxLength(100, 'Title must be at most 100 characters long'),
+)
+
+export const content_schema = v.pipe(
+	v.string('Content must be a string'),
+	v.maxLength(10000, 'Content must be at most 10000 characters long'),
+)
+
+export const thanks_schema = v.pipe(
+	v.string('Thanks must be a string'),
+	v.maxLength(1000, 'Thanks must be at most 1000 characters long'),
+)

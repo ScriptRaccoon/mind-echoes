@@ -23,16 +23,14 @@
 
 	<div class="form-group">
 		<label for="content">What's on your mind?</label>
-		<textarea name="content" id="content" {@attach resize_textarea}
-			>{entry.content}
-		</textarea>
+		<textarea name="content" id="content" {@attach resize_textarea} value={entry.content}
+		></textarea>
 	</div>
 
 	<div class="form-group">
 		<label for="thanks">What are 5 things you are grateful for?</label>
-		<textarea name="thanks" id="thanks" {@attach resize_textarea}
-			>{entry.thanks}
-		</textarea>
+		<textarea name="thanks" id="thanks" {@attach resize_textarea} value={entry.thanks}
+		></textarea>
 	</div>
 
 	<div class="form-actions">

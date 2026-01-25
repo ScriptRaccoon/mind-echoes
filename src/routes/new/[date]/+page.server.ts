@@ -2,6 +2,8 @@ import { is_constraint_error, query } from '$lib/server/db'
 import { encrypt } from '$lib/server/encryption'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
+import * as v from 'valibot'
+import { title_schema, content_schema, thanks_schema } from '$lib/server/schemas'
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -14,6 +16,39 @@ export const actions: Actions = {
 		const title = form.get('title') as string
 		const content = form.get('content') as string
 		const thanks = form.get('thanks') as string
+
+		const title_parsed = v.safeParse(title_schema, title)
+
+		if (!title_parsed.success) {
+			return fail(400, {
+				title,
+				content,
+				thanks,
+				error: title_parsed.issues[0].message,
+			})
+		}
+
+		const content_parsed = v.safeParse(content_schema, content)
+
+		if (!content_parsed.success) {
+			return fail(400, {
+				title,
+				content,
+				thanks,
+				error: content_parsed.issues[0].message,
+			})
+		}
+
+		const thanks_parsed = v.safeParse(thanks_schema, thanks)
+
+		if (!thanks_parsed.success) {
+			return fail(400, {
+				title,
+				content,
+				thanks,
+				error: thanks_parsed.issues[0].message,
+			})
+		}
 
 		const title_enc = encrypt(title)
 		const content_enc = encrypt(content)
