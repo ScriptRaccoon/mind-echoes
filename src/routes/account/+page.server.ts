@@ -22,6 +22,42 @@ export const load: PageServerLoad = async (event) => {
 }
 
 export const actions: Actions = {
+	username: async (event) => {
+		const user = event.locals.user
+		if (!user) error(401, 'Unauthorized')
+
+		const form = await event.request.formData()
+		const username = form.get('username') as string
+
+		if (!username.length) {
+			return fail(400, {
+				type: 'username',
+				error: 'Username cannot be empty.',
+			})
+		}
+
+		const { err } = await query('UPDATE users SET username = ? WHERE id = ?', [
+			username,
+			user.id,
+		])
+
+		if (err) {
+			if (is_constraint_error(err)) {
+				return fail(409, { username, error: 'Username is already taken.' })
+			}
+			return fail(500, { username, error: 'Database error.' })
+		}
+
+		user.username = username
+
+		set_auth_cookie(event, user)
+
+		return {
+			type: 'username',
+			message: 'Username has been updated successfully.',
+		}
+	},
+
 	password: async (event) => {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
@@ -76,42 +112,6 @@ export const actions: Actions = {
 		return {
 			type: 'password',
 			message: 'Password has been updated successfully.',
-		}
-	},
-
-	username: async (event) => {
-		const user = event.locals.user
-		if (!user) error(401, 'Unauthorized')
-
-		const form = await event.request.formData()
-		const username = form.get('username') as string
-
-		if (!username.length) {
-			return fail(400, {
-				type: 'username',
-				error: 'Username cannot be empty.',
-			})
-		}
-
-		const { err } = await query('UPDATE users SET username = ? WHERE id = ?', [
-			username,
-			user.id,
-		])
-
-		if (err) {
-			if (is_constraint_error(err)) {
-				return fail(409, { username, error: 'Username is already taken.' })
-			}
-			return fail(500, { username, error: 'Database error.' })
-		}
-
-		user.username = username
-
-		set_auth_cookie(event, user)
-
-		return {
-			type: 'username',
-			message: 'Username has been updated successfully.',
 		}
 	},
 
