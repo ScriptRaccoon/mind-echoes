@@ -1,5 +1,5 @@
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
-import { query } from '$lib/server/db'
+import { is_constraint_error, query } from '$lib/server/db'
 import { fail, redirect } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import type { Actions } from './$types'
@@ -32,11 +32,15 @@ export const actions: Actions = {
 			[username, password_hash],
 		)
 
-		if (err || !rows.length) {
-			return fail(500, {
-				username,
-				error: 'Database error.',
-			})
+		if (err) {
+			if (is_constraint_error(err)) {
+				return fail(409, { username, error: 'Username is already taken.' })
+			}
+			return fail(500, { username, error: 'Database error.' })
+		}
+
+		if (!rows.length) {
+			return fail(500, { username, error: 'Database error.' })
 		}
 
 		const { id } = rows[0]

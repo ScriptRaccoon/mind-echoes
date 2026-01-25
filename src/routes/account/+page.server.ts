@@ -1,6 +1,6 @@
 import { error, fail, redirect, type Actions } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
-import { query } from '$lib/server/db'
+import { is_constraint_error, query } from '$lib/server/db'
 import { MINIMAL_PASSWORD_LENGTH } from '$lib/server/config'
 import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
 import type { PageServerLoad } from './$types'
@@ -99,10 +99,10 @@ export const actions: Actions = {
 		])
 
 		if (err) {
-			return fail(500, {
-				type: 'username',
-				error: 'Database error.',
-			})
+			if (is_constraint_error(err)) {
+				return fail(409, { username, error: 'Username is already taken.' })
+			}
+			return fail(500, { username, error: 'Database error.' })
 		}
 
 		user.username = username

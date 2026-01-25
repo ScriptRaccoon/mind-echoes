@@ -1,4 +1,4 @@
-import { query } from '$lib/server/db'
+import { is_constraint_error, query } from '$lib/server/db'
 import { encrypt } from '$lib/server/encryption'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
@@ -25,14 +25,11 @@ export const actions: Actions = {
 		)
 
 		if (err) {
-			const error =
-				err.code === 'SQLITE_CONSTRAINT_UNIQUE'
-					? 'An entry already exists for this date.'
-					: 'Database error.'
-
-			const code = err.code === 'SQLITE_CONSTRAINT_UNIQUE' ? 409 : 500
-
-			return fail(code, { title, content, thanks, error })
+			if (is_constraint_error(err)) {
+				const msg = 'An entry already exists for this date.'
+				return fail(409, { title, content, thanks, error: msg })
+			}
+			return fail(500, { title, content, thanks, error: 'Database error.' })
 		}
 
 		redirect(302, '/dashboard')

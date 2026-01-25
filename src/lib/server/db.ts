@@ -14,6 +14,10 @@ export async function initialize_db() {
 	}
 }
 
+export function is_constraint_error(err: LibsqlError): boolean {
+	return err.code.startsWith('SQLITE_CONSTRAINT')
+}
+
 export async function query<T = any>(sql: string, args?: any[]) {
 	try {
 		const res = args ? await db.execute(sql, args) : await db.execute(sql)
