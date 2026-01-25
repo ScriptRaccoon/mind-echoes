@@ -156,25 +156,6 @@ textarea {
 	}
 }
 
-/* FILE UPLOAD */
-
-input[type='file'] + label {
-	display: inline-block;
-	cursor: pointer;
-	background-color: var(--button-color);
-	color: var(--font-color-light);
-	padding: 0.2rem 0.75rem;
-	border-radius: 0.2rem;
-}
-
-input[type='file']:focus-visible + label {
-	outline: 1px solid var(--outline-color);
-}
-
-input[type='file']:valid + label::after {
-	content: ' ✓';
-}
-
 /* UTILS */
 
 .sr-only {
