@@ -48,9 +48,6 @@ export const actions: Actions = {
 
 		if (!title_parsed.success) {
 			return fail(400, {
-				title,
-				content,
-				thanks,
 				error: title_parsed.issues[0].message,
 			})
 		}
@@ -59,9 +56,6 @@ export const actions: Actions = {
 
 		if (!content_parsed.success) {
 			return fail(400, {
-				title,
-				content,
-				thanks,
 				error: content_parsed.issues[0].message,
 			})
 		}
@@ -70,9 +64,6 @@ export const actions: Actions = {
 
 		if (!thanks_parsed.success) {
 			return fail(400, {
-				title,
-				content,
-				thanks,
 				error: thanks_parsed.issues[0].message,
 			})
 		}
@@ -87,10 +78,10 @@ export const actions: Actions = {
 		)
 
 		if (err) {
-			return fail(500, { title, content, thanks, error: 'Database error.' })
+			return fail(500, { error: 'Database error.' })
 		}
 
-		return { title, content, thanks, message: 'Entry has been updated.' }
+		return { message: 'Entry has been updated.' }
 	},
 
 	delete: async (event) => {

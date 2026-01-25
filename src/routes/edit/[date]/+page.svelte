@@ -18,18 +18,26 @@
 <form method="POST" action="?/update" use:enhance>
 	<div class="form-group">
 		<label for="title">Title</label>
-		<input class="title" type="text" name="title" id="title" value={entry.title} />
+		<input class="title" type="text" name="title" id="title" bind:value={entry.title} />
 	</div>
 
 	<div class="form-group">
 		<label for="content">What's on your mind?</label>
-		<textarea name="content" id="content" {@attach resize_textarea} value={entry.content}
+		<textarea
+			name="content"
+			id="content"
+			{@attach resize_textarea}
+			bind:value={entry.content}
 		></textarea>
 	</div>
 
 	<div class="form-group">
 		<label for="thanks">What are 5 things you are grateful for?</label>
-		<textarea name="thanks" id="thanks" {@attach resize_textarea} value={entry.thanks}
+		<textarea
+			name="thanks"
+			id="thanks"
+			{@attach resize_textarea}
+			bind:value={entry.thanks}
 		></textarea>
 	</div>
 
