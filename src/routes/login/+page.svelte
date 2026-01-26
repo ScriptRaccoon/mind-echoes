@@ -17,8 +17,8 @@
 		<input type="password" id="password" name="password" required />
 	</div>
 
-	<div class="form-actions">
-		<button>Submit</button>
+	<div>
+		<button class="button">Submit</button>
 	</div>
 </form>
 

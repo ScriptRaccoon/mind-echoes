@@ -30,8 +30,8 @@
 			/>
 		</div>
 
-		<div class="form-actions">
-			<button>Submit</button>
+		<div>
+			<button class="button">Submit</button>
 		</div>
 	</form>
 
@@ -58,8 +58,8 @@
 			<input type="password" name="new_password" id="new_password" required />
 		</div>
 
-		<div class="form-actions">
-			<button>Submit</button>
+		<div>
+			<button class="button">Submit</button>
 		</div>
 	</form>
 
@@ -80,8 +80,8 @@
 				<form action="?/remove_device" method="POST" use:enhance class="device-form">
 					<span>{device.label}</span>
 					<input type="hidden" name="device_id" value={device.id} />
-					<div class="form-actions">
-						<button>Remove</button>
+					<div>
+						<button class="button">Remove</button>
 					</div>
 				</form>
 			</li>

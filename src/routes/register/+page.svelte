@@ -17,8 +17,8 @@
 		<input type="password" name="password" id="password" />
 	</div>
 
-	<div class="form-actions">
-		<button>Submit</button>
+	<div>
+		<button class="button">Submit</button>
 	</div>
 </form>
 

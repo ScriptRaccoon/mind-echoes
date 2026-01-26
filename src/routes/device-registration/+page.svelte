@@ -10,8 +10,8 @@
 		<input type="text" name="device_label" id="device_label" required />
 	</div>
 
-	<div class="form-actions">
-		<button>Submit</button>
+	<div>
+		<button class="button">Submit</button>
 	</div>
 </form>
 

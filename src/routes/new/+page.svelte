@@ -16,8 +16,8 @@
 		<input type="date" name="date" id="date" bind:value={selected_date} required />
 	</div>
 
-	<div class="form-actions">
-		<button>Continue</button>
+	<div>
+		<button class="button">Continue</button>
 	</div>
 </form>
 

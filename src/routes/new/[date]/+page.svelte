@@ -26,8 +26,8 @@
 		<textarea name="thanks" id="thanks" {@attach resize_textarea}></textarea>
 	</div>
 
-	<div class="form-actions">
-		<button>Create</button>
+	<div>
+		<button class="button">Create</button>
 	</div>
 </form>
 

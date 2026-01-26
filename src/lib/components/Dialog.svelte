@@ -52,9 +52,9 @@
 			}
 		}}
 	>
-		<div class="form-actions">
-			<button type="button" onclick={close_dialog}>Cancel</button>
-			<button class="danger">Yes</button>
+		<div class="actions">
+			<button class="button" type="button" onclick={close_dialog}>Cancel</button>
+			<button class="button danger">Yes</button>
 		</div>
 	</form>
 </dialog>
@@ -86,6 +86,6 @@
 	.actions {
 		display: flex;
 		justify-content: center;
-		gap: 0.75rem;
+		gap: 0.5rem;
 	}
 </style>

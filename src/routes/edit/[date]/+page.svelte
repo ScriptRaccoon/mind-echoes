@@ -43,9 +43,11 @@
 		></textarea>
 	</div>
 
-	<div class="form-actions">
-		<button>Update</button>
-		<button class="danger" type="button" onclick={open_delete_dialog}>Delete</button>
+	<div class="actions">
+		<button class="button">Update</button>
+		<button class="button danger" type="button" onclick={open_delete_dialog}>
+			Delete
+		</button>
 	</div>
 </form>
 
@@ -58,11 +60,13 @@
 {/if}
 
 <style>
-	.form-actions {
-		flex-direction: row-reverse;
-	}
-
 	.form-group {
 		margin-bottom: 1.5rem;
+	}
+
+	.actions {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: space-between;
 	}
 </style>
