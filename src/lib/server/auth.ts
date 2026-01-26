@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 
 import { JWT_SECRET } from '$env/static/private'
 
-const COOKIE_JWT = 'jwt'
+const COOKIE_JWT = 'auth_token'
 
 const COOKIE_JWT_OPTIONS = {
 	httpOnly: true,
