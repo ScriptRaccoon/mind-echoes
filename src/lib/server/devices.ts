@@ -46,23 +46,18 @@ export async function check_device(event: RequestEvent): Promise<void> {
 	}
 
 	const sql = `
-		SELECT id, token_hash
+		SELECT id
 		FROM devices
-		WHERE user_id = ? AND approved_at IS NOT NULL`
+		WHERE user_id = ? AND approved_at IS NOT NULL AND token_hash = ?`
 
 	const { rows: devices } = await query<{ id: number; token_hash: string }>(sql, [
 		user.id,
+		token_hash,
 	])
 
-	if (!devices) return
+	if (!devices?.length) return
 
-	for (const device of devices) {
-		if (device.token_hash === token_hash) {
-			event.locals.device_id = device.id
-			device_cache.set(token_hash, device.id)
-			return
-		}
-	}
+	event.locals.device_id = devices[0].id
 }
 
 export async function save_device_token_in_database(
