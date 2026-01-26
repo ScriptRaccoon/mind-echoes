@@ -156,6 +156,18 @@ textarea {
 	}
 }
 
+/* TODO: refactor me */
+.button {
+	background-color: var(--button-color);
+	color: var(--font-color-light);
+	padding: 0.2rem 0.75rem;
+	border-radius: 0.2rem;
+}
+
+.button.danger {
+	background-color: var(--error-color);
+}
+
 /* UTILS */
 
 .sr-only {

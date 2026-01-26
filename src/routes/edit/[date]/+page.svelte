@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import { resize_textarea } from '$lib/utils'
 
 	let { form, data } = $props()
 
 	let entry = $derived(data.entry)
 
-	let confirm_deletion = $state(false)
-
-	function handle_confirm_click() {
-		confirm_deletion = true
+	function open_delete_dialog() {
+		open_dialog({
+			question: 'Do you want to delete this entry?',
+			action: '?/delete',
+		})
 	}
 </script>
 
@@ -43,14 +45,7 @@
 
 	<div class="form-actions">
 		<button>Update</button>
-
-		{#if confirm_deletion}
-			<button class="danger" formaction="?/delete"> Yes, delete </button>
-		{:else}
-			<button class="danger" type="button" onclick={handle_confirm_click}>
-				Delete
-			</button>
-		{/if}
+		<button class="danger" type="button" onclick={open_delete_dialog}>Delete</button>
 	</div>
 </form>
 
@@ -58,9 +53,7 @@
 	<p class="error">{form.error}</p>
 {/if}
 
-{#if confirm_deletion}
-	<p>Are you sure you want to delete this entry?</p>
-{:else if form?.message}
+{#if form?.message}
 	<p class="message">{form.message}</p>
 {/if}
 

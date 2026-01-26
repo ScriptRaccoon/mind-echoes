@@ -118,17 +118,6 @@ export const actions: Actions = {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
-		const form = await event.request.formData()
-		const user_yes = form.get('yes') as string
-		const actual_yes = 'Yes'
-
-		if (user_yes.toLowerCase() !== actual_yes.toLowerCase()) {
-			return fail(400, {
-				type: 'delete',
-				error: 'Type "Yes" (3 letters) to confirm this action',
-			})
-		}
-
 		const { err } = await query('DELETE FROM users WHERE id = ?', [user.id])
 
 		if (err) {

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import './app.css'
 	import Nav from '$lib/components/Nav.svelte'
+	import Dialog from '$lib/components/Dialog.svelte'
 
 	let { children } = $props()
 </script>
@@ -21,6 +22,8 @@
 <div class="container">
 	{@render children()}
 </div>
+
+<Dialog />
 
 <style>
 	.container {
