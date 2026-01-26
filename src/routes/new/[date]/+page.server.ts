@@ -54,10 +54,12 @@ export const actions: Actions = {
 		const content_enc = encrypt(content)
 		const thanks_enc = encrypt(thanks)
 
-		const { err } = await query(
-			'INSERT INTO entries (date, title_enc, content_enc, thanks_enc, user_id) VALUES (?,?,?,?,?)',
-			[date, title_enc, content_enc, thanks_enc, user.id],
-		)
+		const sql = `
+			INSERT INTO entries
+				(date, title_enc, content_enc, thanks_enc, user_id)
+			VALUES (?,?,?,?,?)`
+
+		const { err } = await query(sql, [date, title_enc, content_enc, thanks_enc, user.id])
 
 		if (err) {
 			if (is_constraint_error(err)) {

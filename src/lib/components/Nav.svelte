@@ -15,7 +15,7 @@
 				<a href="/new">New entry</a>
 			</li>
 			<li>
-				<a href="/logout" data-sveltekit-preload-data="off">Logout</a>
+				<a href="/logout">Logout</a>
 			</li>
 		{:else}
 			<li>

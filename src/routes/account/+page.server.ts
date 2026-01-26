@@ -49,10 +49,8 @@ export const actions: Actions = {
 			})
 		}
 
-		const { err } = await query('UPDATE users SET username = ? WHERE id = ?', [
-			username,
-			user.id,
-		])
+		const sql = 'UPDATE users SET username = ? WHERE id = ?'
+		const { err } = await query(sql, [username, user.id])
 
 		if (err) {
 			if (is_constraint_error(err)) {
@@ -84,10 +82,8 @@ export const actions: Actions = {
 		const current_password = form.get('current_password') as string
 		const new_password = form.get('new_password') as string
 
-		const { rows, err } = await query<{ password_hash: string }>(
-			'SELECT password_hash FROM users WHERE id = ?',
-			[user.id],
-		)
+		const sql_check = 'SELECT password_hash FROM users WHERE id = ?'
+		const { rows, err } = await query<{ password_hash: string }>(sql_check, [user.id])
 
 		if (err || !rows.length) {
 			return fail(500, { type: 'password', error: 'Database error' })
@@ -111,10 +107,8 @@ export const actions: Actions = {
 
 		const new_password_hash = await bcrypt.hash(new_password, 10)
 
-		const { err: update_err } = await query(
-			'UPDATE users SET password_hash = ? WHERE id = ?',
-			[new_password_hash, user.id],
-		)
+		const sql = 'UPDATE users SET password_hash = ? WHERE id = ?'
+		const { err: update_err } = await query(sql, [new_password_hash, user.id])
 
 		if (update_err) {
 			return fail(500, { type: 'password', error: 'Database error' })
@@ -127,7 +121,8 @@ export const actions: Actions = {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
-		const { err } = await query('DELETE FROM users WHERE id = ?', [user.id])
+		const sql = 'DELETE FROM users WHERE id = ?'
+		const { err } = await query(sql, [user.id])
 
 		if (err) {
 			return fail(500, { type: 'delete', error: 'Database error' })
@@ -155,10 +150,8 @@ export const actions: Actions = {
 			return fail(403, { type: 'device', error: 'You cannot remove the current device' })
 		}
 
-		const { err } = await query('DELETE FROM devices WHERE user_id = ? AND id = ?', [
-			user.id,
-			device_id,
-		])
+		const sql = 'DELETE FROM devices WHERE user_id = ? AND id = ?'
+		const { err } = await query(sql, [user.id, device_id])
 
 		if (err) {
 			return fail(400, { type: 'device', error: 'Database error' })
@@ -179,10 +172,12 @@ export const actions: Actions = {
 			return fail(400, { type: 'device', error: 'Device ID is required' })
 		}
 
-		const { err } = await query(
-			'UPDATE devices SET approved_at = current_timestamp WHERE user_id = ? AND id = ?',
-			[user.id, device_id],
-		)
+		const sql = `
+			UPDATE devices
+			SET approved_at = current_timestamp
+			WHERE user_id = ? AND id = ?`
+
+		const { err } = await query(sql, [user.id, device_id])
 
 		if (err) {
 			return fail(400, { type: 'device', error: 'Database error' })

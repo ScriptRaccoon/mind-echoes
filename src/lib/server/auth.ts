@@ -1,9 +1,17 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import jwt from 'jsonwebtoken'
-import { COOKIE_OPTIONS } from './config'
+
 import { JWT_SECRET } from '$env/static/private'
 
 const COOKIE_JWT = 'jwt'
+
+const COOKIE_JWT_OPTIONS = {
+	httpOnly: true,
+	path: '/',
+	maxAge: 60 * 60 * 24 * 7, // 1 week
+	sameSite: 'strict',
+	secure: true,
+} as const
 
 export type User = {
 	id: number
@@ -21,7 +29,7 @@ export function authenticate(event: RequestEvent) {
 
 export function set_auth_cookie(event: RequestEvent, user: User): void {
 	const token = jwt.sign(user, JWT_SECRET, { expiresIn: '1w' })
-	event.cookies.set(COOKIE_JWT, token, COOKIE_OPTIONS)
+	event.cookies.set(COOKIE_JWT, token, COOKIE_JWT_OPTIONS)
 }
 
 export function delete_auth_cookie(event: RequestEvent): void {

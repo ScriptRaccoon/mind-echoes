@@ -12,10 +12,12 @@ export const load: PageServerLoad = async (event) => {
 
 	const date = event.params.date
 
-	const { rows: entries, err } = await query<Entry_DB>(
-		'SELECT id, date, title_enc, content_enc, thanks_enc FROM entries WHERE date = ? AND user_id = ?',
-		[date, user.id],
-	)
+	const sql = `
+		SELECT id, date, title_enc, content_enc, thanks_enc
+		FROM entries
+		WHERE date = ? AND user_id = ?`
+
+	const { rows: entries, err } = await query<Entry_DB>(sql, [date, user.id])
 
 	if (err) {
 		error(500, 'Database error')
@@ -72,10 +74,12 @@ export const actions: Actions = {
 		const content_enc = encrypt(content)
 		const thanks_enc = encrypt(thanks)
 
-		const { err } = await query(
-			'UPDATE entries SET title_enc = ?, content_enc = ?, thanks_enc = ? WHERE date = ? AND user_id = ?',
-			[title_enc, content_enc, thanks_enc, date, user.id],
-		)
+		const sql = `
+			UPDATE entries
+			SET title_enc = ?, content_enc = ?, thanks_enc = ?
+			WHERE date = ? AND user_id = ?`
+
+		const { err } = await query(sql, [title_enc, content_enc, thanks_enc, date, user.id])
 
 		if (err) {
 			return fail(500, { error: 'Database error' })
@@ -90,10 +94,9 @@ export const actions: Actions = {
 
 		const date = event.params.date
 
-		const { err } = await query('DELETE FROM entries WHERE date = ? AND user_id = ?', [
-			date,
-			user.id,
-		])
+		const sql = 'DELETE FROM entries WHERE date = ? AND user_id = ?'
+
+		const { err } = await query(sql, [date, user.id])
 
 		if (err) {
 			return fail(500, { error: 'Database error' })

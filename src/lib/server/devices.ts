@@ -1,7 +1,16 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import { query } from './db'
 import crypto from 'crypto'
-import { COOKIE_DEVICE_TOKEN, DEVICE_COOKIE_OPTIONS } from './config'
+
+const COOKIE_DEVICE_TOKEN = 'device_token'
+
+const DEVICE_COOKIE_OPTIONS = {
+	httpOnly: true,
+	path: '/',
+	maxAge: 60 * 60 * 24 * 365, // 1 year
+	sameSite: 'strict',
+	secure: true,
+} as const
 
 export function create_device_token(): string {
 	return crypto.randomBytes(32).toString('hex')
@@ -16,22 +25,26 @@ export function delete_device_cookie(event: RequestEvent): void {
 }
 
 export async function check_device(event: RequestEvent): Promise<void> {
+	const user = event.locals.user
+	if (!user) return
+
 	const device_token = event.cookies.get(COOKIE_DEVICE_TOKEN)
 	if (!device_token) return
 
 	const token_hash = hash_token(device_token)
 
-	const user = event.locals.user
-	if (!user) return
+	const sql = `
+		SELECT id, token_hash
+		FROM devices
+		WHERE user_id = ? AND approved_at IS NOT NULL`
 
-	const { rows } = await query<{ id: number; token_hash: string }>(
-		'SELECT id, token_hash FROM devices WHERE user_id = ? AND approved_at IS NOT NULL',
-		[user.id],
-	)
+	const { rows: devices } = await query<{ id: number; token_hash: string }>(sql, [
+		user.id,
+	])
 
-	if (!rows) return
+	if (!devices) return
 
-	for (const device of rows) {
+	for (const device of devices) {
 		if (device.token_hash === token_hash) {
 			event.locals.device_id = device.id
 			return
@@ -44,10 +57,8 @@ export async function save_device_token_in_database(
 	label: string,
 	token: string,
 ): Promise<{ success: boolean; approved: boolean }> {
-	const { rows, err: err_devices } = await query<{ id: number }>(
-		'SELECT id FROM devices WHERE user_id = ?',
-		[user_id],
-	)
+	const get_sql = 'SELECT id FROM devices WHERE user_id = ?'
+	const { rows, err: err_devices } = await query<{ id: number }>(get_sql, [user_id])
 
 	if (err_devices) return { success: false, approved: false }
 

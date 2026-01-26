@@ -14,10 +14,9 @@ export const actions: Actions = {
 			return fail(400, { date, error: 'Date is missing' })
 		}
 
-		const { rows: entries, err } = await query<{ id: number }>(
-			'SELECT id FROM entries WHERE date = ? AND user_id = ?',
-			[date, user.id],
-		)
+		const sql = 'SELECT id FROM entries WHERE date = ? AND user_id = ?'
+
+		const { rows: entries, err } = await query<{ id: number }>(sql, [date, user.id])
 
 		if (err) {
 			return fail(500, { date, error: 'Database error' })
