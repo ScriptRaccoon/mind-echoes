@@ -12,12 +12,12 @@ const DEVICE_COOKIE_OPTIONS = {
 	secure: true,
 } as const
 
-export function create_device_token(): string {
+function generate_token(): string {
 	return crypto.randomBytes(32).toString('hex')
 }
 
-export function save_device_cookie(event: RequestEvent, token: string): void {
-	event.cookies.set(COOKIE_DEVICE_TOKEN, token, DEVICE_COOKIE_OPTIONS)
+function hash_token(token: string): string {
+	return crypto.createHash('sha256').update(token).digest('hex')
 }
 
 export function delete_device_cookie(event: RequestEvent): void {
@@ -26,7 +26,7 @@ export function delete_device_cookie(event: RequestEvent): void {
 
 const device_cache: Map<string, number> = new Map()
 
-export function delete_device_token_hash_from_cache(token_hash: string) {
+export function delete_device_from_cache(token_hash: string) {
 	device_cache.delete(token_hash)
 }
 
@@ -39,9 +39,10 @@ export async function check_device(event: RequestEvent): Promise<void> {
 
 	const token_hash = hash_token(device_token)
 
-	const hashed_device_id = device_cache.get(token_hash)
-	if (hashed_device_id !== undefined) {
-		event.locals.device_id = hashed_device_id
+	const cashed_device_id = device_cache.get(token_hash)
+
+	if (cashed_device_id !== undefined) {
+		event.locals.device_id = cashed_device_id
 		return
 	}
 
@@ -50,40 +51,49 @@ export async function check_device(event: RequestEvent): Promise<void> {
 		FROM devices
 		WHERE user_id = ? AND approved_at IS NOT NULL AND token_hash = ?`
 
-	const { rows: devices } = await query<{ id: number; token_hash: string }>(sql, [
-		user.id,
-		token_hash,
-	])
+	const { rows: devices } = await query<{ id: number }>(sql, [user.id, token_hash])
 
 	if (!devices?.length) return
 
 	event.locals.device_id = devices[0].id
 }
 
-export async function save_device_token_in_database(
-	user_id: number,
+export async function save_device(
+	event: RequestEvent,
 	label: string,
-	token: string,
 ): Promise<{ success: boolean; approved: boolean }> {
+	const user = event.locals.user
+	if (!user) return { success: false, approved: false }
+
+	const token = generate_token()
+
 	const get_sql = 'SELECT id FROM devices WHERE user_id = ?'
-	const { rows, err: err_devices } = await query<{ id: number }>(get_sql, [user_id])
+	const { rows, err: err_devices } = await query<{ id: number }>(get_sql, [user.id])
 
 	if (err_devices) return { success: false, approved: false }
 
+	// approve when it's the first device
 	const approved = rows.length === 0
 
 	const token_hash = hash_token(token)
 
-	const sql = approved
-		? 'INSERT INTO devices (user_id, label, token_hash, approved_at) VALUES (?,?,?, current_timestamp)'
-		: 'INSERT INTO devices (user_id, label, token_hash) VALUES (?,?,?)'
+	const sql_approved = `
+		INSERT INTO devices
+			(user_id, label, token_hash, approved_at)
+		VALUES (?,?,?, current_timestamp)`
 
-	const { err: err_insert } = await query(sql, [user_id, label, token_hash])
+	const sql_unapproved = `
+		INSERT INTO devices
+			(user_id, label, token_hash)
+		VALUES (?,?,?)`
+
+	const insert_sql = approved ? sql_approved : sql_unapproved
+
+	const { err: err_insert } = await query(insert_sql, [user.id, label, token_hash])
 
 	const success = !err_insert
-	return { success, approved }
-}
 
-function hash_token(token: string): string {
-	return crypto.createHash('sha256').update(token).digest('hex')
+	event.cookies.set(COOKIE_DEVICE_TOKEN, token, DEVICE_COOKIE_OPTIONS)
+
+	return { success, approved }
 }

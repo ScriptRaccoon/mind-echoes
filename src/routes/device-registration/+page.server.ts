@@ -1,8 +1,4 @@
-import {
-	create_device_token,
-	save_device_cookie,
-	save_device_token_in_database,
-} from '$lib/server/devices'
+import { save_device } from '$lib/server/devices'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 import { RateLimiter } from '$lib/server/ratelimit'
@@ -27,19 +23,11 @@ export const actions: Actions = {
 			return fail(400, { error: 'Device label cannot be empty' })
 		}
 
-		const device_token = create_device_token()
-
-		const { success, approved } = await save_device_token_in_database(
-			user.id,
-			device_label,
-			device_token,
-		)
+		const { success, approved } = await save_device(event, device_label)
 
 		if (!success) {
 			return fail(500, { error: 'Database error' })
 		}
-
-		save_device_cookie(event, device_token)
 
 		limiter.record(ip)
 
