@@ -24,6 +24,12 @@ export function delete_device_cookie(event: RequestEvent): void {
 	event.cookies.delete(COOKIE_DEVICE_TOKEN, { path: '/' })
 }
 
+const device_cache: Map<string, number> = new Map()
+
+export function delete_device_token_hash_from_cache(token_hash: string) {
+	device_cache.delete(token_hash)
+}
+
 export async function check_device(event: RequestEvent): Promise<void> {
 	const user = event.locals.user
 	if (!user) return
@@ -32,6 +38,12 @@ export async function check_device(event: RequestEvent): Promise<void> {
 	if (!device_token) return
 
 	const token_hash = hash_token(device_token)
+
+	const hashed_device_id = device_cache.get(token_hash)
+	if (hashed_device_id !== undefined) {
+		event.locals.device_id = hashed_device_id
+		return
+	}
 
 	const sql = `
 		SELECT id, token_hash
@@ -47,6 +59,7 @@ export async function check_device(event: RequestEvent): Promise<void> {
 	for (const device of devices) {
 		if (device.token_hash === token_hash) {
 			event.locals.device_id = device.id
+			device_cache.set(token_hash, device.id)
 			return
 		}
 	}

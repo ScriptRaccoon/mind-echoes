@@ -5,7 +5,10 @@ import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
 import type { PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { username_schema, password_schema } from '$lib/server/schemas'
-import { delete_device_cookie } from '$lib/server/devices'
+import {
+	delete_device_cookie,
+	delete_device_token_hash_from_cache,
+} from '$lib/server/devices'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
@@ -150,12 +153,20 @@ export const actions: Actions = {
 			return fail(403, { type: 'device', error: 'You cannot remove the current device' })
 		}
 
-		const sql = 'DELETE FROM devices WHERE user_id = ? AND id = ?'
-		const { err } = await query(sql, [user.id, device_id])
+		const sql = `
+			DELETE FROM devices
+			WHERE user_id = ? AND id = ?
+			RETURNING token_hash`
 
-		if (err) {
+		const { rows, err } = await query<{ token_hash: string }>(sql, [user.id, device_id])
+
+		if (err || !rows.length) {
 			return fail(400, { type: 'device', error: 'Database error' })
 		}
+
+		const { token_hash } = rows[0]
+
+		delete_device_token_hash_from_cache(token_hash)
 
 		return { type: 'device', message: 'Device has been removed' }
 	},
