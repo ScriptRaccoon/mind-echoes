@@ -10,6 +10,11 @@ export const username_schema = v.pipe(
 	),
 )
 
+export const email_schema = v.pipe(
+	v.string('Email must be a string'),
+	v.email('Email must be a valid email'),
+)
+
 export const password_schema = v.pipe(
 	v.string('Password must be a string'),
 	v.nonEmpty('Password is required'),

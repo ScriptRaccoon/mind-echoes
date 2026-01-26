@@ -45,6 +45,35 @@
 </section>
 
 <section>
+	<h2>Change email address</h2>
+
+	<form method="POST" action="?/email" use:enhance>
+		<div class="form-group">
+			<label for="email">New email</label>
+			<input
+				type="email"
+				name="email"
+				id="email"
+				required
+				value={page.data.user?.email}
+			/>
+		</div>
+
+		<div>
+			<button class="button">Submit</button>
+		</div>
+	</form>
+
+	{#if form?.error && form.type === 'email'}
+		<p class="error">{form.error}</p>
+	{/if}
+
+	{#if form?.message && form.type === 'email'}
+		<p class="message">{form.message}</p>
+	{/if}
+</section>
+
+<section>
 	<h2>Change password</h2>
 
 	<form method="POST" action="?/password" use:enhance>

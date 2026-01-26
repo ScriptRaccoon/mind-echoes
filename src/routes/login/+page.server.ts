@@ -8,6 +8,7 @@ import { set_auth_cookie } from '$lib/server/auth'
 export const load: PageServerLoad = (event) => {
 	const LOGIN_MESSAGES: Record<string, undefined | string> = {
 		logout: 'You have been logged out successfully',
+		email_verification: 'Your email address has been verified. You can now log in.',
 	}
 
 	const from = event.url.searchParams.get('from') ?? ''
@@ -32,10 +33,17 @@ export const actions: Actions = {
 			return fail(400, { error: 'Username and password required' })
 		}
 
+		const sql = `
+			SELECT id, password_hash, email, email_verified_at
+			FROM users
+			WHERE username = ?`
+
 		const { rows, err } = await query<{
 			id: number
+			email: string
 			password_hash: string
-		}>('SELECT id, password_hash FROM users WHERE username = ?', [username])
+			email_verified_at: string | null
+		}>(sql, [username])
 
 		if (err) {
 			return fail(500, { error: 'Database error' })
@@ -46,7 +54,7 @@ export const actions: Actions = {
 			return fail(401, { error: 'Invalid credentials' })
 		}
 
-		const { id, password_hash } = rows[0]
+		const { id, password_hash, email, email_verified_at } = rows[0]
 
 		const is_correct = await bcrypt.compare(password, password_hash)
 		if (!is_correct) {
@@ -54,9 +62,13 @@ export const actions: Actions = {
 			return fail(401, { error: 'Invalid credentials' })
 		}
 
+		if (!email_verified_at) {
+			return fail(403, { error: 'Email has not been verified yet' })
+		}
+
 		limiter.clear(ip)
 
-		set_auth_cookie(event, { id, username })
+		set_auth_cookie(event, { id, email, username })
 
 		redirect(303, '/dashboard')
 	},

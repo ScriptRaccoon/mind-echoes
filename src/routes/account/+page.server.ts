@@ -4,7 +4,7 @@ import { is_constraint_error, query } from '$lib/server/db'
 import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
 import type { PageServerLoad } from './$types'
 import * as v from 'valibot'
-import { username_schema, password_schema } from '$lib/server/schemas'
+import { username_schema, password_schema, email_schema } from '$lib/server/schemas'
 import { delete_device_cookie, delete_device_from_cache } from '$lib/server/devices'
 
 export const load: PageServerLoad = async (event) => {
@@ -71,6 +71,44 @@ export const actions: Actions = {
 			type: 'username',
 			username,
 			message: 'Username has been updated successfully',
+		}
+	},
+
+	email: async (event) => {
+		const user = event.locals.user
+		if (!user) error(401, 'Unauthorized')
+
+		const form = await event.request.formData()
+		const email = form.get('email') as string
+
+		const email_parsed = v.safeParse(email_schema, email)
+
+		if (!email_parsed.success) {
+			return fail(400, {
+				type: 'email',
+				email,
+				error: email_parsed.issues[0].message,
+			})
+		}
+
+		const sql = 'UPDATE users SET email = ? WHERE id = ?'
+		const { err } = await query(sql, [email, user.id])
+
+		if (err) {
+			if (is_constraint_error(err)) {
+				return fail(409, { type: 'email', email, error: 'Email is already taken' })
+			}
+			return fail(500, { type: 'email', email, error: 'Database error' })
+		}
+
+		user.email = email
+
+		set_auth_cookie(event, user)
+
+		return {
+			type: 'email',
+			email,
+			message: 'Email has been updated successfully',
 		}
 	},
 

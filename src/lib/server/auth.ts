@@ -15,6 +15,7 @@ const COOKIE_JWT_OPTIONS = {
 
 export type User = {
 	id: number
+	email: string
 	username: string
 }
 
@@ -22,8 +23,8 @@ export function authenticate(event: RequestEvent) {
 	const token = event.cookies.get(COOKIE_JWT)
 	if (!token) return
 	try {
-		const { id, username } = jwt.verify(token, JWT_SECRET) as User
-		event.locals.user = { id, username }
+		const { id, email, username } = jwt.verify(token, JWT_SECRET) as User
+		event.locals.user = { id, email, username }
 	} catch (_) {}
 }
 
