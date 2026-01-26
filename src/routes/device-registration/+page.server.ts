@@ -20,7 +20,11 @@ export const actions: Actions = {
 
 		const device_token = create_device_token()
 
-		const success = save_device_token_in_database(user.id, device_label, device_token)
+		const { success, approved } = await save_device_token_in_database(
+			user.id,
+			device_label,
+			device_token,
+		)
 
 		if (!success) {
 			return fail(500, { error: 'Database error' })
@@ -28,6 +32,13 @@ export const actions: Actions = {
 
 		save_device_cookie(event, device_token)
 
-		redirect(303, '/dashboard')
+		if (approved) {
+			redirect(303, '/dashboard')
+		} else {
+			return {
+				message:
+					'Device has been added and marked for approval. To proceed, log in from a known device and approve your new device in the account page.',
+			}
+		}
 	},
 }

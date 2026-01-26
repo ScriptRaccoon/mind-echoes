@@ -18,3 +18,7 @@
 {#if form?.error}
 	<p class="error">{form.error}</p>
 {/if}
+
+{#if form?.message}
+	<p class="message">{form.message}</p>
+{/if}

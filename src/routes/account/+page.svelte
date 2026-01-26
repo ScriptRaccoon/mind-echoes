@@ -89,10 +89,17 @@
 
 			<span>{device.created_at.substring(0, 10)}</span>
 
-			<form action="?/remove_device" method="POST" use:enhance>
-				<input type="hidden" name="device_id" value={device.id} />
-				<button class="button" disabled={is_current}>Remove</button>
-			</form>
+			{#if device.approved_at === null}
+				<form action="?/approve_device" method="POST" use:enhance>
+					<input type="hidden" name="device_id" value={device.id} />
+					<button class="button">Approve</button>
+				</form>
+			{:else}
+				<form action="?/remove_device" method="POST" use:enhance>
+					<input type="hidden" name="device_id" value={device.id} />
+					<button class="button" disabled={is_current}>Remove</button>
+				</form>
+			{/if}
 		{/each}
 	</div>
 

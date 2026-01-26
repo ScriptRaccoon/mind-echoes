@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS devices (
     label TEXT NOT NULL,
     token_hash TEXT NOT NULL UNIQUE,
     created_at TEXT NOT NULL DEFAULT current_timestamp,
+    approved_at TEXT,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
