@@ -5,11 +5,20 @@ import {
 } from '$lib/server/devices'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
+import { RateLimiter } from '$lib/server/ratelimit'
+
+const limiter = new RateLimiter({ limit: 1, window_ms: 60_000 })
 
 export const actions: Actions = {
 	default: async (event) => {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
+
+		const ip = event.getClientAddress()
+
+		if (!limiter.is_allowed(ip)) {
+			return fail(429, { error: 'Too many registrations. Try again later.' })
+		}
 
 		const form = await event.request.formData()
 		const device_label = form.get('device_label') as string
@@ -31,6 +40,8 @@ export const actions: Actions = {
 		}
 
 		save_device_cookie(event, device_token)
+
+		limiter.record(ip)
 
 		if (approved) {
 			redirect(303, '/dashboard')
