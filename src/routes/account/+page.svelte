@@ -79,12 +79,19 @@
 		<span class="head">Date</span>
 		<span></span>
 		{#each data.devices as device (device.id)}
-			<span>{device.label}</span>
+			{@const is_current = device.id === data.current_device_id}
+			<span
+				>{device.label}
+				{#if is_current}
+					[this device]
+				{/if}
+			</span>
+
 			<span>{device.created_at.substring(0, 10)}</span>
 
 			<form action="?/remove_device" method="POST" use:enhance>
 				<input type="hidden" name="device_id" value={device.id} />
-				<button class="button">Remove</button>
+				<button class="button" disabled={is_current}>Remove</button>
 			</form>
 		{/each}
 	</div>

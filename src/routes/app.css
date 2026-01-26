@@ -96,6 +96,11 @@ button:not(:disabled) {
 	cursor: pointer;
 }
 
+button:disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
 :is(button, input, textarea, select, a):focus-visible {
 	outline: 1px solid var(--outline-color) !important;
 }

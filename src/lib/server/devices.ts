@@ -11,23 +11,28 @@ export function save_device_cookie(event: RequestEvent, token: string): void {
 	event.cookies.set(COOKIE_DEVICE_TOKEN, token, DEVICE_COOKIE_OPTIONS)
 }
 
-export async function is_known_device(event: RequestEvent): Promise<boolean> {
+export async function check_device(event: RequestEvent): Promise<void> {
 	const device_token = event.cookies.get(COOKIE_DEVICE_TOKEN)
-	if (!device_token) return false
+	if (!device_token) return
 
 	const token_hash = hash_token(device_token)
 
 	const user = event.locals.user
-	if (!user) return false
+	if (!user) return
 
-	const { rows } = await query<{ token_hash: string }>(
-		'SELECT token_hash FROM devices WHERE user_id = ?',
+	const { rows } = await query<{ id: number; token_hash: string }>(
+		'SELECT id, token_hash FROM devices WHERE user_id = ?',
 		[user.id],
 	)
 
-	if (!rows) return false
+	if (!rows) return
 
-	return rows.some((row) => row.token_hash === token_hash)
+	for (const device of rows) {
+		if (device.token_hash === token_hash) {
+			event.locals.device_id = device.id
+			return
+		}
+	}
 }
 
 export async function save_device_token_in_database(

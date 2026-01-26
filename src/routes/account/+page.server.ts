@@ -20,7 +20,7 @@ export const load: PageServerLoad = async (event) => {
 		error(500, 'Database error')
 	}
 
-	return { devices }
+	return { devices, current_device_id: event.locals.device_id }
 }
 
 export const actions: Actions = {
@@ -136,10 +136,14 @@ export const actions: Actions = {
 
 		const form = await event.request.formData()
 
-		const device_id = form.get('device_id') as string
+		const device_id = parseInt(form.get('device_id') as string)
 
 		if (!device_id) {
 			return fail(400, { type: 'device', error: 'Device ID is required' })
+		}
+
+		if (device_id === event.locals.device_id) {
+			return fail(403, { type: 'device', error: 'You cannot remove the current device' })
 		}
 
 		const { err } = await query('DELETE FROM devices WHERE user_id = ? AND id = ?', [

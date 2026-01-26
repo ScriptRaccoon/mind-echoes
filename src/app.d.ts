@@ -8,6 +8,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			user?: User
+			device_id?: number
 		}
 		interface PageData {
 			user?: User

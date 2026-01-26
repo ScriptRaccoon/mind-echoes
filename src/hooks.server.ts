@@ -1,6 +1,6 @@
 import { authenticate } from '$lib/server/auth'
 import { initialize_db } from '$lib/server/db'
-import { is_known_device } from '$lib/server/devices'
+import { check_device } from '$lib/server/devices'
 
 import { redirect, type Handle, type ServerInit } from '@sveltejs/kit'
 
@@ -15,9 +15,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		redirect(307, '/login')
 	}
 
-	const known = await is_known_device(event)
+	await check_device(event)
 
-	if (requires_auth && !known) {
+	if (requires_auth && !event.locals.device_id) {
 		redirect(307, '/device-registration')
 	}
 
