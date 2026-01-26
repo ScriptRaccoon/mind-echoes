@@ -5,6 +5,7 @@ import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
 import type { PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { username_schema, password_schema } from '$lib/server/schemas'
+import { delete_device_cookie } from '$lib/server/devices'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
@@ -133,6 +134,7 @@ export const actions: Actions = {
 		}
 
 		delete_auth_cookie(event)
+		delete_device_cookie(event)
 
 		redirect(302, '/')
 	},

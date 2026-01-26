@@ -11,6 +11,10 @@ export function save_device_cookie(event: RequestEvent, token: string): void {
 	event.cookies.set(COOKIE_DEVICE_TOKEN, token, DEVICE_COOKIE_OPTIONS)
 }
 
+export function delete_device_cookie(event: RequestEvent): void {
+	event.cookies.delete(COOKIE_DEVICE_TOKEN, { path: '/' })
+}
+
 export async function check_device(event: RequestEvent): Promise<void> {
 	const device_token = event.cookies.get(COOKIE_DEVICE_TOKEN)
 	if (!device_token) return
