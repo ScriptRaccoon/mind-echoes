@@ -74,19 +74,20 @@
 
 <section>
 	<h2>Devices</h2>
-	<ul class="device-list">
+	<div class="device-table">
+		<span class="head">Label</span>
+		<span class="head">Date</span>
+		<span></span>
 		{#each data.devices as device (device.id)}
-			<li>
-				<form action="?/remove_device" method="POST" use:enhance class="device-form">
-					<span>{device.label}</span>
-					<input type="hidden" name="device_id" value={device.id} />
-					<div>
-						<button class="button">Remove</button>
-					</div>
-				</form>
-			</li>
+			<span>{device.label}</span>
+			<span>{device.created_at.substring(0, 10)}</span>
+
+			<form action="?/remove_device" method="POST" use:enhance>
+				<input type="hidden" name="device_id" value={device.id} />
+				<button class="button">Remove</button>
+			</form>
 		{/each}
-	</ul>
+	</div>
 
 	{#if form?.error && form.type === 'device'}
 		<p class="error">{form.error}</p>
@@ -111,13 +112,14 @@
 		margin-top: 2rem;
 	}
 
-	.device-list {
-		padding-left: 2rem;
-	}
+	.device-table {
+		display: grid;
+		grid-template-columns: 1fr 1fr auto;
+		align-items: center;
+		gap: 0.75rem 0.5rem;
 
-	.device-form {
-		margin-bottom: 0.5rem;
-		display: flex;
-		justify-content: space-between;
+		.head {
+			font-weight: bold;
+		}
 	}
 </style>

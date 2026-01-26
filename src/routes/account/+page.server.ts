@@ -10,10 +10,11 @@ export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
 	if (!user) error(401, 'Unauthorized')
 
-	const { rows: devices, err } = await query<{ id: number; label: string }>(
-		'SELECT id, label FROM devices WHERE user_id = ?',
-		[user.id],
-	)
+	const { rows: devices, err } = await query<{
+		id: number
+		label: string
+		created_at: string
+	}>('SELECT id, label, created_at FROM devices WHERE user_id = ?', [user.id])
 
 	if (err) {
 		error(500, 'Database error')
