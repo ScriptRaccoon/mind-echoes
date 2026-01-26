@@ -71,7 +71,7 @@
 		<p class="message">{form.message}</p>
 	{/if}
 </section>
-
+<!-- 
 <section>
 	<h2>Devices</h2>
 	<div class="device-table">
@@ -110,7 +110,7 @@
 	{#if form?.message && form.type === 'device'}
 		<p class="message">{form.message}</p>
 	{/if}
-</section>
+</section> -->
 
 <section>
 	<h2>Delete account</h2>
@@ -126,6 +126,7 @@
 		margin-top: 2rem;
 	}
 
+	/*
 	.device-table {
 		display: grid;
 		grid-template-columns: 1fr 1fr auto;
@@ -136,4 +137,5 @@
 			font-weight: bold;
 		}
 	}
+	*/
 </style>

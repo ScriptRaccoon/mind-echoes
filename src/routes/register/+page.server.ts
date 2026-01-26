@@ -52,6 +52,6 @@ export const actions: Actions = {
 
 		set_auth_cookie(event, { id, username })
 
-		redirect(303, '/device-registration')
+		redirect(303, '/login')
 	},
 }
