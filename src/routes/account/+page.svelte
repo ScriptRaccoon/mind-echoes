@@ -8,7 +8,7 @@
 	function open_delete_dialog() {
 		open_dialog({
 			question: 'Do you want to delete your account? All data will be permanently lost.',
-			action: '?/delete',
+			action: '?/delete_account',
 		})
 	}
 </script>
@@ -138,7 +138,7 @@
 	<h2>Delete account</h2>
 	<button class="button danger" onclick={open_delete_dialog}>Delete</button>
 
-	{#if form?.error && form.type === 'delete'}
+	{#if form?.error && form.type === 'delete_account'}
 		<p class="error">{form.error}</p>
 	{/if}
 </section>

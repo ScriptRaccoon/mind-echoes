@@ -62,9 +62,7 @@ export const actions: Actions = {
 			return fail(500, { type: 'username', username, error: 'Database error' })
 		}
 
-		user.username = username
-
-		set_auth_cookie(event, user)
+		set_auth_cookie(event, { id: user.id, email: user.email, username })
 
 		return {
 			type: 'username',
@@ -100,9 +98,7 @@ export const actions: Actions = {
 			return fail(500, { type: 'email', email, error: 'Database error' })
 		}
 
-		user.email = email
-
-		set_auth_cookie(event, user)
+		set_auth_cookie(event, { id: user.id, username: user.username, email })
 
 		return {
 			type: 'email',
@@ -154,7 +150,7 @@ export const actions: Actions = {
 		return { type: 'password', message: 'Password has been updated successfully' }
 	},
 
-	delete: async (event) => {
+	delete_account: async (event) => {
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
@@ -162,7 +158,7 @@ export const actions: Actions = {
 		const { err } = await query(sql, [user.id])
 
 		if (err) {
-			return fail(500, { type: 'delete', error: 'Database error' })
+			return fail(500, { type: 'delete_account', error: 'Database error' })
 		}
 
 		delete_auth_cookie(event)
