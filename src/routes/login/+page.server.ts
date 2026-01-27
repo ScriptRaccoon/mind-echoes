@@ -1,7 +1,7 @@
 import { query } from '$lib/server/db'
-import { fail, redirect, type Actions } from '@sveltejs/kit'
+import { fail, redirect } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
-import type { PageServerLoad } from './$types'
+import type { Actions, PageServerLoad } from './$types'
 import { RateLimiter } from '$lib/server/ratelimit'
 import { set_auth_cookie } from '$lib/server/auth'
 
@@ -23,7 +23,10 @@ export const actions: Actions = {
 		const ip = event.getClientAddress()
 
 		if (!limiter.is_allowed(ip)) {
-			return fail(429, { error: 'Too many login attempts. Please try again later.' })
+			return fail(429, {
+				username: '',
+				error: 'Too many login attempts. Please try again later.',
+			})
 		}
 
 		const form = await event.request.formData()
@@ -31,7 +34,7 @@ export const actions: Actions = {
 		const password = form.get('password') as string
 
 		if (!username || !password) {
-			return fail(400, { error: 'Username and password required' })
+			return fail(400, { username, error: 'Username and password required' })
 		}
 
 		const sql = `
@@ -47,12 +50,12 @@ export const actions: Actions = {
 		}>(sql, [username])
 
 		if (err) {
-			return fail(500, { error: 'Database error' })
+			return fail(500, { username, error: 'Database error' })
 		}
 
 		if (!rows.length) {
 			limiter.record(ip)
-			return fail(401, { error: 'Invalid credentials' })
+			return fail(401, { username, error: 'Invalid credentials' })
 		}
 
 		const { id, password_hash, email, email_verified_at } = rows[0]
@@ -60,11 +63,11 @@ export const actions: Actions = {
 		const is_correct = await bcrypt.compare(password, password_hash)
 		if (!is_correct) {
 			limiter.record(ip)
-			return fail(401, { error: 'Invalid credentials' })
+			return fail(401, { username, error: 'Invalid credentials' })
 		}
 
 		if (!email_verified_at) {
-			return fail(403, { error: 'Email has not been verified yet' })
+			return fail(403, { username, error: 'Email has not been verified yet' })
 		}
 
 		limiter.clear(ip)
