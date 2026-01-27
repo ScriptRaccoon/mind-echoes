@@ -1,6 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import { query } from './db'
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 
 const COOKIE_DEVICE_TOKEN = 'device_token'
 

@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import { page } from '$app/state'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
-	import { shorten_date } from '$lib/utils.js'
+	import { shorten_date } from '$lib/utils'
 
 	let { data, form } = $props()
 

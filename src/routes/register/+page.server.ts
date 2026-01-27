@@ -12,6 +12,7 @@ import {
 import { send_email_verification_email } from '$lib/server/email'
 import { save_device } from '$lib/server/devices'
 import { get_os_and_browser } from '$lib/utils'
+import crypto from 'node:crypto'
 
 export const load: PageServerLoad = async (event) => {
 	const os = get_os_and_browser(event)

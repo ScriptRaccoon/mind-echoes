@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 import { ENCRYPTION_KEY } from '$env/static/private'
 
 import type { Entry, Entry_DB, Entry_DB_Summary, Entry_Summary } from '$lib/types'
