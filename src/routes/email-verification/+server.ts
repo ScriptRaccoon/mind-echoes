@@ -5,11 +5,11 @@ import { db } from '$lib/server/db'
 const sql_tokens = `
 	SELECT user_id
 	FROM email_verification_tokens
-	WHERE id = ? AND expires_at > datetime('now')`
+	WHERE id = ? AND expires_at > CURRENT_TIMESTAMP`
 
 const sql_verify = `
 	UPDATE users
-	SET email_verified_at = datetime('now')
+	SET email_verified_at = CURRENT_TIMESTAMP
 	WHERE id = ?`
 
 const sql_delete = 'DELETE FROM email_verification_tokens WHERE id = ?'

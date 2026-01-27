@@ -4,13 +4,13 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     email_verified_at TEXT,
-    created_at TEXT NOT NULL DEFAULT current_timestamp
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS email_verification_tokens (
     id TEXT PRIMARY KEY,
     user_id INTEGER NOT NULL,
-    created_at TEXT NOT NULL DEFAULT current_timestamp,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 hour')),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS devices (
     user_id INTEGER NOT NULL,
     label TEXT NOT NULL,
     token_hash TEXT NOT NULL UNIQUE,
-    created_at TEXT NOT NULL DEFAULT current_timestamp,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     verified_at TEXT,
     last_login_at TEXT,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
@@ -31,7 +31,7 @@ CREATE INDEX IF NOT EXISTS idx_devices_user ON devices (user_id);
 CREATE TABLE IF NOT EXISTS device_verification_tokens (
     id TEXT PRIMARY KEY,
     device_id INTEGER NOT NULL,
-    created_at TEXT NOT NULL DEFAULT current_timestamp,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 day')),
     FOREIGN KEY (device_id) REFERENCES devices (id) ON DELETE CASCADE
 );
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS entries (
     title_enc TEXT NOT NULL,
     content_enc TEXT NOT NULL,
     thanks_enc TEXT NOT NULL,
-    created_at TEXT NOT NULL DEFAULT current_timestamp,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     UNIQUE (user_id, date)
 );

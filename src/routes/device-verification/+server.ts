@@ -5,11 +5,11 @@ import { db } from '$lib/server/db'
 const sql_tokens = `
 	SELECT device_id
 	FROM device_verification_tokens
-	WHERE id = ? AND expires_at > datetime('now')`
+	WHERE id = ? AND expires_at > CURRENT_TIMESTAMP`
 
 const sql_verify = `
 	UPDATE devices
-	SET verified_at = datetime('now')
+	SET verified_at = CURRENT_TIMESTAMP
 	WHERE id = ?`
 
 const sql_delete = 'DELETE FROM device_verification_tokens WHERE id = ?'

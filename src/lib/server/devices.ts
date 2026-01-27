@@ -33,7 +33,7 @@ export async function save_device(
 	const sql_verified = `
 		INSERT INTO devices
 			(user_id, label, token_hash, verified_at)
-		VALUES (?,?,?, current_timestamp)
+		VALUES (?,?,?, CURRENT_TIMESTAMP)
 		RETURNING id`
 
 	const sql_unverified = `
@@ -120,7 +120,7 @@ export async function save_login_date_for_device(event: RequestEvent) {
 
 	const sql = `
 		UPDATE devices
-		SET last_login_at = datetime('now')
+		SET last_login_at = CURRENT_TIMESTAMP
 		WHERE id = ? AND user_id = ?`
 
 	await query(sql, [device_id, user.id])
