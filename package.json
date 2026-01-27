@@ -13,7 +13,8 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
 		"seed": "cd data && sqlite3 local.db < seed.sql",
-		"db": "cd data && sqlite3 local.db"
+		"db": "cd data && sqlite3 local.db",
+		"cleanup": "tsx scripts/cleanup.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-netlify": "^5.2.4",
@@ -22,6 +23,7 @@
 		"@types/bcrypt": "^6.0.0",
 		"@types/jsonwebtoken": "^9.0.10",
 		"@types/nodemailer": "^7.0.9",
+		"dotenv": "^17.2.3",
 		"husky": "^9.1.7",
 		"prettier": "^3.7.4",
 		"prettier-plugin-svelte": "^3.4.0",
