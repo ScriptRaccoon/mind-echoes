@@ -3,16 +3,16 @@ import type { RequestHandler } from './$types'
 import { db } from '$lib/server/db'
 
 const sql_tokens = `
-	SELECT user_id
-	FROM email_verification_tokens
+	SELECT device_id
+	FROM device_verification_tokens
 	WHERE id = ? AND expires_at > datetime('now')`
 
 const sql_verify = `
-	UPDATE users
-	SET email_verified_at = datetime('now')
+	UPDATE devices
+	SET verified_at = datetime('now')
 	WHERE id = ?`
 
-const sql_delete = 'DELETE FROM email_verification_tokens WHERE id = ?'
+const sql_delete = 'DELETE FROM device_verification_tokens WHERE id = ?'
 
 class TokenError extends Error {}
 
@@ -29,9 +29,9 @@ export const GET: RequestHandler = async (event) => {
 			throw new TokenError('Invalid token')
 		}
 
-		const { user_id } = tokens[0]
+		const { device_id } = tokens[0]
 
-		await tx.execute({ sql: sql_verify, args: [user_id] })
+		await tx.execute({ sql: sql_verify, args: [device_id] })
 
 		await tx.execute({ sql: sql_delete, args: [token_id] })
 
@@ -47,5 +47,5 @@ export const GET: RequestHandler = async (event) => {
 		error(500, 'Database error')
 	}
 
-	return redirect(303, '/login?from=email_verification')
+	return redirect(303, '/login?from=device_verification')
 }

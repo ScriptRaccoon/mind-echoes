@@ -1,9 +1,19 @@
-import { save_device } from '$lib/server/devices'
-import { error, fail, redirect } from '@sveltejs/kit'
+import { create_device_verification_token, save_device } from '$lib/server/devices'
+import { error, fail } from '@sveltejs/kit'
 import type { Actions } from './$types'
 import { RateLimiter } from '$lib/server/ratelimit'
+import type { PageServerLoad } from './$types'
+import * as v from 'valibot'
+import { device_label_schema } from '$lib/server/schemas'
+import { send_device_verification_email } from '$lib/server/email'
+import { get_os_and_browser } from '$lib/utils'
 
-const limiter = new RateLimiter({ limit: 1, window_ms: 60_000 })
+export const load: PageServerLoad = async (event) => {
+	const os = get_os_and_browser(event)
+	return { os }
+}
+
+const limiter = new RateLimiter({ limit: 10, window_ms: 60_000 }) // TODO: change back to 1
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -13,31 +23,53 @@ export const actions: Actions = {
 		const ip = event.getClientAddress()
 
 		if (!limiter.is_allowed(ip)) {
-			return fail(429, { error: 'Too many registrations. Try again later.' })
+			return fail(429, {
+				device_label: '',
+				error: 'Too many registrations. Try again later.',
+			})
 		}
 
 		const form = await event.request.formData()
 		const device_label = form.get('device_label') as string
 
-		if (!device_label) {
-			return fail(400, { error: 'Device label cannot be empty' })
+		const device_label_parsed = v.safeParse(device_label_schema, device_label)
+
+		if (!device_label_parsed.success) {
+			return fail(400, {
+				device_label,
+				error: device_label_parsed.issues[0].message,
+			})
 		}
 
-		const { success, approved } = await save_device(event, device_label)
+		const { device_id } = await save_device(event, user.id, device_label, {
+			verify: false,
+		})
 
-		if (!success) {
-			return fail(500, { error: 'Database error' })
+		if (!device_id) {
+			return fail(500, { device_label, error: 'Database error' })
+		}
+
+		const { token_id } = await create_device_verification_token(device_id)
+
+		if (!token_id) {
+			return fail(500, { device_label, error: 'Database error' })
+		}
+
+		const link = `${event.url.origin}/device-verification?token=${token_id}`
+
+		try {
+			await send_device_verification_email(user.username, device_label, user.email, link)
+		} catch (err) {
+			console.error(err)
+
+			return fail(500, { device_label, error: 'Failed to send verification email' })
 		}
 
 		limiter.record(ip)
 
-		if (approved) {
-			redirect(303, '/dashboard')
-		} else {
-			return {
-				message:
-					'Device has been added and marked for approval. To proceed, log in from a known device and approve your new device in the account page.',
-			}
+		return {
+			message:
+				'Your device has been added and marked for verification. To proceed, check your email inbox and verify the new device.',
 		}
 	},
 }

@@ -12,16 +12,15 @@ export const load: PageServerLoad = async (event) => {
 	if (!user) error(401, 'Unauthorized')
 
 	const sql = `
-		SELECT id, label, created_at, approved_at
+		SELECT id, label, created_at
 		FROM devices
-		WHERE user_id = ?
+		WHERE user_id = ? AND verified_at IS NOT NULL
 		ORDER BY created_at`
 
 	const { rows: devices, err } = await query<{
 		id: number
 		label: string
 		created_at: string
-		approved_at: string | null
 	}>(sql, [user.id])
 
 	if (err) {
@@ -204,31 +203,5 @@ export const actions: Actions = {
 		delete_device_from_cache(token_hash)
 
 		return { type: 'device', message: 'Device has been removed' }
-	},
-
-	approve_device: async (event) => {
-		const user = event.locals.user
-		if (!user) error(401, 'Unauthorized')
-
-		const form = await event.request.formData()
-
-		const device_id = parseInt(form.get('device_id') as string)
-
-		if (!device_id) {
-			return fail(400, { type: 'device', error: 'Device ID is required' })
-		}
-
-		const sql = `
-			UPDATE devices
-			SET approved_at = current_timestamp
-			WHERE user_id = ? AND id = ?`
-
-		const { err } = await query(sql, [user.id, device_id])
-
-		if (err) {
-			return fail(400, { type: 'device', error: 'Database error' })
-		}
-
-		return { type: 'device', message: 'Device has been approved' }
 	},
 }

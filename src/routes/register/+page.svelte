@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 
-	let { form } = $props()
+	let { data, form } = $props()
 </script>
 
 <h1>Register</h1>
@@ -9,17 +9,34 @@
 <form method="POST" use:enhance>
 	<div class="form-group">
 		<label for="email">Email</label>
-		<input type="email" name="email" id="email" value={form?.email ?? ''} />
+		<input type="email" name="email" id="email" value={form?.email ?? ''} required />
 	</div>
 
 	<div class="form-group">
 		<label for="username">Username</label>
-		<input type="text" name="username" id="username" value={form?.username ?? ''} />
+		<input
+			type="text"
+			name="username"
+			id="username"
+			value={form?.username ?? ''}
+			required
+		/>
 	</div>
 
 	<div class="form-group">
 		<label for="password">Password</label>
-		<input type="password" name="password" id="password" />
+		<input type="password" name="password" id="password" required />
+	</div>
+
+	<div class="form-group">
+		<label for="device_label">Device Label</label>
+		<input
+			type="text"
+			name="device_label"
+			id="device_label"
+			required
+			value={form?.device_label ?? data.os}
+		/>
 	</div>
 
 	<div>

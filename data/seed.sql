@@ -7,13 +7,32 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TEXT NOT NULL DEFAULT current_timestamp
 );
 
-CREATE TABLE IF NOT EXISTS tokens (
+CREATE TABLE IF NOT EXISTS email_verification_tokens (
     id TEXT PRIMARY KEY,
     user_id INTEGER NOT NULL,
-    purpose TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT current_timestamp,
     expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 hour')),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS devices (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    label TEXT NOT NULL,
+    token_hash TEXT NOT NULL UNIQUE,
+    created_at TEXT NOT NULL DEFAULT current_timestamp,
+    verified_at TEXT,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_devices_user ON devices (user_id);
+
+CREATE TABLE IF NOT EXISTS device_verification_tokens (
+    id TEXT PRIMARY KEY,
+    device_id INTEGER NOT NULL,
+    created_at TEXT NOT NULL DEFAULT current_timestamp,
+    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 day')),
+    FOREIGN KEY (device_id) REFERENCES devices (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS entries (
@@ -29,15 +48,3 @@ CREATE TABLE IF NOT EXISTS entries (
 );
 
 CREATE INDEX IF NOT EXISTS idx_entries_user ON entries (user_id);
-
-CREATE TABLE IF NOT EXISTS devices (
-    id INTEGER PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    label TEXT NOT NULL,
-    token_hash TEXT NOT NULL UNIQUE,
-    created_at TEXT NOT NULL DEFAULT current_timestamp,
-    approved_at TEXT,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-);
-
-CREATE INDEX IF NOT EXISTS idx_devices_user ON devices (user_id);

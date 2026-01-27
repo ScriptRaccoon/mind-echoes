@@ -15,7 +15,7 @@ async function send_email(options: { to: string; subject: string; text: string }
 	await transporter.sendMail({ from: EMAIL_ADDRESS, ...options })
 }
 
-export async function send_verification_email(
+export async function send_email_verification_email(
 	username: string,
 	to: string,
 	link: string,
@@ -28,6 +28,24 @@ export async function send_verification_email(
 		link +
 		'\n\n' +
 		'This link is only valid for one hour.'
+
+	await send_email({ to, subject, text })
+}
+
+export async function send_device_verification_email(
+	username: string,
+	device_label: string,
+	to: string,
+	link: string,
+) {
+	const subject = 'Verify your new device'
+	const text =
+		`Hi ${username},\n\n` +
+		`There has been a login from a new device: ${device_label}\n\n` +
+		'Please follow this link to verify that device:\n\n' +
+		link +
+		'\n\n' +
+		'This link is only valid for one day.'
 
 	await send_email({ to, subject, text })
 }

@@ -24,6 +24,12 @@ export const password_schema = v.pipe(
 	v.regex(/[A-Za-z]/, 'Password must contain at least one letter'),
 )
 
+export const device_label_schema = v.pipe(
+	v.string('Device label must be a string'),
+	v.nonEmpty('Device label required'),
+	v.maxLength(100, 'Device label must be at most 100 characters long'),
+)
+
 export const title_schema = v.pipe(
 	v.string('Title must be a string'),
 	v.nonEmpty('Title is required'),

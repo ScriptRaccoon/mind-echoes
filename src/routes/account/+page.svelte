@@ -100,7 +100,7 @@
 		<p class="message">{form.message}</p>
 	{/if}
 </section>
-<!-- 
+
 <section>
 	<h2>Devices</h2>
 	<div class="device-table">
@@ -118,17 +118,10 @@
 
 			<span>{device.created_at.substring(0, 10)}</span>
 
-			{#if device.approved_at === null}
-				<form action="?/approve_device" method="POST" use:enhance>
-					<input type="hidden" name="device_id" value={device.id} />
-					<button class="button">Approve</button>
-				</form>
-			{:else}
-				<form action="?/remove_device" method="POST" use:enhance>
-					<input type="hidden" name="device_id" value={device.id} />
-					<button class="button" disabled={is_current}>Remove</button>
-				</form>
-			{/if}
+			<form action="?/remove_device" method="POST" use:enhance>
+				<input type="hidden" name="device_id" value={device.id} />
+				<button class="button" disabled={is_current}>Remove</button>
+			</form>
 		{/each}
 	</div>
 
@@ -139,7 +132,7 @@
 	{#if form?.message && form.type === 'device'}
 		<p class="message">{form.message}</p>
 	{/if}
-</section> -->
+</section>
 
 <section>
 	<h2>Delete account</h2>
@@ -155,7 +148,6 @@
 		margin-top: 2rem;
 	}
 
-	/*
 	.device-table {
 		display: grid;
 		grid-template-columns: 1fr 1fr auto;
@@ -166,5 +158,4 @@
 			font-weight: bold;
 		}
 	}
-	*/
 </style>

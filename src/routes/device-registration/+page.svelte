@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { form } = $props()
+	let { data, form } = $props()
 </script>
 
 <h1>Device registration</h1>
@@ -7,7 +7,13 @@
 <form method="POST">
 	<div class="form-group">
 		<label for="device_label">Device label</label>
-		<input type="text" name="device_label" id="device_label" required />
+		<input
+			type="text"
+			name="device_label"
+			id="device_label"
+			required
+			value={form?.device_label ?? data.os}
+		/>
 	</div>
 
 	<div>
