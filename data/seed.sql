@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS devices (
     token_hash TEXT NOT NULL UNIQUE,
     created_at TEXT NOT NULL DEFAULT current_timestamp,
     verified_at TEXT,
+    last_login_at TEXT,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 

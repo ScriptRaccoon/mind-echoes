@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import type { Actions, PageServerLoad } from './$types'
 import { RateLimiter } from '$lib/server/ratelimit'
 import { set_auth_cookie } from '$lib/server/auth'
+import { save_login_date_for_device } from '$lib/server/devices'
 
 export const load: PageServerLoad = (event) => {
 	const LOGIN_MESSAGES: Record<string, undefined | string> = {
@@ -73,6 +74,9 @@ export const actions: Actions = {
 		limiter.clear(ip)
 
 		set_auth_cookie(event, { id, email, username })
+		event.locals.user = { id, email, username }
+
+		save_login_date_for_device(event)
 
 		redirect(303, '/dashboard')
 	},

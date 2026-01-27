@@ -108,3 +108,20 @@ export async function create_device_verification_token(device_id: number) {
 
 	return { token_id }
 }
+
+export async function save_login_date_for_device(event: RequestEvent) {
+	const user = event.locals.user
+	if (!user) return
+
+	await check_device(event)
+
+	const device_id = event.locals.device_id
+	if (!device_id) return
+
+	const sql = `
+		UPDATE devices
+		SET last_login_at = datetime('now')
+		WHERE id = ? AND user_id = ?`
+
+	await query(sql, [device_id, user.id])
+}

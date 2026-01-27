@@ -12,7 +12,7 @@ export const load: PageServerLoad = async (event) => {
 	if (!user) error(401, 'Unauthorized')
 
 	const sql = `
-		SELECT id, label, created_at
+		SELECT id, label, created_at, last_login_at
 		FROM devices
 		WHERE user_id = ? AND verified_at IS NOT NULL
 		ORDER BY created_at`
@@ -21,6 +21,7 @@ export const load: PageServerLoad = async (event) => {
 		id: number
 		label: string
 		created_at: string
+		last_login_at: string | null
 	}>(sql, [user.id])
 
 	if (err) {

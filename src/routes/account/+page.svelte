@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms'
 	import { page } from '$app/state'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
+	import { shorten_date } from '$lib/utils.js'
 
 	let { data, form } = $props()
 
@@ -105,7 +106,8 @@
 	<h2>Devices</h2>
 	<div class="device-table">
 		<span class="head">Label</span>
-		<span class="head">Date</span>
+		<span class="head">Created</span>
+		<span class="head">Last login</span>
 		<span></span>
 		{#each data.devices as device (device.id)}
 			{@const is_current = device.id === data.current_device_id}
@@ -116,7 +118,8 @@
 				{/if}
 			</span>
 
-			<span>{device.created_at.substring(0, 10)}</span>
+			<span>{shorten_date(device.created_at)}</span>
+			<span>{shorten_date(device.last_login_at ?? '')}</span>
 
 			<form action="?/remove_device" method="POST" use:enhance>
 				<input type="hidden" name="device_id" value={device.id} />
@@ -150,9 +153,9 @@
 
 	.device-table {
 		display: grid;
-		grid-template-columns: 1fr 1fr auto;
+		grid-template-columns: 1fr auto auto auto;
 		align-items: center;
-		gap: 0.75rem 0.5rem;
+		gap: 0.75rem 1rem;
 
 		.head {
 			font-weight: bold;

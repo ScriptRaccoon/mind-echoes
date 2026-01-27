@@ -45,3 +45,7 @@ export function get_os_and_browser(event: RequestEvent): string {
 
 	return ''
 }
+
+export function shorten_date(datestring: string): string {
+	return datestring.substring(0, 10)
+}
