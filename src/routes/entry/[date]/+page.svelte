@@ -24,7 +24,7 @@
 {/if}
 
 <div class="actions">
-	<a href={page.url.href + '/edit'}>Edit entry</a>
+	<a class="button" href={page.url.href + '/edit'}>Edit</a>
 </div>
 
 <style>

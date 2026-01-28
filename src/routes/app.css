@@ -146,6 +146,11 @@ textarea {
 	background-color: var(--error-color);
 }
 
+a.button {
+	text-decoration: none;
+	display: inline-block;
+}
+
 /* UTILS */
 
 .sr-only {
