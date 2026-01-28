@@ -12,7 +12,7 @@
 				<a href="/account">Account</a>
 			</li>
 			<li>
-				<a href="/new">New entry</a>
+				<a href="/entry/new">New entry</a>
 			</li>
 			<li>
 				<a href="/logout">Logout</a>

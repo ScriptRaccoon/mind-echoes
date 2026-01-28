@@ -11,7 +11,7 @@
 <ol>
 	{#each entries as entry (entry.id)}
 		<li>
-			<a href="/edit/{entry.date}">
+			<a href="/entry/{entry.date}">
 				<span class="date">{entry.date}:</span>
 				<strong>
 					{entry.title || 'Untitled'}

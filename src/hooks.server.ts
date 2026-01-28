@@ -4,7 +4,7 @@ import { check_device } from '$lib/server/devices'
 
 import { redirect, type Handle, type ServerInit } from '@sveltejs/kit'
 
-const auth_routes = ['/account', '/dashboard', '/edit', '/new']
+const auth_routes = ['/account', '/dashboard', '/entry']
 
 export const handle: Handle = async ({ event, resolve }) => {
 	authenticate(event)
