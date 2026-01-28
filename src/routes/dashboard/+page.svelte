@@ -8,7 +8,7 @@
 	const entry_today_exists = $derived(data.entries.some((entry) => entry.date === today))
 </script>
 
-<h1>Diary for {page.data.user?.username}</h1>
+<h1>Diary of {page.data.user?.username}</h1>
 
 {#if !entry_today_exists}
 	<p>
