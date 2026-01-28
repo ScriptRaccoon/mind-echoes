@@ -151,6 +151,12 @@ a.button {
 	display: inline-block;
 }
 
+/* ICONS */
+
+.lucide {
+	vertical-align: text-bottom;
+}
+
 /* UTILS */
 
 .sr-only {
