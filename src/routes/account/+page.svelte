@@ -14,7 +14,10 @@
 	}
 </script>
 
-<h1>Account</h1>
+<header>
+	<h1>Account</h1>
+	<a href="/logout" class="button">Logout</a>
+</header>
 
 <section>
 	<h2>Change username</h2>
@@ -147,6 +150,12 @@
 </section>
 
 <style>
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
 	section + section {
 		margin-top: 2rem;
 	}

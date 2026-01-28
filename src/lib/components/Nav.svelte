@@ -14,9 +14,6 @@
 			<li>
 				<a href="/entry/new">New entry</a>
 			</li>
-			<li>
-				<a href="/logout">Logout</a>
-			</li>
 		{:else}
 			<li>
 				<a href="/">Home</a>
