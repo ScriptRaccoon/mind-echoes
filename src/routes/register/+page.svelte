@@ -29,6 +29,11 @@
 	</div>
 
 	<div class="form-group">
+		<label for="repeat_password">Repeat password</label>
+		<input type="password" name="repeat_password" id="repeat_password" required />
+	</div>
+
+	<div class="form-group">
 		<label for="device_label">Device Label</label>
 		<input
 			type="text"

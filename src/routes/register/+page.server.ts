@@ -25,6 +25,7 @@ export const actions: Actions = {
 		const username = form.get('username') as string
 		const email = form.get('email') as string
 		const password = form.get('password') as string
+		const repeat_password = form.get('repeat_password') as string
 		const device_label = form.get('device_label') as string
 
 		// --- Validation ---
@@ -60,6 +61,10 @@ export const actions: Actions = {
 				device_label,
 				error: password_parsed.issues[0].message,
 			})
+		}
+
+		if (password !== repeat_password) {
+			return fail(400, { username, email, device_label, error: 'Passwords do not match' })
 		}
 
 		const device_label_parsed = v.safeParse(device_label_schema, device_label)
