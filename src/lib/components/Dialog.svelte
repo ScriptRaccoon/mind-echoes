@@ -3,6 +3,7 @@
 		open: boolean
 		question: string
 		action: string
+		id?: number
 	}
 
 	export const dialog_state = $state<DialogState>({
@@ -15,12 +16,14 @@
 		dialog_state.open = true
 		dialog_state.question = data.question
 		dialog_state.action = data.action
+		if (data.id !== undefined) dialog_state.id = data.id
 	}
 
 	export function close_dialog() {
 		dialog_state.open = false
 		dialog_state.question = ''
 		dialog_state.action = ''
+		delete dialog_state.id
 	}
 </script>
 
@@ -52,6 +55,9 @@
 			}
 		}}
 	>
+		{#if dialog_state.id !== undefined}
+			<input type="hidden" name="id" value={dialog_state.id} />
+		{/if}
 		<div class="actions">
 			<button class="button" type="button" onclick={close_dialog}>Cancel</button>
 			<button class="button danger">Yes</button>

@@ -151,7 +151,7 @@ export const actions: Actions = {
 
 		const form = await event.request.formData()
 
-		const device_id = parseInt(form.get('device_id') as string)
+		const device_id = parseInt(form.get('id') as string)
 
 		if (!device_id) {
 			return fail(400, { type: 'device', error: 'Device ID is required' })

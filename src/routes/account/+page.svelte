@@ -7,10 +7,18 @@
 
 	let { data, form } = $props()
 
-	function open_delete_dialog() {
+	function open_delete_account_dialog() {
 		open_dialog({
 			question: 'Do you want to delete your account? All data will be permanently lost.',
 			action: '?/delete_account',
+		})
+	}
+
+	function open_remove_device_dialog(device_id: number) {
+		open_dialog({
+			question: 'Do you want to remove this device?',
+			action: '?/remove_device',
+			id: device_id,
 		})
 	}
 </script>
@@ -125,12 +133,14 @@
 			<span>{shorten_date(device.created_at)}</span>
 			<span>{shorten_date(device.last_login_at ?? '')}</span>
 
-			<form action="?/remove_device" method="POST" use:enhance>
-				<input type="hidden" name="device_id" value={device.id} />
-				<button class="icon-button" disabled={is_current} aria-label="Remove device">
-					<X size={18} />
-				</button>
-			</form>
+			<button
+				class="icon-button"
+				disabled={is_current}
+				aria-label="Remove device"
+				onclick={() => open_remove_device_dialog(device.id)}
+			>
+				<X size={18} />
+			</button>
 		{/each}
 	</div>
 
@@ -145,7 +155,7 @@
 
 <section>
 	<h2>Delete account</h2>
-	<button class="button danger" onclick={open_delete_dialog}>Delete</button>
+	<button class="button danger" onclick={open_delete_account_dialog}>Delete</button>
 
 	{#if form?.error && form.type === 'delete_account'}
 		<p class="error">{form.error}</p>
