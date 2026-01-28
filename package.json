@@ -14,7 +14,8 @@
 		"lint": "prettier --check .",
 		"seed": "cd data && sqlite3 local.db < seed.sql",
 		"db": "cd data && sqlite3 local.db",
-		"cleanup": "tsx scripts/cleanup.ts"
+		"cleanup": "tsx scripts/cleanup.ts",
+		"mock": "tsx scripts/mock.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-netlify": "^5.2.4",
