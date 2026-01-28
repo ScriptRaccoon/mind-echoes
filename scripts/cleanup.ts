@@ -2,10 +2,20 @@ import { createClient } from '@libsql/client'
 import dotenv from 'dotenv'
 dotenv.config()
 
-const db = createClient({
-	authToken: process.env.DB_AUTH_TOKEN ?? '',
-	url: process.env.DB_URL ?? '',
-})
+const DB_AUTH_TOKEN = process.env.DB_AUTH_TOKEN
+const DB_URL = process.env.DB_URL
+
+if (DB_AUTH_TOKEN === undefined) {
+	console.error('Missing DB_AUTH_TOKEN')
+	process.exit(1)
+}
+
+if (DB_URL === undefined) {
+	console.error('Missing DB_URL')
+	process.exit(1)
+}
+
+const db = createClient({ authToken: DB_AUTH_TOKEN, url: DB_URL })
 
 async function cleanup() {
 	console.info('---\nStart cleanup script')
