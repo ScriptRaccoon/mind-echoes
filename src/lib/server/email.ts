@@ -1,4 +1,5 @@
 import { EMAIL_ADDRESS, EMAIL_PASSWORD } from '$env/static/private'
+import { APP_TITLE } from '$lib/config'
 import nodemailer from 'nodemailer'
 
 const transporter = nodemailer.createTransport({
@@ -20,10 +21,10 @@ export async function send_email_verification_email(
 	to: string,
 	link: string,
 ) {
-	const subject = 'Verify your email address'
+	const subject = `${APP_TITLE} - Verify your email address`
 	const text =
 		`Hi ${username},\n\n` +
-		'Thank you for registering for the diary application.\n\n' +
+		`Thank you for registering for ${APP_TITLE}.\n\n` +
 		'Please follow this link to verify your email address:\n\n' +
 		link +
 		'\n\n' +
@@ -38,7 +39,7 @@ export async function send_device_verification_email(
 	to: string,
 	link: string,
 ) {
-	const subject = 'Verify your new device'
+	const subject = `${APP_TITLE} - Verify your new device`
 	const text =
 		`Hi ${username},\n\n` +
 		`There has been a login from a new device: ${device_label}\n\n` +

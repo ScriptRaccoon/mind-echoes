@@ -9,7 +9,7 @@
 	let date = $derived(page.params.date!)
 </script>
 
-<DateHeader title="New entry" {date} />
+<DateHeader title="New Echo" {date} />
 
 <form method="POST" use:enhance>
 	<div class="form-group">

@@ -12,14 +12,14 @@
 {#if entry.content}
 	<section>
 		<h2>This is on my mind</h2>
-		<div class="box">{entry.content}</div>
+		<div>{entry.content}</div>
 	</section>
 {/if}
 
 {#if entry.thanks}
 	<section>
 		<h2>I am thankful for</h2>
-		<div class="box">{entry.thanks}</div>
+		<div>{entry.thanks}</div>
 	</section>
 {/if}
 

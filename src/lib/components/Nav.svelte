@@ -2,7 +2,7 @@
 	import { PencilLine, User, CirclePlus, House, LogIn, UserPlus } from 'lucide-svelte'
 	import { page } from '$app/state'
 
-	let is_diary_page = $derived(
+	let is_echo_page = $derived(
 		page.url.pathname == '/dashboard' ||
 			(page.url.pathname.startsWith('/entry') &&
 				!page.url.pathname.startsWith('/entry/new')),
@@ -13,8 +13,8 @@
 	<ul>
 		{#if page.data.user}
 			<li>
-				<a href="/dashboard" aria-current={is_diary_page}>
-					<PencilLine size={20} /> Diary
+				<a href="/dashboard" aria-current={is_echo_page}>
+					<PencilLine size={20} /> Echoes
 				</a>
 			</li>
 			<li>
@@ -24,7 +24,7 @@
 			</li>
 			<li>
 				<a href="/entry/new" aria-current={page.url.pathname.startsWith('/entry/new')}>
-					<CirclePlus size={20} /> New entry
+					<CirclePlus size={20} /> New Echo
 				</a>
 			</li>
 		{:else}

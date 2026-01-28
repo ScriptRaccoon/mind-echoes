@@ -27,7 +27,7 @@ export const actions: Actions = {
 		}
 
 		if (entries.length) {
-			return fail(409, { date, error: 'An entry already exists for this date' })
+			return fail(409, { date, error: 'An echo already exists for this date' })
 		}
 
 		redirect(303, `/entry/new/${date}`)

@@ -10,13 +10,13 @@
 
 	function open_delete_dialog() {
 		open_dialog({
-			question: 'Do you want to delete this entry?',
+			question: 'Do you want to delete this echo?',
 			action: '?/delete',
 		})
 	}
 </script>
 
-<DateHeader title="Edit entry" date={entry.date} />
+<DateHeader title="Edit Echo" date={entry.date} />
 
 <form method="POST" action="?/update" use:enhance>
 	<div class="form-group">

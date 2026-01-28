@@ -34,7 +34,7 @@ export const load: PageServerLoad = async (event) => {
 	const entry_enc = entries[0]
 
 	if (!entry_enc) {
-		error(404, 'No entry found for this date')
+		error(404, 'No echo found for this date')
 	}
 
 	const entry: Entry = decrypt_entry(entry_enc)

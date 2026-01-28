@@ -8,7 +8,7 @@
 	let selected_date = $derived<string>(form?.date ?? today)
 </script>
 
-<h1>New entry</h1>
+<h1>New Echo</h1>
 
 <form method="POST" use:enhance>
 	<div class="form-group">
