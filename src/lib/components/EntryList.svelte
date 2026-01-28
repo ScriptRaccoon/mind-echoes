@@ -12,7 +12,7 @@
 	{#each entries as entry (entry.id)}
 		<li>
 			<a href="/entry/{entry.date}">
-				<span class="date">{entry.date}:</span>
+				<span class="date">{entry.date}</span>
 				<strong>
 					{entry.title || 'Untitled'}
 				</strong>
@@ -35,6 +35,8 @@
 	}
 
 	.date {
+		display: inline-block;
 		margin-right: 0.25rem;
+		width: 10ch;
 	}
 </style>
