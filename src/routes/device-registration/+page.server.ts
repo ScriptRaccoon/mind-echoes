@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 	return { os }
 }
 
-const limiter = new RateLimiter({ limit: 10, window_ms: 60_000 }) // TODO: change back to 1
+const limiter = new RateLimiter({ limit: 1, window_ms: 60_000 })
 
 export const actions: Actions = {
 	default: async (event) => {

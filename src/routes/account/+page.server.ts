@@ -42,11 +42,7 @@ export const actions: Actions = {
 		const username_parsed = v.safeParse(username_schema, username)
 
 		if (!username_parsed.success) {
-			return fail(400, {
-				type: 'username',
-				username,
-				error: username_parsed.issues[0].message,
-			})
+			return fail(400, { type: 'username', error: username_parsed.issues[0].message })
 		}
 
 		const sql = 'UPDATE users SET username = ? WHERE id = ?'
@@ -54,22 +50,14 @@ export const actions: Actions = {
 
 		if (err) {
 			if (is_constraint_error(err)) {
-				return fail(409, {
-					type: 'username',
-					username,
-					error: 'Username is already taken',
-				})
+				return fail(409, { type: 'username', error: 'Username is already taken' })
 			}
-			return fail(500, { type: 'username', username, error: 'Database error' })
+			return fail(500, { type: 'username', error: 'Database error' })
 		}
 
 		set_auth_cookie(event, { id: user.id, email: user.email, username })
 
-		return {
-			type: 'username',
-			username,
-			message: 'Username has been updated successfully',
-		}
+		return { type: 'username', message: 'Username has been updated successfully' }
 	},
 
 	email: async (event) => {
@@ -82,11 +70,7 @@ export const actions: Actions = {
 		const email_parsed = v.safeParse(email_schema, email)
 
 		if (!email_parsed.success) {
-			return fail(400, {
-				type: 'email',
-				email,
-				error: email_parsed.issues[0].message,
-			})
+			return fail(400, { type: 'email', error: email_parsed.issues[0].message })
 		}
 
 		const sql = 'UPDATE users SET email = ? WHERE id = ?'
@@ -94,18 +78,14 @@ export const actions: Actions = {
 
 		if (err) {
 			if (is_constraint_error(err)) {
-				return fail(409, { type: 'email', email, error: 'Email is already taken' })
+				return fail(409, { type: 'email', error: 'Email is already taken' })
 			}
-			return fail(500, { type: 'email', email, error: 'Database error' })
+			return fail(500, { type: 'email', error: 'Database error' })
 		}
 
 		set_auth_cookie(event, { id: user.id, username: user.username, email })
 
-		return {
-			type: 'email',
-			email,
-			message: 'Email has been updated successfully',
-		}
+		return { type: 'email', message: 'Email has been updated successfully' }
 	},
 
 	password: async (event) => {
@@ -133,10 +113,7 @@ export const actions: Actions = {
 		const password_parsed = v.safeParse(password_schema, new_password)
 
 		if (!password_parsed.success) {
-			return fail(400, {
-				type: 'password',
-				error: password_parsed.issues[0].message,
-			})
+			return fail(400, { type: 'password', error: password_parsed.issues[0].message })
 		}
 
 		const new_password_hash = await bcrypt.hash(new_password, 10)

@@ -17,17 +17,15 @@ const sql_delete = 'DELETE FROM email_verification_tokens WHERE id = ?'
 class TokenError extends Error {}
 
 export const GET: RequestHandler = async (event) => {
-	const tx = await db.transaction()
-
 	const token_id = event.url.searchParams.get('token')
 	if (!token_id) error(400, 'Token is missing')
+
+	const tx = await db.transaction()
 
 	try {
 		const { rows: tokens } = await tx.execute({ sql: sql_tokens, args: [token_id] })
 
-		if (!tokens.length) {
-			throw new TokenError('Invalid token')
-		}
+		if (!tokens.length) throw new TokenError('Invalid token')
 
 		const { user_id } = tokens[0]
 
