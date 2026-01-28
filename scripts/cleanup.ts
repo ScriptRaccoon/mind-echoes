@@ -21,14 +21,17 @@ async function cleanup() {
 	console.info('---\nStart cleanup script')
 	await clean_email_verification_tokens()
 	await clean_device_verification_tokens()
+	await cleanup_users()
 	console.info('Finish cleanup script\n---')
 }
 
 cleanup()
 
 async function clean_email_verification_tokens() {
-	const sql =
-		'DELETE FROM email_verification_tokens WHERE expires_at <= CURRENT_TIMESTAMP'
+	const sql = `
+		DELETE FROM email_verification_tokens
+		WHERE expires_at <= CURRENT_TIMESTAMP`
+
 	try {
 		const res = await db.execute(sql)
 		console.info(`Deleted ${res.rowsAffected} email verification tokens`)
@@ -38,11 +41,27 @@ async function clean_email_verification_tokens() {
 }
 
 async function clean_device_verification_tokens() {
-	const sql =
-		'DELETE FROM device_verification_tokens WHERE expires_at <= CURRENT_TIMESTAMP'
+	const sql = `
+		DELETE FROM device_verification_tokens
+		WHERE expires_at <= CURRENT_TIMESTAMP`
+
 	try {
 		const res = await db.execute(sql)
 		console.info(`Deleted ${res.rowsAffected} device verification tokens`)
+	} catch (err) {
+		console.error(err)
+	}
+}
+
+async function cleanup_users() {
+	const sql = `
+		DELETE FROM users
+		WHERE email_verified_at IS NULL
+		AND created_at < datetime('now', '-1 month')`
+
+	try {
+		const res = await db.execute(sql)
+		console.info(`Deleted ${res.rowsAffected} unverified users`)
 	} catch (err) {
 		console.error(err)
 	}
