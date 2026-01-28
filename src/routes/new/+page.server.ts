@@ -1,6 +1,8 @@
 import { query } from '$lib/server/db'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
+import * as v from 'valibot'
+import { date_string_schema } from '$lib/server/schemas'
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -10,8 +12,10 @@ export const actions: Actions = {
 		const form = await event.request.formData()
 		const date = form.get('date') as string
 
-		if (!date) {
-			return fail(400, { date, error: 'Date is missing' })
+		const date_parsed = v.safeParse(date_string_schema, date)
+
+		if (!date_parsed.success) {
+			return fail(400, { date, error: date_parsed.issues[0].message })
 		}
 
 		const sql = 'SELECT id FROM entries WHERE date = ? AND user_id = ?'

@@ -4,9 +4,17 @@ import type { Actions, PageServerLoad } from './$types'
 import type { Entry, Entry_DB } from '$lib/types'
 import { decrypt_entry, encrypt } from '$lib/server/encryption'
 import * as v from 'valibot'
-import { title_schema, content_schema, thanks_schema } from '$lib/server/schemas'
+import {
+	title_schema,
+	content_schema,
+	thanks_schema,
+	is_valid_date,
+	date_string_schema,
+} from '$lib/server/schemas'
 
 export const load: PageServerLoad = async (event) => {
+	if (!is_valid_date(event.params.date)) error(404, 'Not Found')
+
 	const user = event.locals.user
 	if (!user) error(401, 'Unauthorized')
 
@@ -40,6 +48,11 @@ export const actions: Actions = {
 		if (!user) error(401, 'Unauthorized')
 
 		const date = event.params.date
+		const date_parsed = v.safeParse(date_string_schema, date)
+
+		if (!date_parsed.success) {
+			error(400, date_parsed.issues[0].message)
+		}
 
 		const form = await event.request.formData()
 		const title = form.get('title') as string

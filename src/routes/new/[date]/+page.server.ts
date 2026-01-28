@@ -1,9 +1,19 @@
 import { is_constraint_error, query } from '$lib/server/db'
 import { encrypt } from '$lib/server/encryption'
 import { error, fail, redirect } from '@sveltejs/kit'
-import type { Actions } from './$types'
+import type { Actions, PageServerLoad } from './$types'
 import * as v from 'valibot'
-import { title_schema, content_schema, thanks_schema } from '$lib/server/schemas'
+import {
+	title_schema,
+	content_schema,
+	thanks_schema,
+	date_string_schema,
+} from '$lib/server/schemas'
+import { is_valid_date } from '$lib/server/schemas'
+
+export const load: PageServerLoad = async (event) => {
+	if (!is_valid_date(event.params.date)) error(404, 'Not Found')
+}
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -11,6 +21,11 @@ export const actions: Actions = {
 		if (!user) error(401, 'Unauthorized')
 
 		const date = event.params.date
+		const date_parsed = v.safeParse(date_string_schema, date)
+
+		if (!date_parsed.success) {
+			error(400, date_parsed.issues[0].message)
+		}
 
 		const form = await event.request.formData()
 		const title = form.get('title') as string

@@ -45,3 +45,16 @@ export const thanks_schema = v.pipe(
 	v.string('Thanks must be a string'),
 	v.maxLength(1000, 'Thanks must be at most 1000 characters long'),
 )
+
+export const date_string_schema = v.pipe(
+	v.string('Date must be a string'),
+	v.nonEmpty('Date required'),
+	v.regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must have the format YYYY-MM-DD'),
+	v.check((value) => {
+		const date = new Date(`${value}T00:00:00Z`)
+		return !Number.isNaN(date.getTime())
+	}, 'Invalid date'),
+)
+
+export const is_valid_date = (value: unknown) =>
+	v.safeParse(date_string_schema, value).success
