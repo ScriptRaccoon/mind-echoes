@@ -1,13 +1,34 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import DateHeader from '$lib/components/DateHeader.svelte'
+	import { ChevronLeft, ChevronRight } from 'lucide-svelte'
 
 	let { data } = $props()
 
 	let entry = $derived(data.entry)
 </script>
 
-<DateHeader title={entry.title} date={entry.date} />
+<header>
+	<h1>{entry.title}</h1>
+	<div class="controls">
+		{#if data.previous_date}
+			<a href="/entry/{data.previous_date}" aria-label="previous Echo">
+				<ChevronLeft />
+			</a>
+		{:else}
+			<span class="opaque"><ChevronLeft /></span>
+		{/if}
+
+		<span class="date">{entry.date}</span>
+
+		{#if data.next_date}
+			<a href="/entry/{data.next_date}" aria-label="next Echo">
+				<ChevronRight />
+			</a>
+		{:else}
+			<span class="opaque"><ChevronRight /></span>
+		{/if}
+	</div>
+</header>
 
 {#if entry.content}
 	<section>
@@ -28,6 +49,25 @@
 </div>
 
 <style>
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.controls {
+		display: flex;
+	}
+
+	span.opaque {
+		opacity: 0.25;
+	}
+
+	.date {
+		text-align: center;
+		width: 10ch;
+	}
+
 	section + section {
 		margin-block: 1.5rem;
 	}

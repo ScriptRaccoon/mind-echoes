@@ -28,3 +28,17 @@ export async function query<T = any>(sql: string, args?: any[]) {
 		return { rows: null, err: libsql_error }
 	}
 }
+
+export async function batched_query<T extends any[]>(
+	input: { sql: string; args: any[] }[],
+	mode: 'read' | 'write',
+) {
+	try {
+		const res_list = await db.batch(input, mode)
+		return { rows_list: res_list.map((res) => res.rows) as T, err: null }
+	} catch (err) {
+		const libsql_error = err as LibsqlError
+		console.error(libsql_error)
+		return { rows_list: null, err: libsql_error }
+	}
+}
