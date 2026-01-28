@@ -135,6 +135,8 @@ textarea {
 	}
 }
 
+/* BUTTONS */
+
 .button {
 	background-color: var(--button-color);
 	color: var(--font-color-light);
@@ -149,6 +151,16 @@ textarea {
 a.button {
 	text-decoration: none;
 	display: inline-block;
+}
+
+.icon-button {
+	outline: 1px solid var(--dark-outline-color);
+	width: 1.75rem;
+	height: 1.75rem;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
 }
 
 /* ICONS */

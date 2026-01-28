@@ -3,6 +3,7 @@
 	import { page } from '$app/state'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import { shorten_date } from '$lib/utils'
+	import { X } from 'lucide-svelte'
 
 	let { data, form } = $props()
 
@@ -126,7 +127,9 @@
 
 			<form action="?/remove_device" method="POST" use:enhance>
 				<input type="hidden" name="device_id" value={device.id} />
-				<button class="button" disabled={is_current}>Remove</button>
+				<button class="icon-button" disabled={is_current} aria-label="Remove device">
+					<X size={18} />
+				</button>
 			</form>
 		{/each}
 	</div>
