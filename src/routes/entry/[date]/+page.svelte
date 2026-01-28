@@ -1,72 +1,42 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
-	import { open_dialog } from '$lib/components/Dialog.svelte'
-	import { resize_textarea } from '$lib/utils'
+	import { page } from '$app/state'
+	import DateHeader from '$lib/components/DateHeader.svelte'
 
-	let { form, data } = $props()
+	let { data } = $props()
 
 	let entry = $derived(data.entry)
-
-	function open_delete_dialog() {
-		open_dialog({
-			question: 'Do you want to delete this entry?',
-			action: '?/delete',
-		})
-	}
 </script>
 
-<h1 class="date">{entry.date}</h1>
+<DateHeader title={entry.title} date={entry.date} />
 
-<form method="POST" action="?/update" use:enhance>
-	<div class="form-group">
-		<label for="title">Title</label>
-		<input class="title" type="text" name="title" id="title" bind:value={entry.title} />
-	</div>
-
-	<div class="form-group">
-		<label for="content">What's on your mind?</label>
-		<textarea
-			name="content"
-			id="content"
-			{@attach resize_textarea}
-			bind:value={entry.content}
-		></textarea>
-	</div>
-
-	<div class="form-group">
-		<label for="thanks">What are 5 things you are grateful for?</label>
-		<textarea
-			name="thanks"
-			id="thanks"
-			{@attach resize_textarea}
-			bind:value={entry.thanks}
-		></textarea>
-	</div>
-
-	<div class="actions">
-		<button class="button">Update</button>
-		<button class="button danger" type="button" onclick={open_delete_dialog}>
-			Delete
-		</button>
-	</div>
-</form>
-
-{#if form?.error}
-	<p class="error">{form.error}</p>
+{#if entry.content}
+	<section>
+		<h2>This is on my mind</h2>
+		<div class="box">{entry.content}</div>
+	</section>
 {/if}
 
-{#if form?.message}
-	<p class="message">{form.message}</p>
+{#if entry.thanks}
+	<section>
+		<h2>I am thankful for</h2>
+		<div class="box">{entry.thanks}</div>
+	</section>
 {/if}
+
+<div class="actions">
+	<a href={page.url.href + '/edit'}>Edit entry</a>
+</div>
 
 <style>
-	.form-group {
-		margin-bottom: 1.5rem;
+	section + section {
+		margin-block: 1.5rem;
+	}
+
+	h2 {
+		font-size: 1.25rem;
 	}
 
 	.actions {
-		display: flex;
-		flex-direction: row-reverse;
-		justify-content: space-between;
+		margin-top: 1.5rem;
 	}
 </style>

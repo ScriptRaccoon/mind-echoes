@@ -114,7 +114,7 @@ textarea {
 .form-group {
 	margin-bottom: 1rem;
 
-	label:not([for='file']) {
+	label {
 		display: block;
 		margin-bottom: 0.1rem;
 		font-size: 0.875rem;
@@ -132,14 +132,6 @@ textarea {
 		&:focus-visible {
 			background-color: var(--input-focus-color);
 		}
-	}
-
-	input.title {
-		font-size: 1.875rem;
-	}
-
-	textarea {
-		font-size: 1.2rem;
 	}
 }
 

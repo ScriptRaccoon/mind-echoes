@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { page } from '$app/state'
+	import DateHeader from '$lib/components/DateHeader.svelte'
 	import { resize_textarea } from '$lib/utils'
 
 	let { form } = $props()
@@ -8,7 +9,7 @@
 	let date = $derived(page.params.date!)
 </script>
 
-<h1 class="date">New &ndash; {date}</h1>
+<DateHeader title="New entry" {date} />
 
 <form method="POST" use:enhance>
 	<div class="form-group">
