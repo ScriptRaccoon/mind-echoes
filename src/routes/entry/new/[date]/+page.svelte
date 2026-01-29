@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import { page } from '$app/state'
 	import DateHeader from '$lib/components/DateHeader.svelte'
-	import { resize_textarea } from '$lib/utils'
+	import EntryInputs from '$lib/components/EntryInputs.svelte'
 
 	let { form } = $props()
 
@@ -12,20 +12,7 @@
 <DateHeader title="New Echo" {date} />
 
 <form method="POST" use:enhance>
-	<div class="form-group">
-		<label for="title">Title</label>
-		<input class="title" type="text" name="title" id="title" required />
-	</div>
-
-	<div class="form-group">
-		<label for="content">What's on your mind?</label>
-		<textarea name="content" id="content" {@attach resize_textarea}></textarea>
-	</div>
-
-	<div class="form-group">
-		<label for="thanks">What are 5 things you are grateful for?</label>
-		<textarea name="thanks" id="thanks" {@attach resize_textarea}></textarea>
-	</div>
+	<EntryInputs />
 
 	<div>
 		<button class="button">Create</button>
@@ -35,9 +22,3 @@
 {#if form?.error}
 	<p class="error">{form.error}</p>
 {/if}
-
-<style>
-	.form-group {
-		margin-bottom: 1.5rem;
-	}
-</style>
