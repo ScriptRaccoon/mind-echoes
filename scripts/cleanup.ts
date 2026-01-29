@@ -19,7 +19,7 @@ const db = createClient({ authToken: DB_AUTH_TOKEN, url: DB_URL })
 
 async function cleanup() {
 	console.info('---\nStart cleanup script')
-	await clean_registration_codes()
+	await clean_registration_requests()
 	await clean_device_verification_tokens()
 	await clean_email_change_requests()
 	await cleanup_users()
@@ -28,14 +28,14 @@ async function cleanup() {
 
 cleanup()
 
-async function clean_registration_codes() {
+async function clean_registration_requests() {
 	const sql = `
-		DELETE FROM registration_codes
+		DELETE FROM registration_requests
 		WHERE expires_at <= CURRENT_TIMESTAMP`
 
 	try {
 		const res = await db.execute(sql)
-		console.info(`Deleted ${res.rowsAffected} expired registration codes`)
+		console.info(`Deleted ${res.rowsAffected} expired registration requests`)
 	} catch (err) {
 		console.error(err)
 	}

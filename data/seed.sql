@@ -7,15 +7,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS registration_codes (
-    id INTEGER PRIMARY KEY,
-    code INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+10 minutes')),
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS devices (
     id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -28,14 +19,6 @@ CREATE TABLE IF NOT EXISTS devices (
 );
 
 CREATE INDEX IF NOT EXISTS idx_devices_user ON devices (user_id);
-
-CREATE TABLE IF NOT EXISTS device_verification_tokens (
-    id TEXT PRIMARY KEY,
-    device_id INTEGER NOT NULL,
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 day')),
-    FOREIGN KEY (device_id) REFERENCES devices (id) ON DELETE CASCADE
-);
 
 CREATE TABLE IF NOT EXISTS entries (
     id INTEGER PRIMARY KEY,
@@ -51,6 +34,15 @@ CREATE TABLE IF NOT EXISTS entries (
 
 CREATE INDEX IF NOT EXISTS idx_entries_user ON entries (user_id);
 
+CREATE TABLE IF NOT EXISTS registration_requests (
+    id INTEGER PRIMARY KEY,
+    code INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+10 minutes')),
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS email_change_requests (
     id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -59,4 +51,12 @@ CREATE TABLE IF NOT EXISTS email_change_requests (
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+10 minutes')),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-)
+);
+
+CREATE TABLE IF NOT EXISTS device_verification_tokens (
+    id TEXT PRIMARY KEY,
+    device_id INTEGER NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 day')),
+    FOREIGN KEY (device_id) REFERENCES devices (id) ON DELETE CASCADE
+);

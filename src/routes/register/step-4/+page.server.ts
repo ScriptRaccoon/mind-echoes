@@ -20,7 +20,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const code = generate_code()
 
-	const sql = 'INSERT INTO registration_codes (code, user_id) VALUES (?,?)'
+	const sql = 'INSERT INTO registration_requests (code, user_id) VALUES (?,?)'
 
 	const { err } = await query(sql, [code, user_id])
 
@@ -55,7 +55,7 @@ export const actions: Actions = {
 		if (!code) return fail(400, { error: 'Code required' })
 
 		const sql_code = `
-			DELETE FROM registration_codes
+			DELETE FROM registration_requests
 			WHERE user_id = ? AND code = ? AND expires_at > CURRENT_TIMESTAMP
 			RETURNING id`
 
