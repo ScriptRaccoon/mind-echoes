@@ -4,6 +4,11 @@ import { REGISTER_COOKIE_NAME } from '$lib/server/registration-cache'
 import { registration_cache } from '$lib/server/registration-cache'
 import { query } from '$lib/server/db'
 import { send_registration_email } from '$lib/server/email'
+import crypto from 'node:crypto'
+
+function generate_code(): number {
+	return crypto.randomInt(100_000, 1_000_000)
+}
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
@@ -18,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const { username, email, user_id } = progress
 
-	const code = Math.floor(Math.random() * 10_000)
+	const code = generate_code()
 
 	const sql = 'INSERT INTO registration_codes (code, user_id) VALUES (?,?)'
 
