@@ -10,14 +10,18 @@ export const load: PageServerLoad = async (event) => {
 	if (!token) error(401, 'Token required')
 }
 
+const sql_request = `
+        SELECT user_id FROM password_reset_requests
+        WHERE token = ? AND expires_at > CURRENT_TIMESTAMP`
+
+const sql_pw = `UPDATE users SET password_hash = ? WHERE id = ?`
+
+const sql_clean = `DELETE FROM password_reset_requests WHERE token = ?`
+
 export const actions: Actions = {
 	default: async (event) => {
 		const token = event.url.searchParams.get('token')
 		if (!token) return fail(400, { error: 'Token required' })
-
-		const sql_request = `
-            SELECT user_id FROM password_reset_requests
-            WHERE token = ? AND expires_at > CURRENT_TIMESTAMP`
 
 		const { rows: requests, err: err_request } = await query<{ user_id: number }>(
 			sql_request,
@@ -46,9 +50,6 @@ export const actions: Actions = {
 
 		const password_hash = await bcrypt.hash(password, 10)
 
-		const sql_pw = `UPDATE users SET password_hash = ? WHERE id = ?`
-		const sql_clean = `DELETE FROM password_reset_requests WHERE token = ?`
-
 		const { err } = await batched_query(
 			[
 				{ sql: sql_pw, args: [password_hash, user_id] },
@@ -59,6 +60,6 @@ export const actions: Actions = {
 
 		if (err) return fail(500, { error: 'Database error' })
 
-		return redirect(303, '/login?from=password_reset')
+		redirect(303, '/login?from=password_reset')
 	},
 }

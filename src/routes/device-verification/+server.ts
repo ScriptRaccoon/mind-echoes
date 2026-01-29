@@ -39,5 +39,5 @@ export const GET: RequestHandler = async (event) => {
 
 	if (err) error(500, 'Database error')
 
-	return redirect(303, '/login?from=device_verification')
+	redirect(303, '/login?from=device_verification')
 }

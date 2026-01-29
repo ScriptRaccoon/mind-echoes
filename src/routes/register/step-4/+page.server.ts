@@ -67,20 +67,23 @@ export const actions: Actions = {
 
 		if (!code) return fail(400, { error: 'Code required' })
 
-		const sql_code = `
+		const sql_request = `
 			SELECT id FROM registration_requests
 			WHERE user_id = ? AND code = ? AND expires_at > CURRENT_TIMESTAMP`
 
-		const { rows, err: err_code } = await query<{ id: number }>(sql_code, [user_id, code])
+		const { rows: requests, err: err_request } = await query<{ id: number }>(
+			sql_request,
+			[user_id, code],
+		)
 
-		if (err_code) return fail(500, { error: 'Database error' })
+		if (err_request) return fail(500, { error: 'Database error' })
 
-		if (!rows.length) {
+		if (!requests.length) {
 			limiter.record(ip)
 			return fail(401, { error: 'Invalid code' })
 		}
 
-		const request_id = rows[0].id
+		const request_id = requests[0].id
 
 		const sql_clean = `DELETE FROM registration_requests WHERE id = ?`
 
