@@ -39,7 +39,10 @@
 				</a>
 			</li>
 			<li>
-				<a href="/register" aria-current={page.url.pathname == '/register'}>
+				<a
+					href="/register/step-1"
+					aria-current={page.url.pathname.startsWith('/register')}
+				>
 					<UserPlus size={20} /> Register
 				</a>
 			</li>

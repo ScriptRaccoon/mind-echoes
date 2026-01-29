@@ -31,7 +31,7 @@
 
 	<p>
 		To get started, <a href="/login">log in</a> or
-		<a href="/register">create an account</a>.
+		<a href="/register/step-1">create an account</a>.
 	</p>
 </main>
 
