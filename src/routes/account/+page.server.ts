@@ -6,6 +6,7 @@ import type { PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { username_schema, password_schema, email_schema } from '$lib/server/schemas'
 import { delete_device_cookie, delete_device_from_cache } from '$lib/server/devices'
+import type { Device } from '$lib/types'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
@@ -17,12 +18,7 @@ export const load: PageServerLoad = async (event) => {
 		WHERE user_id = ? AND verified_at IS NOT NULL
 		ORDER BY created_at`
 
-	const { rows: devices, err } = await query<{
-		id: number
-		label: string
-		created_at: string
-		last_login_at: string | null
-	}>(sql, [user.id])
+	const { rows: devices, err } = await query<Device>(sql, [user.id])
 
 	if (err) {
 		error(500, 'Database error')

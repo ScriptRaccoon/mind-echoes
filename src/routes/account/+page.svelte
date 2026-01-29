@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import { page } from '$app/state'
+	import DeviceTable from '$lib/components/DeviceTable.svelte'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
-	import { shorten_date } from '$lib/utils'
-	import { Monitor, MonitorPlay, X } from 'lucide-svelte'
 
 	let { data, form } = $props()
 
@@ -116,35 +115,12 @@
 
 <section>
 	<h2>Devices</h2>
-	<div class="device-table">
-		<span class="head">Label</span>
-		<span class="head">Created</span>
-		<span class="head">Last login</span>
-		<span></span>
-		{#each data.devices as device (device.id)}
-			{@const is_current = device.id === data.current_device_id}
-			<span>
-				{#if is_current}
-					<MonitorPlay size={18} />
-				{:else}
-					<Monitor size={18} />
-				{/if}
-				&nbsp;{device.label}
-			</span>
 
-			<span class="date">{shorten_date(device.created_at)}</span>
-			<span class="date">{shorten_date(device.last_login_at ?? '')}</span>
-
-			<button
-				class="icon-button"
-				disabled={is_current}
-				aria-label="Remove device"
-				onclick={() => open_remove_device_dialog(device.id)}
-			>
-				<X size={18} />
-			</button>
-		{/each}
-	</div>
+	<DeviceTable
+		devices={data.devices}
+		current_device_id={data.current_device_id}
+		remove_device={open_remove_device_dialog}
+	/>
 
 	{#if form?.error && form.type === 'device'}
 		<p class="error">{form.error}</p>
@@ -173,20 +149,5 @@
 
 	section + section {
 		margin-top: 2rem;
-	}
-
-	.device-table {
-		display: grid;
-		grid-template-columns: 2fr 1fr 1fr auto;
-		align-items: center;
-		gap: 0.75rem 1rem;
-
-		.head {
-			font-weight: bold;
-		}
-
-		.date {
-			color: var(--secondary-font-color);
-		}
 	}
 </style>
