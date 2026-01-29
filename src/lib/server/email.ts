@@ -1,4 +1,4 @@
-import { EMAIL_ADDRESS, EMAIL_PASSWORD } from '$env/static/private'
+import { EMAIL_ADDRESS, EMAIL_PASSWORD, ENABLE_EMAILS } from '$env/static/private'
 import { APP_TITLE } from '$lib/config'
 import nodemailer from 'nodemailer'
 
@@ -13,7 +13,18 @@ const transporter = nodemailer.createTransport({
 })
 
 async function send_email(options: { to: string; subject: string; text: string }) {
-	await transporter.sendMail({ from: EMAIL_ADDRESS, ...options })
+	if (ENABLE_EMAILS === 'true') {
+		await transporter.sendMail({ from: EMAIL_ADDRESS, ...options })
+	} else {
+		console.info('--- Email ---')
+		console.info('\nRecipient:')
+		console.info(options.to)
+		console.info('\nSubject:')
+		console.info(options.subject)
+		console.info('\nText:')
+		console.info(options.text)
+		console.info('\n---')
+	}
 }
 
 export async function send_registration_email(
