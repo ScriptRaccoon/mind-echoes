@@ -5,6 +5,9 @@ import { registration_cache } from '$lib/server/registration-cache'
 import { query } from '$lib/server/db'
 import { send_registration_email } from '$lib/server/email'
 import { generate_code } from '$lib/server/utils'
+import { RateLimiter } from '$lib/server/ratelimit'
+
+const limiter = new RateLimiter({ limit: 2, window_ms: 60_000 })
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
@@ -37,6 +40,15 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	default: async (event) => {
+		const ip = event.getClientAddress()
+
+		if (!limiter.is_allowed(ip)) {
+			return fail(429, {
+				device_label: '',
+				error: 'Too many registration attempts. Try again later.',
+			})
+		}
+
 		const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
 		if (!register_id) error(403, 'Forbidden')
 
@@ -64,7 +76,10 @@ export const actions: Actions = {
 
 		if (err_code) return fail(500, { error: 'Database error' })
 
-		if (!rows.length) return fail(401, { error: 'Invalid code' })
+		if (!rows.length) {
+			limiter.record(ip)
+			return fail(401, { error: 'Invalid code' })
+		}
 
 		const sql_verify = `
 			UPDATE users
@@ -74,6 +89,8 @@ export const actions: Actions = {
 		const { err: err_verify } = await query(sql_verify, [user_id])
 
 		if (err_verify) return fail(500, { error: 'Database error' })
+
+		limiter.clear(ip)
 
 		redirect(303, `/login?from=register&username=${progress.username}`)
 	},
