@@ -10,7 +10,7 @@ export const load: PageServerLoad = async (event) => {
 	if (!register_id) error(403, 'Forbidden')
 
 	const progress = registration_cache.get(register_id)
-	if (!progress || !progress.user_id) error(403, 'Forbidden')
+	if (!progress || !progress.user_id || !progress.device_id) error(403, 'Forbidden')
 
 	if (progress.expires_at <= Date.now()) {
 		error(403, 'Session expired')
@@ -18,7 +18,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const { username, email, user_id } = progress
 
-	const code = Math.floor(Math.random() * 10000)
+	const code = Math.floor(Math.random() * 10_000)
 
 	const sql = 'INSERT INTO registration_codes (code, user_id) VALUES (?,?)'
 
@@ -40,7 +40,7 @@ export const actions: Actions = {
 		if (!register_id) error(403, 'Forbidden')
 
 		const progress = registration_cache.get(register_id)
-		if (!progress || !progress.user_id) error(403, 'Forbidden')
+		if (!progress || !progress.user_id || !progress.device_id) error(403, 'Forbidden')
 
 		if (progress.expires_at <= Date.now()) {
 			error(403, 'Session expired')

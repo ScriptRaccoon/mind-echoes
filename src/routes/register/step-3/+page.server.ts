@@ -54,6 +54,8 @@ export const actions: Actions = {
 			return fail(500, { device_label, error: 'Database error' })
 		}
 
+		registration_cache.set(register_id, { ...progress, device_id })
+
 		redirect(303, '/register/step-4')
 	},
 }
