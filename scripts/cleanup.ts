@@ -21,6 +21,7 @@ async function cleanup() {
 	console.info('---\nStart cleanup script')
 	await clean_registration_codes()
 	await clean_device_verification_tokens()
+	await clean_email_change_requests()
 	await cleanup_users()
 	console.info('Finish cleanup script\n---')
 }
@@ -34,7 +35,7 @@ async function clean_registration_codes() {
 
 	try {
 		const res = await db.execute(sql)
-		console.info(`Deleted ${res.rowsAffected} registration codes`)
+		console.info(`Deleted ${res.rowsAffected} expired registration codes`)
 	} catch (err) {
 		console.error(err)
 	}
@@ -47,7 +48,7 @@ async function clean_device_verification_tokens() {
 
 	try {
 		const res = await db.execute(sql)
-		console.info(`Deleted ${res.rowsAffected} device verification tokens`)
+		console.info(`Deleted ${res.rowsAffected} expired device verification tokens`)
 	} catch (err) {
 		console.error(err)
 	}
@@ -62,6 +63,19 @@ async function cleanup_users() {
 	try {
 		const res = await db.execute(sql)
 		console.info(`Deleted ${res.rowsAffected} unverified users`)
+	} catch (err) {
+		console.error(err)
+	}
+}
+
+async function clean_email_change_requests() {
+	const sql = `
+		DELETE FROM email_change_requests
+		WHERE expires_at <= CURRENT_TIMESTAMP`
+
+	try {
+		const res = await db.execute(sql)
+		console.info(`Deleted ${res.rowsAffected} expired email change requests`)
 	} catch (err) {
 		console.error(err)
 	}

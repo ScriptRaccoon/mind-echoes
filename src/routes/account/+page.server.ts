@@ -7,10 +7,15 @@ import * as v from 'valibot'
 import { username_schema, password_schema, email_schema } from '$lib/server/schemas'
 import { delete_device_cookie, delete_device_from_cache } from '$lib/server/devices'
 import type { Device } from '$lib/types'
+import { generate_code, send_email_change_email } from '$lib/server/email'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
 	if (!user) error(401, 'Unauthorized')
+
+	const from = event.url.searchParams.get('from')
+	const message =
+		from === 'email_change' ? 'Your email has been updated successfully' : null
 
 	const sql = `
 		SELECT id, label, created_at, last_login_at
@@ -24,7 +29,7 @@ export const load: PageServerLoad = async (event) => {
 		error(500, 'Database error')
 	}
 
-	return { devices, current_device_id: event.locals.device_id }
+	return { devices, current_device_id: event.locals.device_id, message }
 }
 
 export const actions: Actions = {
@@ -69,19 +74,36 @@ export const actions: Actions = {
 			return fail(400, { type: 'email', error: email_parsed.issues[0].message })
 		}
 
-		const sql = 'UPDATE users SET email = ? WHERE id = ?'
-		const { err } = await query(sql, [email, user.id])
+		const code = generate_code()
+
+		const sql_duplicate = `SELECT id FROM users WHERE email = ?`
+		const { rows, err: err_dupl } = await query(sql_duplicate, [email])
+
+		if (err_dupl) return fail(500, { type: 'email', error: 'Database error' })
+
+		if (rows.length) return fail(409, { type: 'email', error: 'Email is already taken' })
+
+		const sql = `
+			INSERT INTO email_change_requests
+				(user_id, new_email, code)
+			VALUES (?,?,?)`
+
+		const { err } = await query(sql, [user.id, email, code])
 
 		if (err) {
-			if (is_constraint_error(err)) {
-				return fail(409, { type: 'email', error: 'Email is already taken' })
-			}
 			return fail(500, { type: 'email', error: 'Database error' })
 		}
 
-		set_auth_cookie(event, { id: user.id, username: user.username, email })
+		try {
+			await send_email_change_email(user.username, email, code)
+		} catch (err) {
+			console.error(err)
+			return fail(500, { type: 'email', error: 'Failed to send verification email' })
+		}
 
-		return { type: 'email', message: 'Email has been updated successfully' }
+		const email_enc = encodeURIComponent(email)
+
+		redirect(303, `/account/confirm-new-email?new_email=${email_enc}`)
 	},
 
 	password: async (event) => {

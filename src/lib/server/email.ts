@@ -1,6 +1,7 @@
 import { EMAIL_ADDRESS, EMAIL_PASSWORD, ENABLE_EMAILS } from '$env/static/private'
 import { APP_TITLE } from '$lib/config'
 import nodemailer from 'nodemailer'
+import crypto from 'node:crypto'
 
 const transporter = nodemailer.createTransport({
 	host: 'smtp.gmail.com',
@@ -60,4 +61,36 @@ export async function send_device_verification_email(
 		'This link is only valid for one day.'
 
 	await send_email({ to, subject, text })
+}
+
+export async function send_email_change_email(
+	username: string,
+	to: string,
+	code: number,
+) {
+	const subject = `${APP_TITLE} - Verify your new email address`
+	const text =
+		`Hi ${username},\n\n` +
+		`You have requested to change your email address.\n\n` +
+		'Please use the following code to confirm the change:\n\n' +
+		code +
+		'\n\n' +
+		'This code is only valid for 10 minutes.'
+
+	await send_email({ to, subject, text })
+}
+
+export async function send_email_inform_changed_email(
+	username: string,
+	to: string,
+	new_email: string,
+) {
+	const subject = `${APP_TITLE} - Your email address has been updated`
+	const text = `Hi ${username},\n\nYour email address has been changed to ${new_email}.`
+
+	await send_email({ to, subject, text })
+}
+
+export function generate_code(): number {
+	return crypto.randomInt(100_000, 1_000_000)
 }

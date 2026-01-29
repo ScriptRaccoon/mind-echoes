@@ -27,6 +27,12 @@
 	<a href="/logout" class="button">Logout</a>
 </header>
 
+{#if data.message}
+	<p class="message">
+		{data.message}
+	</p>
+{/if}
+
 <section>
 	<h2>Change username</h2>
 
@@ -80,9 +86,9 @@
 		<p class="error">{form.error}</p>
 	{/if}
 
-	{#if form?.message && form.type === 'email'}
+	<!-- {#if form?.message && form.type === 'email'}
 		<p class="message">{form.message}</p>
-	{/if}
+	{/if} -->
 </section>
 
 <section>

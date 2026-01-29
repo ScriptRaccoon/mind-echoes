@@ -50,3 +50,13 @@ CREATE TABLE IF NOT EXISTS entries (
 );
 
 CREATE INDEX IF NOT EXISTS idx_entries_user ON entries (user_id);
+
+CREATE TABLE IF NOT EXISTS email_change_requests (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    new_email TEXT NOT NULL,
+    code INTEGER NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+10 minutes')),
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+)

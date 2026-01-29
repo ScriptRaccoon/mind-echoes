@@ -3,12 +3,7 @@ import type { Actions, PageServerLoad } from './$types'
 import { REGISTER_COOKIE_NAME } from '$lib/server/registration-cache'
 import { registration_cache } from '$lib/server/registration-cache'
 import { query } from '$lib/server/db'
-import { send_registration_email } from '$lib/server/email'
-import crypto from 'node:crypto'
-
-function generate_code(): number {
-	return crypto.randomInt(100_000, 1_000_000)
-}
+import { generate_code, send_registration_email } from '$lib/server/email'
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)

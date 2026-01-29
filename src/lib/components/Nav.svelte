@@ -18,7 +18,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="/account" aria-current={page.url.pathname == '/account'}>
+				<a href="/account" aria-current={page.url.pathname.startsWith('/account')}>
 					<User size={20} /> Account
 				</a>
 			</li>
