@@ -2,7 +2,9 @@
 	import { APP_TITLE } from '$lib/config'
 </script>
 
-<h1>Welcome to {APP_TITLE}</h1>
+<header>
+	<h1>Welcome to {APP_TITLE}</h1>
+</header>
 
 <main>
 	<p>

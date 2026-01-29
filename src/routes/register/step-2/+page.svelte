@@ -4,7 +4,9 @@
 	let { form } = $props()
 </script>
 
-<h1>Register</h1>
+<header>
+	<h1>Register</h1>
+</header>
 
 <form method="POST" use:enhance>
 	<div class="form-group">

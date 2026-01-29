@@ -2,7 +2,9 @@
 	let { data, form } = $props()
 </script>
 
-<h1>Device registration</h1>
+<header>
+	<h1>Device registration</h1>
+</header>
 
 <form method="POST">
 	<div class="form-group">

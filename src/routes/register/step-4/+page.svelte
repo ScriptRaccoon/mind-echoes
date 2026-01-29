@@ -4,7 +4,9 @@
 	let { form } = $props()
 </script>
 
-<h1>Register</h1>
+<header>
+	<h1>Register</h1>
+</header>
 
 <p>
 	To verify your email address, we have sent you a registration code. Enter it below to
