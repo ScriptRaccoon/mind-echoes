@@ -3,7 +3,7 @@
 	import { page } from '$app/state'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import { shorten_date } from '$lib/utils'
-	import { X } from 'lucide-svelte'
+	import { Monitor, MonitorPlay, X } from 'lucide-svelte'
 
 	let { data, form } = $props()
 
@@ -123,15 +123,17 @@
 		<span></span>
 		{#each data.devices as device (device.id)}
 			{@const is_current = device.id === data.current_device_id}
-			<span
-				>{device.label}
+			<span>
 				{#if is_current}
-					[this device]
+					<MonitorPlay size={18} />
+				{:else}
+					<Monitor size={18} />
 				{/if}
+				&nbsp;{device.label}
 			</span>
 
-			<span>{shorten_date(device.created_at)}</span>
-			<span>{shorten_date(device.last_login_at ?? '')}</span>
+			<span class="date">{shorten_date(device.created_at)}</span>
+			<span class="date">{shorten_date(device.last_login_at ?? '')}</span>
 
 			<button
 				class="icon-button"
@@ -181,6 +183,10 @@
 
 		.head {
 			font-weight: bold;
+		}
+
+		.date {
+			color: var(--secondary-font-color);
 		}
 	}
 </style>
