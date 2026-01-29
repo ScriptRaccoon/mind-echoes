@@ -1,4 +1,4 @@
-import { create_device_verification_token, save_device } from '$lib/server/devices'
+import { create_device_verification_request, save_device } from '$lib/server/devices'
 import { error, fail } from '@sveltejs/kit'
 import type { Actions } from './$types'
 import { RateLimiter } from '$lib/server/ratelimit'
@@ -49,13 +49,13 @@ export const actions: Actions = {
 			return fail(500, { device_label, error: 'Database error' })
 		}
 
-		const { token_id } = await create_device_verification_token(device_id)
+		const { token } = await create_device_verification_request(device_id)
 
-		if (!token_id) {
+		if (!token) {
 			return fail(500, { device_label, error: 'Database error' })
 		}
 
-		const link = `${event.url.origin}/device-verification?token=${token_id}`
+		const link = `${event.url.origin}/device-verification?token=${token}`
 
 		try {
 			await send_device_verification_email(user.username, device_label, user.email, link)

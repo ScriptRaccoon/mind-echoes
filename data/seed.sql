@@ -53,10 +53,10 @@ CREATE TABLE IF NOT EXISTS email_change_requests (
 );
 
 CREATE TABLE IF NOT EXISTS device_verification_requests (
-    id TEXT PRIMARY KEY,
+    token TEXT PRIMARY KEY,
     device_id INTEGER NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 day')),
+    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 hour')),
     FOREIGN KEY (device_id) REFERENCES devices (id) ON DELETE CASCADE
 );
 

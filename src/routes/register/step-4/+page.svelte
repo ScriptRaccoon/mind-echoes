@@ -16,8 +16,6 @@
 	complete the registration.
 </p>
 
-<p></p>
-
 <form method="POST" use:enhance>
 	<div class="form-group">
 		<label for="code">Registration Code</label>

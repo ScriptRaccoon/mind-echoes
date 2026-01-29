@@ -1,7 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import { query } from './db'
-import crypto from 'node:crypto'
-import { generate_token } from './utils'
+import { generate_token, hash_token } from './utils'
 
 const COOKIE_DEVICE_TOKEN = 'device_token'
 
@@ -12,10 +11,6 @@ const DEVICE_COOKIE_OPTIONS = {
 	sameSite: 'strict',
 	secure: true,
 } as const
-
-function hash_token(token: string): string {
-	return crypto.createHash('sha256').update(token).digest('hex')
-}
 
 export async function save_device(
 	event: RequestEvent,
@@ -91,19 +86,14 @@ export function delete_device_from_cache(token_hash: string) {
 	device_cache.delete(token_hash)
 }
 
-export async function create_device_verification_token(device_id: number) {
-	const token_id = generate_token()
+export async function create_device_verification_request(device_id: number) {
+	const token = generate_token()
 
-	const sql = `
-		INSERT INTO device_verification_requests
-			(id, device_id)
-		VALUES (?,?)`
+	const sql = `INSERT INTO device_verification_requests (token, device_id) VALUES (?,?)`
 
-	const { err } = await query(sql, [token_id, device_id])
+	const { err } = await query(sql, [token, device_id])
 
-	if (err) return { token_id: null }
-
-	return { token_id }
+	return err ? { token: null } : { token }
 }
 
 export async function save_login_date_for_device(event: RequestEvent) {

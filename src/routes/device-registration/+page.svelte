@@ -6,9 +6,11 @@
 	<h1>Device registration</h1>
 </header>
 
+<p>This is the first time you log in from this device. You need to first register it.</p>
+
 <form method="POST">
 	<div class="form-group">
-		<label for="device_label">Device label</label>
+		<label for="device_label">Name this new device</label>
 		<input
 			type="text"
 			name="device_label"

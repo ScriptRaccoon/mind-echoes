@@ -19,14 +19,28 @@ const db = createClient({ authToken: DB_AUTH_TOKEN, url: DB_URL })
 
 async function cleanup() {
 	console.info('---\nStart cleanup script')
+	await cleanup_users()
 	await clean_registration_requests()
 	await clean_device_verification_requests()
 	await clean_email_change_requests()
-	await cleanup_users()
 	console.info('Finish cleanup script\n---')
 }
 
 cleanup()
+
+async function cleanup_users() {
+	const sql = `
+		DELETE FROM users
+		WHERE email_verified_at IS NULL
+		AND created_at < datetime('now', '-1 month')`
+
+	try {
+		const res = await db.execute(sql)
+		console.info(`Deleted ${res.rowsAffected} unverified, inactive users`)
+	} catch (err) {
+		console.error(err)
+	}
+}
 
 async function clean_registration_requests() {
 	const sql = `
@@ -48,21 +62,7 @@ async function clean_device_verification_requests() {
 
 	try {
 		const res = await db.execute(sql)
-		console.info(`Deleted ${res.rowsAffected} expired device verification tokens`)
-	} catch (err) {
-		console.error(err)
-	}
-}
-
-async function cleanup_users() {
-	const sql = `
-		DELETE FROM users
-		WHERE email_verified_at IS NULL
-		AND created_at < datetime('now', '-1 month')`
-
-	try {
-		const res = await db.execute(sql)
-		console.info(`Deleted ${res.rowsAffected} unverified users`)
+		console.info(`Deleted ${res.rowsAffected} expired device verification requests`)
 	} catch (err) {
 		console.error(err)
 	}

@@ -57,7 +57,7 @@ export async function send_device_verification_email(
 		'Please follow this link to verify that device:\n\n' +
 		link +
 		'\n\n' +
-		'This link is only valid for one day.'
+		'This link is only valid for one hour.'
 
 	await send_email({ to, subject, text })
 }
