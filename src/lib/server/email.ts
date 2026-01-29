@@ -91,6 +91,22 @@ export async function send_email_inform_changed_email(
 	await send_email({ to, subject, text })
 }
 
+export async function send_password_reset_email(
+	username: string,
+	to: string,
+	link: string,
+) {
+	const subject = `${APP_TITLE} - Password reset`
+	const text =
+		`Hi ${username},\n\n` +
+		`Use the following link to reset your password:\n\n` +
+		link +
+		'\n\n' +
+		'This link is only valid for 10 minutes.'
+
+	await send_email({ to, subject, text })
+}
+
 export function generate_code(): number {
 	return crypto.randomInt(100_000, 1_000_000)
 }

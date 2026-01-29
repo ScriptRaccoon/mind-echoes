@@ -60,3 +60,11 @@ CREATE TABLE IF NOT EXISTS device_verification_requests (
     expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 day')),
     FOREIGN KEY (device_id) REFERENCES devices (id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS password_reset_requests (
+    token TEXT PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+10 minutes')),
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);

@@ -11,6 +11,7 @@ export const load: PageServerLoad = (event) => {
 		logout: 'You have been logged out successfully',
 		register: 'Registration is complete. You can now log in.',
 		device_verification: 'Your device has been verified. You can now log in.',
+		password_reset: 'Password has been reset. You can now log in with the new password.',
 	}
 
 	const from = event.url.searchParams.get('from') ?? ''

@@ -95,7 +95,7 @@ export function delete_device_from_cache(token_hash: string) {
 }
 
 export async function create_device_verification_token(device_id: number) {
-	const token_id = crypto.randomUUID()
+	const token_id = crypto.randomBytes(32).toString('hex')
 
 	const sql = `
 		INSERT INTO device_verification_requests

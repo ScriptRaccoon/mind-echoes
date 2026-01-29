@@ -35,3 +35,14 @@
 {:else if data.message}
 	<p class="message">{data.message}</p>
 {/if}
+
+<p class="forgot">
+	<a href="/password-forgot">Forgot your password?</a>
+</p>
+
+<style>
+	.forgot {
+		margin-top: 2rem;
+		color: var(--secondary-font-color);
+	}
+</style>
