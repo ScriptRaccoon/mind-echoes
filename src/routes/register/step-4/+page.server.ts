@@ -2,7 +2,7 @@ import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import { REGISTER_COOKIE_NAME } from '$lib/server/registration-cache'
 import { registration_cache } from '$lib/server/registration-cache'
-import { query } from '$lib/server/db'
+import { batched_query, query } from '$lib/server/db'
 import { send_registration_email } from '$lib/server/email'
 import { generate_code } from '$lib/server/utils'
 import { RateLimiter } from '$lib/server/ratelimit'
@@ -59,7 +59,7 @@ export const actions: Actions = {
 			error(403, 'Session expired')
 		}
 
-		const { user_id } = progress
+		const { user_id, username } = progress
 
 		const form = await event.request.formData()
 
@@ -68,9 +68,8 @@ export const actions: Actions = {
 		if (!code) return fail(400, { error: 'Code required' })
 
 		const sql_code = `
-			DELETE FROM registration_requests
-			WHERE user_id = ? AND code = ? AND expires_at > CURRENT_TIMESTAMP
-			RETURNING id`
+			SELECT id FROM registration_requests
+			WHERE user_id = ? AND code = ? AND expires_at > CURRENT_TIMESTAMP`
 
 		const { rows, err: err_code } = await query<{ id: number }>(sql_code, [user_id, code])
 
@@ -81,17 +80,27 @@ export const actions: Actions = {
 			return fail(401, { error: 'Invalid code' })
 		}
 
+		const request_id = rows[0].id
+
+		const sql_clean = `DELETE FROM registration_requests WHERE id = ?`
+
 		const sql_verify = `
 			UPDATE users
 			SET email_verified_at = CURRENT_TIMESTAMP
 			WHERE id = ?`
 
-		const { err: err_verify } = await query(sql_verify, [user_id])
+		const { err } = await batched_query(
+			[
+				{ sql: sql_verify, args: [user_id] },
+				{ sql: sql_clean, args: [request_id] },
+			],
+			'write',
+		)
 
-		if (err_verify) return fail(500, { error: 'Database error' })
+		if (err) return fail(500, { error: 'Database error' })
 
 		limiter.clear(ip)
 
-		redirect(303, `/login?from=register&username=${progress.username}`)
+		redirect(303, `/login?from=register&username=${username}`)
 	},
 }
