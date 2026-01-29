@@ -1,3 +1,4 @@
+import { dev } from '$app/environment'
 import * as v from 'valibot'
 
 export const username_schema = v.pipe(
@@ -15,14 +16,16 @@ export const email_schema = v.pipe(
 	v.email('Email must be a valid email'),
 )
 
-export const password_schema = v.pipe(
-	v.string('Password must be a string'),
-	v.nonEmpty('Password is required'),
-	v.minLength(8, 'Password must be at least 8 characters long'),
-	v.maxLength(100, 'Password must be at most 100 characters long'),
-	v.regex(/\d/, 'Password must contain at least one digit'),
-	v.regex(/[A-Za-z]/, 'Password must contain at least one letter'),
-)
+export const password_schema = dev
+	? v.pipe(v.string('Password must be a string'), v.nonEmpty('Password is required'))
+	: v.pipe(
+			v.string('Password must be a string'),
+			v.nonEmpty('Password is required'),
+			v.minLength(8, 'Password must be at least 8 characters long'),
+			v.maxLength(100, 'Password must be at most 100 characters long'),
+			v.regex(/\d/, 'Password must contain at least one digit'),
+			v.regex(/[A-Za-z]/, 'Password must contain at least one letter'),
+		)
 
 export const device_label_schema = v.pipe(
 	v.string('Device label must be a string'),
