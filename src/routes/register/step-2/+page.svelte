@@ -7,6 +7,8 @@
 
 <RegistrationHeader step={2} />
 
+<p>Choose a secure password.</p>
+
 <form method="POST" use:enhance>
 	<div class="form-group">
 		<label for="password">Password</label>

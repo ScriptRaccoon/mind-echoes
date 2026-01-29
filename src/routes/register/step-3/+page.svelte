@@ -7,9 +7,11 @@
 
 <RegistrationHeader step={3} />
 
+<p>Your account will only be accessible from authenticated devices.</p>
+
 <form method="POST" use:enhance>
 	<div class="form-group">
-		<label for="device_label">Device Label</label>
+		<label for="device_label">Name this device</label>
 		<input
 			type="text"
 			name="device_label"

@@ -16,7 +16,7 @@
 			id="username"
 			name="username"
 			required
-			value={form?.username ?? ''}
+			value={form?.username ?? data.username ?? ''}
 		/>
 	</div>
 

@@ -74,6 +74,6 @@ export const actions: Actions = {
 
 		if (err_verify) return fail(500, { error: 'Database error' })
 
-		redirect(303, '/login?from=register')
+		redirect(303, `/login?from=register&username=${progress.username}`)
 	},
 }
