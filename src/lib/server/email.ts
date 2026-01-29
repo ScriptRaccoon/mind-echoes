@@ -65,16 +65,16 @@ export async function send_device_verification_email(
 export async function send_email_change_email(
 	username: string,
 	to: string,
-	code: number,
+	link: string,
 ) {
 	const subject = `${APP_TITLE} - Verify your new email address`
 	const text =
 		`Hi ${username},\n\n` +
 		`You have requested to change your email address.\n\n` +
-		'Please use the following code to confirm the change:\n\n' +
-		code +
+		'Please use the following link to confirm the change:\n\n' +
+		link +
 		'\n\n' +
-		'This code is only valid for 10 minutes.'
+		'This link is only valid for 10 minutes.'
 
 	await send_email({ to, subject, text })
 }

@@ -8,7 +8,7 @@ import { username_schema, password_schema, email_schema } from '$lib/server/sche
 import { delete_device_cookie, delete_device_from_cache } from '$lib/server/devices'
 import type { Device } from '$lib/types'
 import { send_email_change_email } from '$lib/server/email'
-import { generate_code } from '$lib/server/utils'
+import { generate_token } from '$lib/server/utils'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
@@ -75,8 +75,6 @@ export const actions: Actions = {
 			return fail(400, { type: 'email', error: email_parsed.issues[0].message })
 		}
 
-		const code = generate_code()
-
 		const sql_duplicate = `SELECT id FROM users WHERE email = ?`
 		const { rows, err: err_dupl } = await query(sql_duplicate, [email])
 
@@ -84,27 +82,32 @@ export const actions: Actions = {
 
 		if (rows.length) return fail(409, { type: 'email', error: 'Email is already taken' })
 
+		const token = generate_token()
+
 		const sql = `
 			INSERT INTO email_change_requests
-				(user_id, new_email, code)
+				(token, user_id, new_email)
 			VALUES (?,?,?)`
 
-		const { err } = await query(sql, [user.id, email, code])
+		const { err } = await query(sql, [token, user.id, email])
 
 		if (err) {
 			return fail(500, { type: 'email', error: 'Database error' })
 		}
 
+		const link = `${event.url.origin}/account/email-verification?token=${token}`
+
 		try {
-			await send_email_change_email(user.username, email, code)
+			await send_email_change_email(user.username, email, link)
 		} catch (err) {
 			console.error(err)
 			return fail(500, { type: 'email', error: 'Failed to send verification email' })
 		}
 
-		const email_enc = encodeURIComponent(email)
-
-		redirect(303, `/account/confirm-new-email?new_email=${email_enc}`)
+		return {
+			type: 'email',
+			message: 'We have sent a verification link to the new email address.',
+		}
 	},
 
 	password: async (event) => {

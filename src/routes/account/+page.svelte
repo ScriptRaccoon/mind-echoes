@@ -86,9 +86,9 @@
 		<p class="error">{form.error}</p>
 	{/if}
 
-	<!-- {#if form?.message && form.type === 'email'}
+	{#if form?.message && form.type === 'email'}
 		<p class="message">{form.message}</p>
-	{/if} -->
+	{/if}
 </section>
 
 <section>

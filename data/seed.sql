@@ -44,10 +44,9 @@ CREATE TABLE IF NOT EXISTS registration_requests (
 );
 
 CREATE TABLE IF NOT EXISTS email_change_requests (
-    id INTEGER PRIMARY KEY,
+    token TEXT PRIMARY KEY,
     user_id INTEGER NOT NULL,
     new_email TEXT NOT NULL,
-    code INTEGER NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+10 minutes')),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
