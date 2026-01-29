@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import RegistrationHeader from '$lib/components/RegistrationHeader.svelte'
 
 	let { form } = $props()
 </script>
 
-<header>
-	<h1>Register</h1>
-</header>
+<RegistrationHeader step={1} />
 
 <form method="POST" use:enhance>
 	<div class="form-group">

@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import RegistrationHeader from '$lib/components/RegistrationHeader.svelte'
 
 	let { form } = $props()
 </script>
 
-<header>
-	<h1>Register</h1>
-</header>
+<RegistrationHeader step={4} />
 
 <p>
 	To verify your email address, we have sent you a registration code. Enter it below to
