@@ -5,6 +5,7 @@ import * as v from 'valibot'
 import { password_schema } from '$lib/server/schemas'
 import { REGISTER_COOKIE_NAME, registration_cache } from '$lib/server/registration-cache'
 import { query, is_constraint_error } from '$lib/server/db'
+import { RateLimiter } from '$lib/server/ratelimit'
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
@@ -18,8 +19,19 @@ export const load: PageServerLoad = async (event) => {
 	}
 }
 
+const limiter = new RateLimiter({ limit: 1, window_ms: 30_000 })
+
 export const actions: Actions = {
 	default: async (event) => {
+		const ip = event.getClientAddress()
+
+		if (!limiter.is_allowed(ip)) {
+			return fail(429, {
+				device_label: '',
+				error: 'Too many registrations. Try again later.',
+			})
+		}
+
 		const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
 		if (!register_id) error(403, 'Forbidden')
 
@@ -76,6 +88,8 @@ export const actions: Actions = {
 		const user_id = users[0].id
 
 		registration_cache.set(register_id, { ...progress, user_id })
+
+		limiter.record(ip)
 
 		redirect(303, '/register/step-3')
 	},
