@@ -7,11 +7,12 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS email_verification_tokens (
-    id TEXT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS registration_codes (
+    id INTEGER PRIMARY KEY,
+    code INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+1 hour')),
+    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+10 minutes')),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 

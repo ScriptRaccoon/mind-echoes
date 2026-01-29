@@ -9,7 +9,7 @@ import { save_login_date_for_device } from '$lib/server/devices'
 export const load: PageServerLoad = (event) => {
 	const LOGIN_MESSAGES: Record<string, undefined | string> = {
 		logout: 'You have been logged out successfully',
-		email_verification: 'Your email address has been verified. You can now log in.',
+		register: 'Registration is complete. You can now log in.',
 		device_verification: 'Your device has been verified. You can now log in.',
 	}
 

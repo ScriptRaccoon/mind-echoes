@@ -1,12 +1,9 @@
-import { is_constraint_error, query } from '$lib/server/db'
-import { fail, error } from '@sveltejs/kit'
+import { fail, error, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { device_label_schema } from '$lib/server/schemas'
-import { send_email_verification_email } from '$lib/server/email'
 import { save_device } from '$lib/server/devices'
 import { get_os_and_browser } from '$lib/utils'
-import crypto from 'node:crypto'
 import { REGISTER_COOKIE_NAME } from '$lib/server/registration-cache'
 import { registration_cache } from '$lib/server/registration-cache'
 
@@ -37,9 +34,7 @@ export const actions: Actions = {
 			error(403, 'Session expired')
 		}
 
-		const { username, email, user_id } = progress
-
-		// --- Device registration ---
+		const { user_id } = progress
 
 		const form = await event.request.formData()
 
@@ -59,34 +54,6 @@ export const actions: Actions = {
 			return fail(500, { device_label, error: 'Database error' })
 		}
 
-		// --- Email verification ---
-
-		const token_id = crypto.randomUUID()
-
-		const sql_token = 'INSERT INTO email_verification_tokens (id, user_id) VALUES (?,?)'
-
-		const { err: err_token } = await query(sql_token, [token_id, user_id])
-
-		if (err_token) {
-			return fail(500, { device_label, error: 'Database error' })
-		}
-
-		const link = `${event.url.origin}/email-verification?token=${token_id}`
-
-		try {
-			await send_email_verification_email(username, email, link)
-		} catch (err) {
-			console.error(err)
-			return fail(500, {
-				device_label,
-				error: 'Failed to send verification email',
-			})
-		}
-
-		const message =
-			`Your account has been created. ` +
-			`Check your email inbox to complete the registration.`
-
-		return { device_label, message }
+		redirect(303, '/register/step-4')
 	},
 }

@@ -19,14 +19,10 @@
 	</div>
 
 	<div>
-		<button class="button">Submit</button>
+		<button class="button">Continue</button>
 	</div>
 </form>
 
 {#if form?.error}
 	<p class="error">{form.error}</p>
-{/if}
-
-{#if form?.message}
-	<p class="message">{form.message}</p>
 {/if}

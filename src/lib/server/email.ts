@@ -16,19 +16,19 @@ async function send_email(options: { to: string; subject: string; text: string }
 	await transporter.sendMail({ from: EMAIL_ADDRESS, ...options })
 }
 
-export async function send_email_verification_email(
+export async function send_registration_email(
 	username: string,
 	to: string,
-	link: string,
+	code: number,
 ) {
-	const subject = `${APP_TITLE} - Verify your email address`
+	const subject = `${APP_TITLE} - Registration Code`
 	const text =
 		`Hi ${username},\n\n` +
 		`Thank you for registering for ${APP_TITLE}.\n\n` +
-		'Please follow this link to verify your email address:\n\n' +
-		link +
+		'Please use following code to complete the registration.\n\n' +
+		code +
 		'\n\n' +
-		'This link is only valid for one hour.'
+		'This code is only valid for 10 minutes.'
 
 	await send_email({ to, subject, text })
 }
