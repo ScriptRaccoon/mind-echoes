@@ -10,13 +10,13 @@
 
 <form method="POST" use:enhance>
 	<div class="form-group">
-		<label for="username">Username</label>
+		<label for="identifier">Username or Email</label>
 		<input
 			type="text"
-			id="username"
-			name="username"
+			id="identifier"
+			name="identifier"
 			required
-			value={form?.username ?? data.username ?? ''}
+			value={form?.identifier ?? data.username ?? ''}
 		/>
 	</div>
 

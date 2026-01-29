@@ -35,44 +35,47 @@ export const actions: Actions = {
 		}
 
 		const form = await event.request.formData()
-		const username = form.get('username') as string
+		const identifier = form.get('identifier') as string
 		const password = form.get('password') as string
 
-		if (!username || !password) {
-			return fail(400, { username, error: 'Username and password required' })
+		if (!identifier || !password) {
+			return fail(400, { identifier, error: 'Both fields are required' })
 		}
 
+		const identifier_name = identifier.includes('@') ? 'email' : 'username'
+
 		const sql = `
-			SELECT id, password_hash, email, email_verified_at
+			SELECT id, username, email, password_hash, email_verified_at
 			FROM users
-			WHERE username = ?`
+			WHERE ${identifier_name} = ?`
 
 		const { rows, err } = await query<{
 			id: number
+			username: string
 			email: string
 			password_hash: string
 			email_verified_at: string | null
-		}>(sql, [username])
+		}>(sql, [identifier])
 
 		if (err) {
-			return fail(500, { username, error: 'Database error' })
+			return fail(500, { identifier, error: 'Database error' })
 		}
 
 		if (!rows.length) {
 			limiter.record(ip)
-			return fail(401, { username, error: 'Invalid credentials' })
+			return fail(401, { identifier, error: 'Invalid credentials' })
 		}
 
-		const { id, password_hash, email, email_verified_at } = rows[0]
+		const { id, password_hash, username, email, email_verified_at } = rows[0]
 
 		const is_correct = await bcrypt.compare(password, password_hash)
 		if (!is_correct) {
 			limiter.record(ip)
-			return fail(401, { username, error: 'Invalid credentials' })
+			return fail(401, { identifier, error: 'Invalid credentials' })
 		}
 
 		if (!email_verified_at) {
-			return fail(403, { username, error: 'Email has not been verified yet' })
+			return fail(403, { identifier, error: 'Email has not been verified yet' })
 		}
 
 		limiter.clear(ip)
