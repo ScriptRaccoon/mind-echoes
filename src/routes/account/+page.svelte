@@ -175,7 +175,7 @@
 
 	.device-table {
 		display: grid;
-		grid-template-columns: 1fr auto auto auto;
+		grid-template-columns: 2fr 1fr 1fr auto;
 		align-items: center;
 		gap: 0.75rem 1rem;
 

@@ -18,4 +18,8 @@
 		justify-content: space-between;
 		align-items: center;
 	}
+
+	span {
+		color: var(--secondary-font-color);
+	}
 </style>

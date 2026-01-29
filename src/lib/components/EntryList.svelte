@@ -13,6 +13,7 @@
 		<li>
 			<a href="/entry/{entry.date}">
 				<span class="date">{entry.date}</span>
+				&ndash;
 				<strong>
 					{entry.title || 'Untitled'}
 				</strong>
@@ -36,7 +37,7 @@
 
 	.date {
 		display: inline-block;
-		margin-right: 0.25rem;
-		width: 10ch;
+		width: 9ch;
+		color: var(--secondary-font-color);
 	}
 </style>

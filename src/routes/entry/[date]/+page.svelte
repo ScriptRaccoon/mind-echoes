@@ -66,6 +66,7 @@
 	.date {
 		text-align: center;
 		width: 10ch;
+		color: var(--secondary-font-color);
 	}
 
 	section + section {

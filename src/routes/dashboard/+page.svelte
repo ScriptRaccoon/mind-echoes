@@ -14,7 +14,7 @@
 
 {#if !entry_today_exists}
 	<p>
-		<a href="/entry/new/{today}">Add today's Echo</a>
+		<a href="/entry/new/{today}" class="button">Add today's Echo</a>
 	</p>
 {/if}
 

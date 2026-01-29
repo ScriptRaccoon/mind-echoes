@@ -7,12 +7,13 @@
 }
 
 :root {
+	--bg-color: #121414;
+	--font-color: #ddd;
+	--secondary-font-color: #aaa;
+	--font-color-light: white;
 	--error-color: #f12c2c;
 	--success-color: #22e222;
 	--button-color: royalblue;
-	--bg-color: #121414;
-	--font-color: #ddd;
-	--font-color-light: white;
 	--outline-color: #bbb;
 	--dark-outline-color: #444;
 	--input-bg-color: #202020;
@@ -51,7 +52,7 @@ p {
 }
 
 header:has(h1) {
-	margin-block: 1rem;
+	margin-block: 1.5rem 1rem;
 }
 
 h1,
@@ -113,6 +114,11 @@ textarea {
 		display: block;
 		margin-bottom: 0.1rem;
 		font-size: 0.875rem;
+		color: var(--secondary-font-color);
+	}
+
+	label:has(+ :focus-visible) {
+		color: var(--font-color);
 	}
 
 	input,

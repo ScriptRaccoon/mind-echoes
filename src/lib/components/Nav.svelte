@@ -52,7 +52,7 @@
 
 <style>
 	nav {
-		margin-top: 1rem;
+		margin-block: 1rem;
 	}
 
 	ul {
