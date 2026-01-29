@@ -3,7 +3,8 @@ import type { Actions, PageServerLoad } from './$types'
 import { REGISTER_COOKIE_NAME } from '$lib/server/registration-cache'
 import { registration_cache } from '$lib/server/registration-cache'
 import { query } from '$lib/server/db'
-import { generate_code, send_registration_email } from '$lib/server/email'
+import { send_registration_email } from '$lib/server/email'
+import { generate_code } from '$lib/server/utils'
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)

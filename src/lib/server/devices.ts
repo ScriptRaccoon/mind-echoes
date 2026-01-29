@@ -1,6 +1,7 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import { query } from './db'
 import crypto from 'node:crypto'
+import { generate_token } from './utils'
 
 const COOKIE_DEVICE_TOKEN = 'device_token'
 
@@ -11,10 +12,6 @@ const DEVICE_COOKIE_OPTIONS = {
 	sameSite: 'strict',
 	secure: true,
 } as const
-
-function generate_token(): string {
-	return crypto.randomBytes(32).toString('hex')
-}
 
 function hash_token(token: string): string {
 	return crypto.createHash('sha256').update(token).digest('hex')
@@ -95,7 +92,7 @@ export function delete_device_from_cache(token_hash: string) {
 }
 
 export async function create_device_verification_token(device_id: number) {
-	const token_id = crypto.randomBytes(32).toString('hex')
+	const token_id = generate_token()
 
 	const sql = `
 		INSERT INTO device_verification_requests

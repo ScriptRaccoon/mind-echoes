@@ -7,7 +7,8 @@ import * as v from 'valibot'
 import { username_schema, password_schema, email_schema } from '$lib/server/schemas'
 import { delete_device_cookie, delete_device_from_cache } from '$lib/server/devices'
 import type { Device } from '$lib/types'
-import { generate_code, send_email_change_email } from '$lib/server/email'
+import { send_email_change_email } from '$lib/server/email'
+import { generate_code } from '$lib/server/utils'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user

@@ -1,7 +1,6 @@
 import { EMAIL_ADDRESS, EMAIL_PASSWORD, ENABLE_EMAILS } from '$env/static/private'
 import { APP_TITLE } from '$lib/config'
 import nodemailer from 'nodemailer'
-import crypto from 'node:crypto'
 
 const transporter = nodemailer.createTransport({
 	host: 'smtp.gmail.com',
@@ -105,8 +104,4 @@ export async function send_password_reset_email(
 		'This link is only valid for 10 minutes.'
 
 	await send_email({ to, subject, text })
-}
-
-export function generate_code(): number {
-	return crypto.randomInt(100_000, 1_000_000)
 }
