@@ -98,7 +98,7 @@ export async function create_device_verification_token(device_id: number) {
 	const token_id = crypto.randomUUID()
 
 	const sql = `
-		INSERT INTO device_verification_tokens
+		INSERT INTO device_verification_requests
 			(id, device_id)
 		VALUES (?,?)`
 

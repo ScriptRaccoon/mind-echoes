@@ -20,7 +20,7 @@ const db = createClient({ authToken: DB_AUTH_TOKEN, url: DB_URL })
 async function cleanup() {
 	console.info('---\nStart cleanup script')
 	await clean_registration_requests()
-	await clean_device_verification_tokens()
+	await clean_device_verification_requests()
 	await clean_email_change_requests()
 	await cleanup_users()
 	console.info('Finish cleanup script\n---')
@@ -41,9 +41,9 @@ async function clean_registration_requests() {
 	}
 }
 
-async function clean_device_verification_tokens() {
+async function clean_device_verification_requests() {
 	const sql = `
-		DELETE FROM device_verification_tokens
+		DELETE FROM device_verification_requests
 		WHERE expires_at <= CURRENT_TIMESTAMP`
 
 	try {

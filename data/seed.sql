@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS email_change_requests (
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS device_verification_tokens (
+CREATE TABLE IF NOT EXISTS device_verification_requests (
     id TEXT PRIMARY KEY,
     device_id INTEGER NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,

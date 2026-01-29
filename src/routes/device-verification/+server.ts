@@ -4,7 +4,7 @@ import { db } from '$lib/server/db'
 
 const sql_tokens = `
 	SELECT device_id
-	FROM device_verification_tokens
+	FROM device_verification_requests
 	WHERE id = ? AND expires_at > CURRENT_TIMESTAMP`
 
 const sql_verify = `
@@ -12,7 +12,7 @@ const sql_verify = `
 	SET verified_at = CURRENT_TIMESTAMP
 	WHERE id = ?`
 
-const sql_delete = 'DELETE FROM device_verification_tokens WHERE id = ?'
+const sql_delete = 'DELETE FROM device_verification_requests WHERE id = ?'
 
 class TokenError extends Error {}
 
