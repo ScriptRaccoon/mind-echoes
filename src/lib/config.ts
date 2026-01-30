@@ -1,1 +1,1 @@
-export const APP_TITLE = 'Mind Echo'
+export const APP_TITLE = 'Mind Echoes'
