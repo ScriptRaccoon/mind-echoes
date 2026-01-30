@@ -46,7 +46,7 @@ export const actions: Actions = {
 		if (!limiter.is_allowed(ip)) {
 			return fail(429, {
 				device_label: '',
-				error: 'Too many registration attempts. Try again later.',
+				error: 'Too many invalid codes detected. Try again later.',
 			})
 		}
 

@@ -10,13 +10,25 @@ import {
 	date_string_schema,
 } from '$lib/server/schemas'
 import { is_valid_date } from '$lib/server/schemas'
+import { RateLimiter } from '$lib/server/ratelimit'
 
 export const load: PageServerLoad = async (event) => {
 	if (!is_valid_date(event.params.date)) error(404, 'Not Found')
 }
 
+const limiter = new RateLimiter({ limit: 10, window_ms: 60_000 })
+
 export const actions: Actions = {
 	default: async (event) => {
+		const ip = event.getClientAddress()
+
+		if (!limiter.is_allowed(ip)) {
+			return fail(429, {
+				username: '',
+				error: 'Too many new entries created. Please try again later.',
+			})
+		}
+
 		const user = event.locals.user
 		if (!user) error(401, 'Unauthorized')
 
@@ -83,6 +95,8 @@ export const actions: Actions = {
 			}
 			return fail(500, { title, content, thanks, error: 'Database error' })
 		}
+
+		limiter.record(ip)
 
 		redirect(302, `/entry/${date}`)
 	},
