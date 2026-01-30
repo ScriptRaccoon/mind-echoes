@@ -9,7 +9,7 @@ const sql_request = `
 
 const sql_verify = `
 	UPDATE devices
-	SET verified_at = CURRENT_TIMESTAMP
+	SET verified_at = CURRENT_TIMESTAMP, last_login_at = CURRENT_TIMESTAMP
 	WHERE id = ?`
 
 const sql_clean = 'DELETE FROM device_verification_requests WHERE token = ?'

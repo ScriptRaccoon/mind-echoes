@@ -60,7 +60,7 @@ export const actions: Actions = {
 			error(403, 'Session expired')
 		}
 
-		const { user_id, username, email } = progress
+		const { user_id, username, email, device_id } = progress
 
 		const form = await event.request.formData()
 
@@ -86,16 +86,23 @@ export const actions: Actions = {
 
 		const request_id = requests[0].id
 
-		const sql_clean = `DELETE FROM registration_requests WHERE id = ?`
-
 		const sql_verify = `
 			UPDATE users
 			SET email_verified_at = CURRENT_TIMESTAMP
 			WHERE id = ?`
 
+		const sql_login_date = `
+			UPDATE devices
+			SET last_login_at = CURRENT_TIMESTAMP
+			WHERE id = ?
+		`
+
+		const sql_clean = `DELETE FROM registration_requests WHERE id = ?`
+
 		const { err } = await batched_query(
 			[
 				{ sql: sql_verify, args: [user_id] },
+				{ sql: sql_login_date, args: [device_id] },
 				{ sql: sql_clean, args: [request_id] },
 			],
 			'write',
@@ -104,6 +111,8 @@ export const actions: Actions = {
 		if (err) return fail(500, { error: 'Database error' })
 
 		limiter.clear(ip)
+
+		event.cookies.delete(REGISTER_COOKIE_NAME, { path: '/' })
 
 		set_auth_cookie(event, { id: user_id, email, username })
 
