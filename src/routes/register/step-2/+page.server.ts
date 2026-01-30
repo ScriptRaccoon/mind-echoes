@@ -6,6 +6,8 @@ import { password_schema } from '$lib/server/schemas'
 import { REGISTER_COOKIE_NAME, registration_cache } from '$lib/server/registration-cache'
 import { query, is_constraint_error } from '$lib/server/db'
 import { RateLimiter } from '$lib/server/ratelimit'
+import { get_device_label } from '$lib/server/utils'
+import { save_device } from '$lib/server/devices'
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
@@ -87,7 +89,17 @@ export const actions: Actions = {
 
 		const user_id = users[0].id
 
-		registration_cache.set(register_id, { ...progress, user_id })
+		const device_label = get_device_label(event.request.headers)
+
+		const { device_id } = await save_device(event, user_id, device_label, {
+			verify: true,
+		})
+
+		if (!device_id) {
+			return fail(500, { device_label, error: 'Database error' })
+		}
+
+		registration_cache.set(register_id, { ...progress, user_id, device_id })
 
 		limiter.record(ip)
 

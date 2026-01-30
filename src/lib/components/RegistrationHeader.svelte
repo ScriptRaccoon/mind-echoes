@@ -4,7 +4,7 @@
 
 <header>
 	<h1>Register</h1>
-	<span class="step">Step {step}/4</span>
+	<span class="step">Step {step}/3</span>
 </header>
 
 <style>

@@ -1,61 +1,112 @@
-import { fail, error, redirect } from '@sveltejs/kit'
+import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
-import * as v from 'valibot'
-import { device_label_schema } from '$lib/server/schemas'
-import { save_device } from '$lib/server/devices'
 import { REGISTER_COOKIE_NAME } from '$lib/server/registration-cache'
 import { registration_cache } from '$lib/server/registration-cache'
-import { get_device_label } from '$lib/server/utils'
+import { batched_query, query } from '$lib/server/db'
+import { send_registration_email } from '$lib/server/email'
+import { generate_code } from '$lib/server/utils'
+import { RateLimiter } from '$lib/server/ratelimit'
+import { set_auth_cookie } from '$lib/server/auth'
+
+const limiter = new RateLimiter({ limit: 2, window_ms: 60_000 })
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
 	if (!register_id) error(403, 'Forbidden')
 
 	const progress = registration_cache.get(register_id)
-	if (!progress || !progress.user_id) error(403, 'Forbidden')
+	if (!progress || !progress.user_id || !progress.device_id) error(403, 'Forbidden')
 
 	if (progress.expires_at <= Date.now()) {
 		error(403, 'Session expired')
 	}
 
-	const device_label = get_device_label(event.request.headers)
-	return { device_label }
+	const { username, email, user_id } = progress
+
+	const code = generate_code()
+
+	const sql = 'INSERT INTO registration_requests (code, user_id) VALUES (?,?)'
+
+	const { err } = await query(sql, [code, user_id])
+
+	if (err) error(500, 'Database error')
+
+	try {
+		await send_registration_email(username, email, code)
+	} catch (err) {
+		console.error(err)
+		error(500, 'Failed to send verification email')
+	}
 }
 
 export const actions: Actions = {
 	default: async (event) => {
+		const ip = event.getClientAddress()
+
+		if (!limiter.is_allowed(ip)) {
+			return fail(429, {
+				device_label: '',
+				error: 'Too many invalid codes detected. Try again later.',
+			})
+		}
+
 		const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
 		if (!register_id) error(403, 'Forbidden')
 
 		const progress = registration_cache.get(register_id)
-		if (!progress || !progress.user_id) error(403, 'Forbidden')
+		if (!progress || !progress.user_id || !progress.device_id) error(403, 'Forbidden')
 
 		if (progress.expires_at <= Date.now()) {
 			error(403, 'Session expired')
 		}
 
-		const { user_id } = progress
+		const { user_id, username, email } = progress
 
 		const form = await event.request.formData()
 
-		const device_label = form.get('device_label') as string
+		const code = form.get('code') as string
 
-		const device_label_parsed = v.safeParse(device_label_schema, device_label)
+		if (!code) return fail(400, { error: 'Code required' })
 
-		if (!device_label_parsed.success) {
-			return fail(400, { device_label, error: device_label_parsed.issues[0].message })
+		const sql_request = `
+			SELECT id FROM registration_requests
+			WHERE user_id = ? AND code = ? AND expires_at > CURRENT_TIMESTAMP`
+
+		const { rows: requests, err: err_request } = await query<{ id: number }>(
+			sql_request,
+			[user_id, code],
+		)
+
+		if (err_request) return fail(500, { error: 'Database error' })
+
+		if (!requests.length) {
+			limiter.record(ip)
+			return fail(401, { error: 'Invalid code' })
 		}
 
-		const { device_id } = await save_device(event, user_id, device_label, {
-			verify: true,
-		})
+		const request_id = requests[0].id
 
-		if (!device_id) {
-			return fail(500, { device_label, error: 'Database error' })
-		}
+		const sql_clean = `DELETE FROM registration_requests WHERE id = ?`
 
-		registration_cache.set(register_id, { ...progress, device_id })
+		const sql_verify = `
+			UPDATE users
+			SET email_verified_at = CURRENT_TIMESTAMP
+			WHERE id = ?`
 
-		redirect(303, '/register/step-4')
+		const { err } = await batched_query(
+			[
+				{ sql: sql_verify, args: [user_id] },
+				{ sql: sql_clean, args: [request_id] },
+			],
+			'write',
+		)
+
+		if (err) return fail(500, { error: 'Database error' })
+
+		limiter.clear(ip)
+
+		set_auth_cookie(event, { id: user_id, email, username })
+
+		redirect(303, `/dashboard`)
 	},
 }
