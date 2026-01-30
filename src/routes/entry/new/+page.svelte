@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
+	import FormWrapper from '$lib/components/FormWrapper.svelte'
 
 	let { form } = $props()
 
@@ -12,17 +12,15 @@
 	<h1>New Echo</h1>
 </header>
 
-<form method="POST" use:enhance>
-	<div class="form-group">
-		<label for="date">Choose a date</label>
-		<input type="date" name="date" id="date" bind:value={selected_date} required />
-	</div>
+<FormWrapper {form}>
+	{#snippet content()}
+		<div class="form-group">
+			<label for="date">Choose a date</label>
+			<input type="date" name="date" id="date" bind:value={selected_date} required />
+		</div>
+	{/snippet}
 
-	<div>
+	{#snippet buttons()}
 		<button class="button">Continue</button>
-	</div>
-</form>
-
-{#if form?.error}
-	<p class="error">{form.error}</p>
-{/if}
+	{/snippet}
+</FormWrapper>

@@ -29,6 +29,7 @@
 
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import FormWrapper from './FormWrapper.svelte'
 
 	let dialog_element = $state<HTMLDialogElement | null>(null)
 
@@ -44,25 +45,22 @@
 <dialog bind:this={dialog_element} onclose={close_dialog}>
 	<div class="question">{dialog_state.question}</div>
 
-	<form
-		class="actions"
-		method="POST"
+	<FormWrapper
 		action={dialog_state.action}
-		use:enhance={() => {
-			return async ({ update }) => {
-				await update()
-				close_dialog()
-			}
-		}}
+		callback={close_dialog}
+		button_alignment="center"
 	>
-		{#if dialog_state.id !== undefined}
-			<input type="hidden" name="id" value={dialog_state.id} />
-		{/if}
-		<div class="actions">
+		{#snippet content()}
+			{#if dialog_state.id !== undefined}
+				<input type="hidden" name="id" value={dialog_state.id} />
+			{/if}
+		{/snippet}
+
+		{#snippet buttons()}
 			<button class="button" type="button" onclick={close_dialog}>Cancel</button>
 			<button class="button danger">Yes</button>
-		</div>
-	</form>
+		{/snippet}
+	</FormWrapper>
 </dialog>
 
 <style>
@@ -87,11 +85,5 @@
 		font-size: 1.25rem;
 		text-align: center;
 		margin-bottom: 1rem;
-	}
-
-	.actions {
-		display: flex;
-		justify-content: center;
-		gap: 0.5rem;
 	}
 </style>

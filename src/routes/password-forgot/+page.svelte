@@ -1,4 +1,6 @@
 <script lang="ts">
+	import FormWrapper from '$lib/components/FormWrapper.svelte'
+
 	let { form } = $props()
 </script>
 
@@ -8,21 +10,15 @@
 
 <p>Enter your email. We will send you a link to reset your password.</p>
 
-<form method="POST">
-	<div class="form-group">
-		<label for="email">Email</label>
-		<input type="email" name="email" id="email" required value={form?.email ?? ''} />
-	</div>
+<FormWrapper {form}>
+	{#snippet content()}
+		<div class="form-group">
+			<label for="email">Email</label>
+			<input type="email" name="email" id="email" required value={form?.email ?? ''} />
+		</div>
+	{/snippet}
 
-	<div>
+	{#snippet buttons()}
 		<button class="button">Submit</button>
-	</div>
-</form>
-
-{#if form?.error}
-	<p class="error">{form.error}</p>
-{/if}
-
-{#if form?.message}
-	<p class="message">{form.message}</p>
-{/if}
+	{/snippet}
+</FormWrapper>

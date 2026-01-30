@@ -1,4 +1,6 @@
 <script lang="ts">
+	import FormWrapper from '$lib/components/FormWrapper.svelte'
+
 	let { data, form } = $props()
 </script>
 
@@ -8,27 +10,21 @@
 
 <p>This is the first time you log in from this device. You need to first register it.</p>
 
-<form method="POST">
-	<div class="form-group">
-		<label for="device_label">Name this new device</label>
-		<input
-			type="text"
-			name="device_label"
-			id="device_label"
-			required
-			value={form?.device_label ?? data.device_label}
-		/>
-	</div>
+<FormWrapper {form}>
+	{#snippet content()}
+		<div class="form-group">
+			<label for="device_label">Name this new device</label>
+			<input
+				type="text"
+				name="device_label"
+				id="device_label"
+				required
+				value={form?.device_label ?? data.device_label}
+			/>
+		</div>
+	{/snippet}
 
-	<div>
+	{#snippet buttons()}
 		<button class="button">Submit</button>
-	</div>
-</form>
-
-{#if form?.error}
-	<p class="error">{form.error}</p>
-{/if}
-
-{#if form?.message}
-	<p class="message">{form.message}</p>
-{/if}
+	{/snippet}
+</FormWrapper>

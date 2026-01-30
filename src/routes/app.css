@@ -88,6 +88,10 @@ select {
 	background: none;
 }
 
+button {
+	transition: opacity 120ms;
+}
+
 button:not(:disabled) {
 	cursor: pointer;
 }
@@ -134,6 +138,10 @@ textarea {
 			background-color: var(--input-focus-color);
 		}
 	}
+}
+
+fieldset {
+	border: none;
 }
 
 /* BUTTONS */

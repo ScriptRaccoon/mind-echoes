@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import { page } from '$app/state'
 	import DeviceTable from '$lib/components/DeviceTable.svelte'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
+	import FormWrapper from '$lib/components/FormWrapper.svelte'
 
 	let { data, form } = $props()
 
@@ -36,91 +36,73 @@
 <section>
 	<h2>Change username</h2>
 
-	<form method="POST" action="?/username" use:enhance>
-		<div class="form-group">
-			<label for="username">New username</label>
-			<input
-				type="text"
-				name="username"
-				id="username"
-				value={page.data.user?.username ?? ''}
-				required
-			/>
-		</div>
+	<FormWrapper form={form?.type === 'username' ? form : null} action="?/username">
+		{#snippet content()}
+			<div class="form-group">
+				<label for="username">New username</label>
+				<input
+					type="text"
+					name="username"
+					id="username"
+					value={page.data.user?.username ?? ''}
+					required
+				/>
+			</div>
+		{/snippet}
 
-		<div>
+		{#snippet buttons()}
 			<button class="button">Submit</button>
-		</div>
-	</form>
-
-	{#if form?.error && form.type === 'username'}
-		<p class="error">{form.error}</p>
-	{/if}
-
-	{#if form?.message && form.type === 'username'}
-		<p class="message">{form.message}</p>
-	{/if}
+		{/snippet}
+	</FormWrapper>
 </section>
 
 <section>
 	<h2>Change email address</h2>
 
-	<form method="POST" action="?/email" use:enhance>
-		<div class="form-group">
-			<label for="email">New email</label>
-			<input
-				type="email"
-				name="email"
-				id="email"
-				required
-				value={page.data.user?.email}
-			/>
-		</div>
+	<FormWrapper form={form?.type === 'email' ? form : null} action="?/email">
+		{#snippet content()}
+			<div class="form-group">
+				<label for="email">New email</label>
+				<input
+					type="email"
+					name="email"
+					id="email"
+					required
+					value={page.data.user?.email}
+				/>
+			</div>
+		{/snippet}
 
-		<div>
+		{#snippet buttons()}
 			<button class="button">Submit</button>
-		</div>
-	</form>
-
-	{#if form?.error && form.type === 'email'}
-		<p class="error">{form.error}</p>
-	{/if}
-
-	{#if form?.message && form.type === 'email'}
-		<p class="message">{form.message}</p>
-	{/if}
+		{/snippet}
+	</FormWrapper>
 </section>
 
 <section>
 	<h2>Change password</h2>
 
-	<form method="POST" action="?/password" use:enhance>
-		<div class="form-group">
-			<label for="current_password">Current password</label>
-			<input type="password" name="current_password" id="current_password" required />
-		</div>
+	<FormWrapper form={form?.type === 'password' ? form : null} action="?/password">
+		{#snippet content()}
+			<div class="form-group">
+				<label for="current_password">Current password</label>
+				<input type="password" name="current_password" id="current_password" required />
+			</div>
 
-		<div class="form-group">
-			<label for="new_password">New password</label>
-			<input type="password" name="new_password" id="new_password" required />
-		</div>
+			<div class="form-group">
+				<label for="new_password">New password</label>
+				<input type="password" name="new_password" id="new_password" required />
+			</div>
+		{/snippet}
 
-		<div>
+		{#snippet buttons()}
 			<button class="button">Submit</button>
-		</div>
-	</form>
-
-	{#if form?.error && form.type === 'password'}
-		<p class="error">{form.error}</p>
-	{/if}
-
-	{#if form?.message && form.type === 'password'}
-		<p class="message">{form.message}</p>
-	{/if}
+		{/snippet}
+	</FormWrapper>
 </section>
 
 <section>
-	<h2>Devices</h2>
+	<h2>Manage Devices</h2>
 
 	<DeviceTable
 		devices={data.devices}
@@ -141,7 +123,7 @@
 	<h2>Delete account</h2>
 	<button class="button danger" onclick={open_delete_account_dialog}>Delete</button>
 
-	{#if form?.error && form.type === 'delete_account'}
+	{#if form?.type === 'delete_account' && form.error}
 		<p class="error">{form.error}</p>
 	{/if}
 </section>

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import DateHeader from '$lib/components/DateHeader.svelte'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import EntryInputs from '$lib/components/EntryInputs.svelte'
+	import FormWrapper from '$lib/components/FormWrapper.svelte'
 
 	let { form, data } = $props()
 
@@ -18,25 +18,15 @@
 
 <DateHeader title="Edit Echo" date={entry.date} />
 
-<form method="POST" action="?/update" use:enhance>
-	<EntryInputs {entry} />
+<FormWrapper {form} action="?/update" buttons_reversed>
+	{#snippet content()}
+		<EntryInputs {entry} />
+	{/snippet}
 
-	<div class="actions">
-		<button class="button">Save</button>
+	{#snippet buttons()}
+		<button class="button"> Save </button>
 		<button class="button danger" type="button" onclick={open_delete_dialog}>
 			Delete
 		</button>
-	</div>
-</form>
-
-{#if form?.error}
-	<p class="error">{form.error}</p>
-{/if}
-
-<style>
-	.actions {
-		display: flex;
-		flex-direction: row-reverse;
-		justify-content: space-between;
-	}
-</style>
+	{/snippet}
+</FormWrapper>
