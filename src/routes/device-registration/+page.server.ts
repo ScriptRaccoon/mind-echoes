@@ -6,11 +6,11 @@ import type { PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { device_label_schema } from '$lib/server/schemas'
 import { send_device_verification_email } from '$lib/server/email'
-import { get_os_and_browser } from '$lib/utils'
+import { get_device_label } from '$lib/server/utils'
 
 export const load: PageServerLoad = async (event) => {
-	const os = get_os_and_browser(event)
-	return { os }
+	const device_label = get_device_label(event.request.headers)
+	return { device_label }
 }
 
 const limiter = new RateLimiter({ limit: 1, window_ms: 60_000 })

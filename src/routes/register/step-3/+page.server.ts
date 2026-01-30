@@ -3,9 +3,9 @@ import type { Actions, PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { device_label_schema } from '$lib/server/schemas'
 import { save_device } from '$lib/server/devices'
-import { get_os_and_browser } from '$lib/utils'
 import { REGISTER_COOKIE_NAME } from '$lib/server/registration-cache'
 import { registration_cache } from '$lib/server/registration-cache'
+import { get_device_label } from '$lib/server/utils'
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
@@ -18,8 +18,8 @@ export const load: PageServerLoad = async (event) => {
 		error(403, 'Session expired')
 	}
 
-	const os = get_os_and_browser(event)
-	return { os }
+	const device_label = get_device_label(event.request.headers)
+	return { device_label }
 }
 
 export const actions: Actions = {

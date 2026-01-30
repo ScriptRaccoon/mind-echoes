@@ -16,7 +16,7 @@
 			name="device_label"
 			id="device_label"
 			required
-			value={form?.device_label ?? data.os}
+			value={form?.device_label ?? data.device_label}
 		/>
 	</div>
 

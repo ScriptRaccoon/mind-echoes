@@ -38,6 +38,7 @@
 		"bcrypt": "^6.0.0",
 		"jsonwebtoken": "^9.0.3",
 		"lucide-svelte": "^0.563.0",
+		"my-ua-parser": "^2.0.4",
 		"nodemailer": "^7.0.12",
 		"valibot": "^1.2.0"
 	}
