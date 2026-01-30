@@ -45,6 +45,7 @@
 					name="username"
 					id="username"
 					value={page.data.user?.username ?? ''}
+					defaultValue={page.data.user?.username ?? ''}
 					required
 				/>
 			</div>
@@ -69,6 +70,7 @@
 					id="email"
 					required
 					value={page.data.user?.email}
+					defaultValue={page.data.user?.email}
 				/>
 			</div>
 		{/snippet}
