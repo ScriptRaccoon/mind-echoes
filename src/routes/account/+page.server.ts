@@ -95,7 +95,7 @@ export const actions: Actions = {
 			return fail(500, { type: 'email', error: 'Database error' })
 		}
 
-		const link = `${event.url.origin}/account/email-verification?token=${token}`
+		const link = `${event.url.origin}/email-verification?token=${token}`
 
 		try {
 			await send_email_change_email(user.username, email, link)
