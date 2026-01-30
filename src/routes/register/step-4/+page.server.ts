@@ -6,6 +6,7 @@ import { batched_query, query } from '$lib/server/db'
 import { send_registration_email } from '$lib/server/email'
 import { generate_code } from '$lib/server/utils'
 import { RateLimiter } from '$lib/server/ratelimit'
+import { set_auth_cookie } from '$lib/server/auth'
 
 const limiter = new RateLimiter({ limit: 2, window_ms: 60_000 })
 
@@ -59,7 +60,7 @@ export const actions: Actions = {
 			error(403, 'Session expired')
 		}
 
-		const { user_id, username } = progress
+		const { user_id, username, email } = progress
 
 		const form = await event.request.formData()
 
@@ -104,6 +105,8 @@ export const actions: Actions = {
 
 		limiter.clear(ip)
 
-		redirect(303, `/login?from=register&username=${username}`)
+		set_auth_cookie(event, { id: user_id, email, username })
+
+		redirect(303, `/dashboard`)
 	},
 }
