@@ -6,6 +6,7 @@ import { query } from '$lib/server/db'
 import { send_password_reset_email } from '$lib/server/email'
 import { RateLimiter } from '$lib/server/ratelimit'
 import { generate_token } from '$lib/server/utils'
+import { sleep } from '$lib/utils'
 
 const msg =
 	'If you have an account with that email address, ' +
@@ -45,6 +46,7 @@ export const actions: Actions = {
 		if (err_user) return fail(500, { email, error: 'Database error' })
 
 		if (!users.length) {
+			await sleep(200) // fake delay
 			limiter.record(ip)
 			return { email, message: msg }
 		}
