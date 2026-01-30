@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
 	import type { Device } from '$lib/types'
 	import { shorten_date } from '$lib/utils'
 	import { Monitor, MonitorPlay, X } from 'lucide-svelte'
@@ -19,14 +20,24 @@
 	<span></span>
 	{#each devices as device (device.id)}
 		{@const is_current = device.id === current_device_id}
-		<span>
+
+		<form action="?/rename_device" method="POST" use:enhance>
 			{#if is_current}
 				<MonitorPlay size={18} />
 			{:else}
 				<Monitor size={18} />
 			{/if}
-			&nbsp;{device.label}
-		</span>
+			&nbsp;
+			<input
+				type="text"
+				name="label"
+				aria-label="device label"
+				value={device.label}
+				defaultValue={device.label}
+				required
+			/>
+			<input type="hidden" name="id" value={device.id} />
+		</form>
 
 		<span class="date">{shorten_date(device.created_at)}</span>
 		<span class="date">{shorten_date(device.last_login_at ?? '')}</span>

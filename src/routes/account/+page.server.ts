@@ -4,7 +4,12 @@ import { is_constraint_error, query } from '$lib/server/db'
 import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
 import type { PageServerLoad } from './$types'
 import * as v from 'valibot'
-import { username_schema, password_schema, email_schema } from '$lib/server/schemas'
+import {
+	username_schema,
+	password_schema,
+	email_schema,
+	device_label_schema,
+} from '$lib/server/schemas'
 import { delete_device_cookie, delete_device_from_cache } from '$lib/server/devices'
 import type { Device } from '$lib/types'
 import { send_email_change_email } from '$lib/server/email'
@@ -199,5 +204,38 @@ export const actions: Actions = {
 		delete_device_from_cache(token_hash)
 
 		return { type: 'device', message: 'Device has been removed' }
+	},
+
+	rename_device: async (event) => {
+		const user = event.locals.user
+		if (!user) error(401, 'Unauthorized')
+
+		const form = await event.request.formData()
+		const device_label = form.get('label') as string
+		const device_id = form.get('id') as string
+
+		const device_label_parsed = v.safeParse(device_label_schema, device_label)
+
+		if (!device_label_parsed.success) {
+			return fail(400, {
+				type: 'device',
+				error: device_label_parsed.issues[0].message,
+			})
+		}
+
+		if (!device_id) {
+			return fail(400, { type: 'device', error: 'Device ID is required' })
+		}
+
+		const sql = `
+			UPDATE devices
+			SET label = ?
+			WHERE user_id = ? AND id = ?`
+
+		const { err } = await query(sql, [device_label, user.id, device_id])
+
+		if (err) return fail(400, { type: 'device', error: 'Database error' })
+
+		return { type: 'device', message: 'Device has been renamed' }
 	},
 }
