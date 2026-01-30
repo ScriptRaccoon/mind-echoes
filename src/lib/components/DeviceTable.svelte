@@ -27,7 +27,6 @@
 			{:else}
 				<Monitor size={18} />
 			{/if}
-			&nbsp;
 			<input
 				type="text"
 				name="label"
@@ -56,9 +55,16 @@
 <style>
 	.table {
 		display: grid;
-		grid-template-columns: 2fr 1fr 1fr auto;
+		grid-template-columns: 1fr auto auto auto;
 		align-items: center;
 		gap: 0.75rem 1rem;
+	}
+
+	form {
+		display: grid;
+		gap: 0.5rem;
+		grid-template-columns: auto 1fr;
+		align-items: center;
 	}
 
 	.head {
