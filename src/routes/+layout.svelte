@@ -3,6 +3,7 @@
 	import Nav from '$lib/components/Nav.svelte'
 	import Dialog from '$lib/components/Dialog.svelte'
 	import { APP_TITLE } from '$lib/config'
+	import LoadingBar from '$lib/components/LoadingBar.svelte'
 
 	let { children } = $props()
 </script>
@@ -25,6 +26,8 @@
 </div>
 
 <Dialog />
+
+<LoadingBar />
 
 <style>
 	.container {
