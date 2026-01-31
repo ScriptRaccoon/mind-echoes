@@ -44,7 +44,7 @@ export const actions: Actions = {
 		const identifier_name = identifier.includes('@') ? 'email' : 'username'
 
 		const sql = `
-			SELECT id, username, email, password_hash, email_verified_at
+			SELECT id, username, email, password_hash, email_verified_at, disabled
 			FROM users
 			WHERE ${identifier_name} = ?`
 
@@ -54,6 +54,7 @@ export const actions: Actions = {
 			email: string
 			password_hash: string
 			email_verified_at: string | null
+			disabled: number
 		}>(sql, [identifier])
 
 		if (err) {
@@ -65,7 +66,7 @@ export const actions: Actions = {
 			return fail(401, { identifier, error: 'Invalid credentials' })
 		}
 
-		const { id, password_hash, username, email, email_verified_at } = rows[0]
+		const { id, password_hash, username, email, email_verified_at, disabled } = rows[0]
 
 		const is_correct = await bcrypt.compare(password, password_hash)
 		if (!is_correct) {
@@ -75,6 +76,13 @@ export const actions: Actions = {
 
 		if (!email_verified_at) {
 			return fail(403, { identifier, error: 'Email has not been verified yet' })
+		}
+
+		if (disabled === 1) {
+			return fail(403, {
+				identifier,
+				error: 'Your account is temporarily disabled',
+			})
 		}
 
 		limiter.clear(ip)
