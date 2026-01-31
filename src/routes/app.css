@@ -20,6 +20,8 @@
 	--input-bg-color: #202020;
 	--input-focus-color: #252525;
 	--accent-color: yellow;
+	--vibrant-color: rgb(114, 40, 128);
+	--heading-color: rgb(220, 236, 93);
 }
 
 body {
@@ -173,6 +175,18 @@ a.button {
 	border-radius: 50%;
 }
 
+.vibrant-button {
+	background-color: var(--vibrant-color);
+	color: var(--font-color-light);
+	padding: 0.25rem 1.25rem;
+	border-radius: 100vw;
+}
+
+a.vibrant-button {
+	text-decoration: none;
+	display: inline-block;
+}
+
 /* ICONS */
 
 .lucide {
@@ -191,4 +205,8 @@ a.button {
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
+}
+
+.opaque {
+	opacity: 0.5;
 }

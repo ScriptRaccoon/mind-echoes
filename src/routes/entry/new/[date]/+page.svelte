@@ -3,7 +3,7 @@
 	import DateHeader from '$lib/components/DateHeader.svelte'
 	import EntryInputs from '$lib/components/EntryInputs.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
-	import { localize_date } from '$lib/utils.js'
+	import { localize_date } from '$lib/utils'
 
 	let { form } = $props()
 </script>

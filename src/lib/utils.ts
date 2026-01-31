@@ -30,3 +30,11 @@ export function localize_date(datestring: string): string {
 export function sleep(delay: number) {
 	return new Promise<void>((res) => setTimeout(res, delay))
 }
+
+export function format_date_short(datestring: string): string {
+	return new Intl.DateTimeFormat('en-US', {
+		month: 'short',
+		day: '2-digit',
+		year: 'numeric',
+	}).format(new Date(datestring))
+}

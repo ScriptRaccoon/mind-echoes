@@ -1,84 +1,100 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { localize_date } from '$lib/utils.js'
+	import { format_date_short } from '$lib/utils'
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte'
 
 	let { data } = $props()
 
 	let entry = $derived(data.entry)
+
+	const icon_size = 26
 </script>
 
 <header>
 	<h1>{entry.title}</h1>
-	<div class="controls">
-		{#if data.previous_date}
-			<a href="/entry/{data.previous_date}" aria-label="previous Echo">
-				<ChevronLeft />
-			</a>
-		{:else}
-			<span class="opaque"><ChevronLeft /></span>
-		{/if}
-
-		<span class="date">{localize_date(entry.date)}</span>
-
-		{#if data.next_date}
-			<a href="/entry/{data.next_date}" aria-label="next Echo">
-				<ChevronRight />
-			</a>
-		{:else}
-			<span class="opaque"><ChevronRight /></span>
-		{/if}
-	</div>
 </header>
+
+<nav>
+	{#if data.previous_date}
+		<a href="/entry/{data.previous_date}" aria-label="previous Echo" class="nav-button">
+			<ChevronLeft size={icon_size} />
+		</a>
+	{:else}
+		<span class="nav-button opaque"><ChevronLeft size={icon_size} /></span>
+	{/if}
+
+	<div class="date">{format_date_short(entry.date)}</div>
+
+	{#if data.next_date}
+		<a href="/entry/{data.next_date}" aria-label="next Echo" class="nav-button">
+			<ChevronRight size={icon_size} />
+		</a>
+	{:else}
+		<span class="nav-button opaque"><ChevronRight size={icon_size} /></span>
+	{/if}
+</nav>
 
 {#if entry.content}
 	<section>
 		<h2>This is on my mind</h2>
-		<div>{entry.content}</div>
+		<div class="text">{entry.content}</div>
 	</section>
 {/if}
 
 {#if entry.thanks}
 	<section>
-		<h2>I am thankful for</h2>
-		<div>{entry.thanks}</div>
+		<h2 class="accent">I am thankful for</h2>
+		<div class="text">{entry.thanks}</div>
 	</section>
 {/if}
 
-<div class="actions">
-	<a class="button" href={page.url.href + '/edit'}>Edit</a>
-</div>
+<section aria-label="menu">
+	<menu>
+		<a class="vibrant-button" href={page.url.href + '/edit'}>Edit Echo</a>
+	</menu>
+</section>
 
 <style>
 	header {
+		text-align: center;
+	}
+
+	h1,
+	h2 {
+		color: var(--heading-color);
+	}
+
+	nav {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
 
-	.controls {
-		display: flex;
-	}
-
-	span.opaque {
-		opacity: 0.25;
-	}
-
 	.date {
+		font-weight: 600;
+		font-size: 1.125rem;
 		text-align: center;
-		width: 10ch;
-		color: var(--secondary-font-color);
 	}
 
-	section + section {
-		margin-block: 1.5rem;
+	.nav-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 4.5rem;
+		background-color: var(--vibrant-color);
+		border-radius: 100vw;
 	}
 
-	h2 {
-		font-size: 1.25rem;
+	section {
+		margin-top: 2rem;
 	}
 
-	.actions {
-		margin-top: 1.5rem;
+	.text {
+		font-size: 1.125rem;
+	}
+
+	menu {
+		display: flex;
+		justify-content: center;
 	}
 </style>
