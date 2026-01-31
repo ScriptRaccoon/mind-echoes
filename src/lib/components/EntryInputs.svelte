@@ -57,7 +57,7 @@
 	textarea {
 		width: 100%;
 		padding: 0.2rem 0.5rem;
-		border-radius: 0.5rem;
+		border-radius: 0.25rem;
 		outline: 1px solid var(--dark-outline-color);
 	}
 </style>
