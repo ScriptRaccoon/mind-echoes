@@ -58,10 +58,12 @@
 
 <style>
 	.table {
+		overflow-x: scroll;
 		display: grid;
 		grid-template-columns: 1fr auto auto auto;
 		align-items: center;
 		gap: 0.75rem 1rem;
+		padding: 1px;
 	}
 
 	form {
