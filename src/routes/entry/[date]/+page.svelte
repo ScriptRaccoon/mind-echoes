@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { localize_date } from '$lib/utils.js'
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte'
 
 	let { data } = $props()
@@ -18,7 +19,7 @@
 			<span class="opaque"><ChevronLeft /></span>
 		{/if}
 
-		<span class="date">{entry.date}</span>
+		<span class="date">{localize_date(entry.date)}</span>
 
 		{#if data.next_date}
 			<a href="/entry/{data.next_date}" aria-label="next Echo">

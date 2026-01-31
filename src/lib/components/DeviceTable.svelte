@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { Device } from '$lib/types'
-	import { shorten_date } from '$lib/utils'
+	import { localize_date, shorten_date } from '$lib/utils'
 	import { Monitor, MonitorPlay, X } from 'lucide-svelte'
 
 	type Props = {
@@ -38,8 +38,12 @@
 			<input type="hidden" name="id" value={device.id} />
 		</form>
 
-		<span class="date">{shorten_date(device.created_at)}</span>
-		<span class="date">{shorten_date(device.last_login_at ?? '')}</span>
+		<span class="date">
+			{localize_date(shorten_date(device.created_at))}
+		</span>
+		<span class="date">
+			{device.last_login_at ? localize_date(shorten_date(device.last_login_at)) : ''}
+		</span>
 
 		<button
 			class="icon-button"

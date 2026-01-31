@@ -3,13 +3,12 @@
 	import DateHeader from '$lib/components/DateHeader.svelte'
 	import EntryInputs from '$lib/components/EntryInputs.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { localize_date } from '$lib/utils.js'
 
 	let { form } = $props()
-
-	let date = $derived(page.params.date!)
 </script>
 
-<DateHeader title="New Echo" {date} />
+<DateHeader title="New Echo" date={localize_date(page.params.date!)} />
 
 <FormWrapper {form}>
 	{#snippet content()}

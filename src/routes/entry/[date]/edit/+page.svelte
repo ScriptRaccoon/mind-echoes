@@ -3,6 +3,7 @@
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import EntryInputs from '$lib/components/EntryInputs.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { localize_date } from '$lib/utils'
 
 	let { form, data } = $props()
 
@@ -16,7 +17,7 @@
 	}
 </script>
 
-<DateHeader title="Edit Echo" date={entry.date} />
+<DateHeader title="Edit Echo" date={localize_date(entry.date)} />
 
 <FormWrapper {form} action="?/update" buttons_reversed>
 	{#snippet content()}
