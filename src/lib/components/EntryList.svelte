@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Entry_Summary } from '$lib/types'
-	import { localize_date } from '$lib/utils'
+	import { format_date_short } from '$lib/utils'
 
 	type Props = {
 		entries: Entry_Summary[]
@@ -13,7 +13,7 @@
 	{#each entries as entry (entry.id)}
 		<li>
 			<a href="/entry/{entry.date}">
-				<span class="date">{localize_date(entry.date)}</span>
+				<span class="date">{format_date_short(entry.date)}</span>
 				&ndash;
 				<strong>
 					{entry.title || 'Untitled'}

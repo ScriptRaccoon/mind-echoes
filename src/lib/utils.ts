@@ -18,12 +18,8 @@ export const resize_textarea: Attachment = (textarea) => {
 	}
 }
 
-export function shorten_date(datestring: string): string {
-	return datestring.substring(0, 10)
-}
-
 export function localize_date(datestring: string): string {
-	const date = new Date(datestring)
+	const date = new Date(datestring.substring(0, 10))
 	return date.toLocaleDateString()
 }
 

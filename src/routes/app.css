@@ -133,6 +133,13 @@ fieldset {
 	border: none;
 }
 
+/* WRITTEN TEXT IN DIARY */
+
+.text {
+	font-size: 1.125rem;
+	font-family: 'Klee One', cursive;
+}
+
 /* BUTTONS */
 
 .button {

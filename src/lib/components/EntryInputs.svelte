@@ -9,25 +9,55 @@
 	let { entry }: Props = $props()
 </script>
 
-<div class="form-group">
-	<label for="title">Title</label>
-	<input type="text" name="title" id="title" value={entry?.title} />
-</div>
+<section>
+	<h2 id="title">Title</h2>
 
-<div class="form-group">
-	<label for="content">What's on your mind?</label>
-	<textarea name="content" id="content" {@attach resize_textarea} value={entry?.content}
-	></textarea>
-</div>
+	<input
+		aria-labelledby="title"
+		type="text"
+		name="title"
+		id="title"
+		value={entry?.title}
+		class="text"
+	/>
+</section>
 
-<div class="form-group">
-	<label for="thanks">What are 5 things you are grateful for?</label>
-	<textarea name="thanks" id="thanks" {@attach resize_textarea} value={entry?.thanks}
+<section>
+	<h2 id="content">This is on my mind</h2>
+
+	<textarea
+		class="text"
+		aria-labelledby="content"
+		name="content"
+		id="content"
+		{@attach resize_textarea}
+		value={entry?.content}
 	></textarea>
-</div>
+</section>
+
+<section>
+	<h2 id="thanks">I am thankful for</h2>
+
+	<textarea
+		aria-labelledby="thanks"
+		class="text"
+		name="thanks"
+		id="thanks"
+		{@attach resize_textarea}
+		value={entry?.thanks}
+	></textarea>
+</section>
 
 <style>
-	.form-group {
-		margin-bottom: 1.5rem;
+	section + section {
+		margin-top: 2rem;
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		padding: 0.2rem 0.5rem;
+		border-radius: 0.5rem;
+		outline: 1px solid var(--dark-outline-color);
 	}
 </style>

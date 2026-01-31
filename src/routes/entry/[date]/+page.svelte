@@ -88,11 +88,6 @@
 		margin-top: 2rem;
 	}
 
-	.text {
-		font-size: 1.125rem;
-		font-family: 'Klee One', cursive;
-	}
-
 	menu {
 		display: flex;
 		justify-content: center;
