@@ -14,16 +14,16 @@
 	--font-color: #ddd;
 	--secondary-font-color: #aaa;
 	--font-color-light: white;
-	--error-color: #f00;
+	--error-color: red;
+	--danger-color: rgb(208, 33, 68);
 	--error-bg-color: #f001;
 	--message-color: #0f0;
 	--message-bg-color: #0f01;
-	--button-color: royalblue;
 	--outline-color: #bbb;
 	--dark-outline-color: #444;
 	--input-bg-color: #202020;
 	--input-focus-color: #252525;
-	--vibrant-color: rgb(114, 40, 128);
+	--button-color: rgb(114, 40, 128);
 	--heading-color: rgb(220, 236, 93);
 	--loading-bar-color: yellow;
 }
@@ -120,7 +120,7 @@ textarea {
 		width: 100%;
 		background-color: var(--input-bg-color);
 		padding: 0.2rem 0.5rem;
-		border-radius: 0.2rem;
+		border-radius: 0.5rem;
 		outline: 1px solid var(--dark-outline-color);
 
 		&:focus-visible {
@@ -138,12 +138,12 @@ fieldset {
 .button {
 	background-color: var(--button-color);
 	color: var(--font-color-light);
-	padding: 0.2rem 0.75rem;
-	border-radius: 0.2rem;
+	padding: 0.25rem 1.25rem;
+	border-radius: 100vw;
 }
 
 .button.danger {
-	background-color: var(--error-color);
+	background-color: var(--danger-color);
 }
 
 a.button {
@@ -159,13 +159,6 @@ a.button {
 	justify-content: center;
 	align-items: center;
 	border-radius: 50%;
-}
-
-.vibrant-button {
-	background-color: var(--vibrant-color);
-	color: var(--font-color-light);
-	padding: 0.25rem 1.25rem;
-	border-radius: 100vw;
 }
 
 a.vibrant-button {

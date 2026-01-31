@@ -50,7 +50,7 @@
 
 <section aria-label="menu">
 	<menu>
-		<a class="vibrant-button" href={page.url.href + '/edit'}>Edit Echo</a>
+		<a class="button" href={page.url.href + '/edit'}>Edit Echo</a>
 	</menu>
 </section>
 
@@ -80,7 +80,7 @@
 		justify-content: center;
 		align-items: center;
 		width: 4.5rem;
-		background-color: var(--vibrant-color);
+		background-color: var(--button-color);
 		border-radius: 100vw;
 	}
 
