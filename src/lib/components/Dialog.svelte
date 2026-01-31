@@ -42,7 +42,7 @@
 	})
 </script>
 
-<dialog bind:this={dialog_element} onclose={close_dialog}>
+<dialog bind:this={dialog_element} onclose={close_dialog} closedby="any">
 	<div class="question">{dialog_state.question}</div>
 
 	<FormWrapper
