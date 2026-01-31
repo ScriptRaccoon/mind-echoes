@@ -34,3 +34,12 @@ export function format_date_short(datestring: string): string {
 		year: 'numeric',
 	}).format(new Date(datestring))
 }
+
+export function format_date(datestring: string): string {
+	return new Intl.DateTimeFormat('en-US', {
+		weekday: 'short',
+		month: 'short',
+		day: '2-digit',
+		year: 'numeric',
+	}).format(new Date(datestring))
+}

@@ -3,7 +3,7 @@
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import EntryInputs from '$lib/components/EntryInputs.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
-	import { format_date_short } from '$lib/utils'
+	import { format_date } from '$lib/utils'
 
 	let { form, data } = $props()
 
@@ -17,7 +17,7 @@
 	}
 </script>
 
-<DateHeader title="Edit Echo" date={format_date_short(entry.date)} />
+<DateHeader title="Edit Echo" date={format_date(entry.date)} />
 
 <FormWrapper {form} action="?/update" buttons_reversed>
 	{#snippet content()}

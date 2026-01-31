@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import { format_date_short } from '$lib/utils'
+	import { format_date } from '$lib/utils'
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte'
 
 	let { data } = $props()
@@ -23,7 +23,7 @@
 		<span class="nav-button opaque"><ChevronLeft size={icon_size} /></span>
 	{/if}
 
-	<div class="date">{format_date_short(entry.date)}</div>
+	<div class="date">{format_date(entry.date)}</div>
 
 	{#if data.next_date}
 		<a href="/entry/{data.next_date}" aria-label="next Echo" class="nav-button">
