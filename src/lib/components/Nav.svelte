@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PencilLine, User, CirclePlus, House, LogIn, UserPlus } from 'lucide-svelte'
+	import { User, SquarePlus, House, LogIn, UserPlus, BookOpen } from 'lucide-svelte'
 	import { page } from '$app/state'
 
 	let is_echo_page = $derived(
@@ -14,28 +14,28 @@
 		{#if page.data.user}
 			<li>
 				<a href="/dashboard" aria-current={is_echo_page}>
-					<PencilLine size={20} /> Echoes
-				</a>
-			</li>
-			<li>
-				<a href="/account" aria-current={page.url.pathname.startsWith('/account')}>
-					<User size={20} /> Account
+					<BookOpen /> <span>Echoes</span>
 				</a>
 			</li>
 			<li>
 				<a href="/entry/new" aria-current={page.url.pathname.startsWith('/entry/new')}>
-					<CirclePlus size={20} /> New Echo
+					<SquarePlus /> <span>New Echo</span>
+				</a>
+			</li>
+			<li>
+				<a href="/account" aria-current={page.url.pathname.startsWith('/account')}>
+					<User /> <span>Account</span>
 				</a>
 			</li>
 		{:else}
 			<li>
 				<a href="/" aria-current={page.url.pathname == '/'}>
-					<House size={20} /> Home
+					<House /> <span>Home</span>
 				</a>
 			</li>
 			<li>
 				<a href="/login" aria-current={page.url.pathname == '/login'}>
-					<LogIn size={20} /> Login
+					<LogIn /> <span>Login</span>
 				</a>
 			</li>
 			<li>
@@ -43,7 +43,7 @@
 					href="/register/step-1"
 					aria-current={page.url.pathname.startsWith('/register')}
 				>
-					<UserPlus size={20} /> Register
+					<UserPlus /> <span>Register</span>
 				</a>
 			</li>
 		{/if}
@@ -52,31 +52,27 @@
 
 <style>
 	nav {
-		margin-block: 1rem;
+		padding-block: 1rem 0.75rem;
+		background-color: var(--nav-bg-color);
+		border-bottom: 1px solid var(--dark-outline-color);
+		position: sticky;
+		top: 0;
 	}
 
 	ul {
 		list-style-type: none;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
-		gap: 1rem;
+		justify-content: space-between;
+		width: min(95vw, 20rem);
+		margin-inline: auto;
 	}
 
 	a {
-		display: inline-flex;
-		gap: 0.4rem;
-		align-items: center;
 		text-decoration: none;
-		outline: 1px solid var(--dark-outline-color);
-		border-radius: 0.5rem;
-		padding: 0.4rem 0.6rem;
-		background-color: var(--input-bg-color);
-		font-size: 0.875rem;
-		white-space: nowrap;
-	}
-
-	a[aria-current='true'] {
-		outline-color: var(--outline-color);
+		display: flex;
+		gap: 0.25rem;
+		flex-direction: column;
+		align-items: center;
 	}
 </style>
