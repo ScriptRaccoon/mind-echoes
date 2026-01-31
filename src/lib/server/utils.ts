@@ -18,3 +18,13 @@ export function get_device_label(headers: Headers) {
 	const { browser, os, device } = parser(ua)
 	return `${browser.name} on ${os.name} (${device.vendor})`
 }
+
+export function log_bold(text: string) {
+	const bold = '\x1b[1m'
+	const reset = '\x1b[0m'
+	console.info(bold + text + reset)
+}
+
+export function combine_paragraphs(texts: string[]): string {
+	return texts.join('\n\n')
+}
