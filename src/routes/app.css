@@ -9,22 +9,21 @@
 }
 
 :root {
-	--bg-color: #121414;
-	--nav-bg-color: #0c0d0d;
-	--font-color: #ddd;
-	--secondary-font-color: #aaa;
-	--font-color-light: #fff;
+	--bg-color: hsl(226, 34%, 13%);
+	--nav-bg-color: hsl(226, 34%, 10%);
+	--font-color: #fff;
+	--secondary-font-color: #bbb;
 	--error-color: #f00;
 	--error-bg-color: #f001;
 	--message-color: #0f0;
 	--message-bg-color: #0f01;
-	--outline-color: #bbb;
-	--dark-outline-color: #444;
-	--input-bg-color: #202020;
-	--input-focus-color: #252525;
-	--button-color: #722880;
+	--outline-color: hsl(226, 20%, 60%);
+	--dark-outline-color: hsl(226, 20%, 30%);
+	--input-bg-color: hsl(226, 34%, 10%);
+	--input-focus-color: hsl(226, 34%, 7%);
+	--button-color: rgb(166, 60, 190);
 	--danger-color: #c00;
-	--heading-color: #dcec5d;
+	--heading-color: #bfdaf2;
 	--loading-bar-color: #ffff00;
 }
 
@@ -58,6 +57,7 @@ h2 {
 
 h1 {
 	color: var(--heading-color);
+	text-wrap: balance;
 }
 
 h2 {
@@ -143,7 +143,6 @@ fieldset {
 
 .button {
 	background-color: var(--button-color);
-	color: var(--font-color-light);
 	padding: 0.25rem 1.25rem;
 	border-radius: 100vw;
 }
