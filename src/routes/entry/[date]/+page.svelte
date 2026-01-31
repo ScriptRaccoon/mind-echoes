@@ -59,7 +59,6 @@
 		text-align: center;
 	}
 
-	h1,
 	h2 {
 		color: var(--heading-color);
 	}
@@ -91,6 +90,7 @@
 
 	.text {
 		font-size: 1.125rem;
+		font-family: 'Klee One', cursive;
 	}
 
 	menu {

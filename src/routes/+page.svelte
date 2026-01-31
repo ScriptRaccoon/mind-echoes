@@ -49,9 +49,4 @@
 	li {
 		margin-block: 0.5rem;
 	}
-
-	strong {
-		font-weight: 500;
-		color: var(--accent-color);
-	}
 </style>

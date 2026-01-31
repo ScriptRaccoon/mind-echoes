@@ -14,7 +14,7 @@
 		left: 0;
 		width: 0%;
 		height: 2px;
-		background-color: var(--accent-color);
+		background-color: var(--loading-bar-color);
 		animation: grow 2s cubic-bezier(0.15, 0.4, 0.3, 1) forwards;
 	}
 
