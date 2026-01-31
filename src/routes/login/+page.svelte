@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BlockMessage from '$lib/components/BlockMessage.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 
 	let { form, data } = $props()
@@ -9,7 +10,7 @@
 </header>
 
 {#if !form && data.message}
-	<p class="message">{data.message}</p>
+	<BlockMessage content={data.message} />
 {/if}
 
 <FormWrapper {form}>

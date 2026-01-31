@@ -29,10 +29,8 @@
 	<a href="/logout" class="button">Logout</a>
 </header>
 
-{#if data.message}
-	<p class="message">
-		{data.message}
-	</p>
+{#if !form && data.message}
+	<BlockMessage content={data.message} />
 {/if}
 
 <section>
