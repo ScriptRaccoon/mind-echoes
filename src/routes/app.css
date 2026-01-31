@@ -14,8 +14,10 @@
 	--font-color: #ddd;
 	--secondary-font-color: #aaa;
 	--font-color-light: white;
-	--error-color: #f12c2c;
-	--success-color: #22e222;
+	--error-color: #f00;
+	--error-bg-color: #f001;
+	--message-color: #0f0;
+	--message-bg-color: #0f01;
 	--button-color: royalblue;
 	--outline-color: #bbb;
 	--dark-outline-color: #444;
@@ -61,18 +63,6 @@ h1 {
 
 h2 {
 	margin-block: 0.5rem;
-}
-
-/* MESSAGES */
-
-.error {
-	color: var(--error-color);
-	font-weight: 600;
-}
-
-.message {
-	color: var(--success-color);
-	font-weight: 600;
 }
 
 /* INTERACTIVE ELEMENTS */

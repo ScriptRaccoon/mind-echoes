@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import BlockError from '$lib/components/BlockError.svelte'
+	import BlockMessage from '$lib/components/BlockMessage.svelte'
 	import DeviceTable from '$lib/components/DeviceTable.svelte'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
@@ -112,12 +114,14 @@
 		remove_device={open_remove_device_dialog}
 	/>
 
-	{#if form?.error && form.type === 'device'}
-		<p class="error">{form.error}</p>
-	{/if}
+	{#if form?.type === 'device'}
+		{#if form.error}
+			<BlockError content={form.error} />
+		{/if}
 
-	{#if form?.message && form.type === 'device'}
-		<p class="message">{form.message}</p>
+		{#if form.message}
+			<BlockMessage content={form.message} />
+		{/if}
 	{/if}
 </section>
 

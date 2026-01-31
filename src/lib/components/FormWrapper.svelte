@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { Snippet } from 'svelte'
+	import BlockError from './BlockError.svelte'
+	import BlockMessage from './BlockMessage.svelte'
 
 	type Props = {
 		action?: string
@@ -51,9 +53,9 @@
 
 {#if form}
 	{#if 'error' in form}
-		<p class="error">{form.error}</p>
+		<BlockError content={form.error} />
 	{:else if 'message' in form}
-		<p class="message">{form.message}</p>
+		<BlockMessage content={form.message} />
 	{/if}
 {/if}
 
