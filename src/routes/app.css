@@ -68,8 +68,7 @@ h2 {
 
 button,
 input,
-textarea,
-select {
+textarea {
 	color: inherit;
 	font: inherit;
 	border: none;
@@ -89,7 +88,7 @@ button:disabled {
 	opacity: 0.5;
 }
 
-:is(button, input, textarea, select, a):focus-visible {
+:is(button, input, textarea, a):focus-visible {
 	outline: 1px solid var(--outline-color) !important;
 }
 
@@ -114,8 +113,7 @@ textarea {
 	}
 
 	input,
-	textarea,
-	select {
+	textarea {
 		width: 100%;
 		background-color: var(--input-bg-color);
 		padding: 0.2rem 0.5rem;
