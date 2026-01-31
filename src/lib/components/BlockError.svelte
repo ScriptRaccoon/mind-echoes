@@ -19,5 +19,6 @@
 		padding: 0.5rem 0.75rem;
 		border-radius: 0.5rem;
 		font-weight: 500;
+		box-shadow: 2px 2px 0.5rem #0004;
 	}
 </style>
