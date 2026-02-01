@@ -1,5 +1,149 @@
 [
 	{
+		"date": "2023-01-07",
+		"title": "Slow January",
+		"content": "Started the year quietly. Small tasks and slow momentum, but consistent enough to feel like progress.",
+		"thanks": ""
+	},
+	{
+		"date": "2023-02-12",
+		"title": "Short trip",
+		"content": "A brief weekend away helped reset perspective. New scenes made routines feel lighter when I returned.",
+		"thanks": "Fresh air"
+	},
+	{
+		"date": "2023-03-18",
+		"title": "Focused morning",
+		"content": "Blocked off the morning for deep work and it paid off. One focused stretch can reshape an entire day.",
+		"thanks": "Discipline"
+	},
+	{
+		"date": "2023-04-22",
+		"title": "Small victory",
+		"content": "Completed a project that had been lingering. The relief was disproportionate but welcome.",
+		"thanks": "Completion"
+	},
+	{
+		"date": "2023-05-30",
+		"title": "Quiet evening",
+		"content": "Spent the evening reading and making tea. The simplicity felt restorative after a busy week.",
+		"thanks": "Books"
+	},
+	{
+		"date": "2023-06-10",
+		"title": "Hot day",
+		"content": "Heat made focus difficult. I slowed down, hydrated, and accepted lower expectations for the day.",
+		"thanks": ""
+	},
+	{
+		"date": "2023-07-19",
+		"title": "Connection",
+		"content": "Talked at length with an old friend. The conversation was grounding and helped clarify a few things.",
+		"thanks": "Friendship"
+	},
+	{
+		"date": "2023-08-05",
+		"title": "Long walk",
+		"content": "Walked for miles without a strict route. Letting thoughts move without structure felt surprisingly productive.",
+		"thanks": ""
+	},
+	{
+		"date": "2023-09-14",
+		"title": "New routine",
+		"content": "Tried a new morning routine for a week. Small adjustments improved energy and focus.",
+		"thanks": "Habits"
+	},
+	{
+		"date": "2023-10-27",
+		"title": "Reflective",
+		"content": "Spent time reviewing goals for the year. Some shifts needed, but the review itself felt useful.",
+		"thanks": ""
+	},
+	{
+		"date": "2023-11-21",
+		"title": "Rest day",
+		"content": "Took an intentional day off. No tasks, only rest and gentle hobbies. It reset motivation.",
+		"thanks": "Rest"
+	},
+	{
+		"date": "2023-12-31",
+		"title": "Year end",
+		"content": "Looked back on the year and noticed steady small improvements. No dramatic changes, but steady movement.",
+		"thanks": "Persistence"
+	},
+	{
+		"date": "2024-01-03",
+		"title": "Fresh start",
+		"content": "A calmer start to the year. Set a few modest intentions rather than big resolutions.",
+		"thanks": "Clarity"
+	},
+	{
+		"date": "2024-02-09",
+		"title": "Good conversation",
+		"content": "Had a meaningful talk that helped untangle several thoughts. It was reassuring to be heard.",
+		"thanks": "Listening"
+	},
+	{
+		"date": "2024-03-15",
+		"title": "Deep focus",
+		"content": "Managed a long stretch of uninterrupted work. Felt productive and energized afterward.",
+		"thanks": "Focus"
+	},
+	{
+		"date": "2024-04-01",
+		"title": "Light day",
+		"content": "Kept the day intentionally light to avoid burnout. Small tasks and gentle pacing worked well.",
+		"thanks": ""
+	},
+	{
+		"date": "2024-05-20",
+		"title": "Outside time",
+		"content": "Spent more time outdoors and noticed mood improvements. Sun and movement helped more than expected.",
+		"thanks": "Nature"
+	},
+	{
+		"date": "2024-06-13",
+		"title": "Productive sprint",
+		"content": "Completed a focused sprint on a project. Momentum carried me through several follow-up tasks.",
+		"thanks": "Momentum"
+	},
+	{
+		"date": "2024-07-07",
+		"title": "Slow afternoon",
+		"content": "An unstructured afternoon felt indulgent but necessary. Rest sometimes looks like doing very little.",
+		"thanks": ""
+	},
+	{
+		"date": "2024-08-29",
+		"title": "Clear priorities",
+		"content": "Re-evaluated what matters this quarter and pruned a few commitments. The relief was immediate.",
+		"thanks": "Simplicity"
+	},
+	{
+		"date": "2024-09-18",
+		"title": "Creative burst",
+		"content": "Had a short, intense creative session that produced useful ideas. Will try to protect time for more of these.",
+		"thanks": "Creativity"
+	},
+	{
+		"date": "2024-10-24",
+		"title": "Reset weekend",
+		"content": "Used the weekend to reset routines and catch up on sleep. It made the following week smoother.",
+		"thanks": "Rest"
+	},
+	{
+		"date": "2024-11-11",
+		"title": "Small improvements",
+		"content": "Made incremental changes to workflow that reduced friction. Small wins add up.",
+		"thanks": ""
+	},
+	{
+		"date": "2024-12-28",
+		"title": "Year review",
+		"content": "Reviewed the year's entries and noticed patterns. Gratitude for the steady progress, even when slow.",
+		"thanks": "Perspective"
+	},
+	{
 		"date": "2025-10-02",
 		"title": "Slow start",
 		"content": "The day began sluggishly and I struggled to get into a productive rhythm. Even simple tasks felt heavier than usual. I decided to accept the pace instead of fighting it, which helped reduce frustration by the afternoon.",
