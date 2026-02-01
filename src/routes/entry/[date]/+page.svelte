@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state'
 	import { APP_TITLE } from '$lib/client/config'
-	import { format_date } from '$lib/client/utils.js'
+	import { format_date } from '$lib/client/utils'
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte'
 
 	let { data } = $props()

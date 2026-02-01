@@ -2,7 +2,7 @@
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 	import { APP_TITLE } from '$lib/client/config'
-	import { localize_date } from '$lib/client/utils.js'
+	import { localize_date } from '$lib/client/utils'
 	import { Monitor, MonitorPlay } from 'lucide-svelte'
 
 	let { data, form } = $props()
