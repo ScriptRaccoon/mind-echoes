@@ -34,6 +34,6 @@
 			Send email again
 		</button>
 
-		<button class="button"> Submit </button>
+		<button class="button">Submit</button>
 	{/snippet}
 </FormWrapper>

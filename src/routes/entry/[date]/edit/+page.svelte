@@ -29,10 +29,12 @@
 		<EntryInputs {entry} />
 	{/snippet}
 
-	{#snippet buttons()}
-		<button class="button"> Save </button>
-		<button class="button danger" type="button" onclick={open_delete_dialog}>
-			Delete
-		</button>
+	{#snippet buttons(sending)}
+		<button class="button">Save</button>
+		{#if !sending}
+			<button class="button danger" type="button" onclick={open_delete_dialog}>
+				Delete
+			</button>
+		{/if}
 	{/snippet}
 </FormWrapper>

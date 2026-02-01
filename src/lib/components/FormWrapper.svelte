@@ -3,12 +3,13 @@
 	import type { Snippet } from 'svelte'
 	import BlockError from './BlockError.svelte'
 	import BlockMessage from './BlockMessage.svelte'
+	import LoadingSpinner from './LoadingSpinner.svelte'
 
 	type Props = {
 		action?: string
 		form?: { message: string } | { error: string } | null
 		content?: Snippet
-		buttons: Snippet
+		buttons: Snippet<[sending?: boolean]>
 		callback?: () => void
 		button_alignment?: 'space-between' | 'center'
 		buttons_reversed?: boolean
@@ -25,6 +26,18 @@
 	}: Props = $props()
 
 	let sending = $state(false)
+
+	let show_spinner = $state(false)
+
+	$effect(() => {
+		if (sending) {
+			setTimeout(() => {
+				if (sending) show_spinner = true
+			}, 100)
+		} else {
+			show_spinner = false
+		}
+	})
 </script>
 
 <form
@@ -47,7 +60,10 @@
 		style:--button-alignment={button_alignment}
 		disabled={sending}
 	>
-		{@render buttons()}
+		{@render buttons(sending)}
+		{#if show_spinner}
+			<LoadingSpinner />
+		{/if}
 	</fieldset>
 </form>
 
