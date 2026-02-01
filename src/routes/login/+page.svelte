@@ -23,7 +23,7 @@
 				id="identifier"
 				name="identifier"
 				required
-				value={form?.identifier ?? data.username ?? ''}
+				value={form?.identifier ?? ''}
 			/>
 		</div>
 

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/state'
-	import BlockError from '$lib/components/BlockError.svelte'
 	import BlockMessage from '$lib/components/BlockMessage.svelte'
 	import DeviceTable from '$lib/components/DeviceTable.svelte'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
@@ -12,14 +11,6 @@
 		open_dialog({
 			question: 'Do you want to delete your account? All data will be permanently lost.',
 			action: '?/delete_account',
-		})
-	}
-
-	function open_remove_device_dialog(device_id: string) {
-		open_dialog({
-			question: 'Do you want to remove this device?',
-			action: '?/remove_device',
-			id: device_id,
 		})
 	}
 </script>
@@ -120,20 +111,10 @@
 <section>
 	<h2>Manage Devices</h2>
 
-	<DeviceTable
-		devices={data.devices}
-		current_device_id={data.current_device_id}
-		remove_device={open_remove_device_dialog}
-	/>
-
-	{#if form?.type === 'device'}
-		{#if form.error}
-			<BlockError content={form.error} />
-		{/if}
-
-		{#if form.message}
-			<BlockMessage content={form.message} />
-		{/if}
+	{#if data.devices.length}
+		<DeviceTable devices={data.devices} current_device_id={data.current_device_id} />
+	{:else}
+		<p>No devices</p>
 	{/if}
 </section>
 

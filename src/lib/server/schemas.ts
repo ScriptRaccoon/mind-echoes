@@ -27,7 +27,7 @@ export const password_schema = v.pipe(
 export const device_label_schema = v.pipe(
 	v.string('Device label must be a string'),
 	v.nonEmpty('Device label required'),
-	v.maxLength(100, 'Device label must be at most 100 characters long'),
+	v.maxLength(40, 'Device label must be at most 40 characters long'),
 )
 
 export const title_schema = v.pipe(

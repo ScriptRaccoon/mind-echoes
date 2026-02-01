@@ -6,18 +6,16 @@ import { RateLimiter } from '$lib/server/ratelimit'
 import { set_auth_cookie } from '$lib/server/auth'
 import { save_login_date_for_device } from '$lib/server/devices'
 
+const LOGIN_MESSAGES: Record<string, undefined | string> = {
+	logout: 'You have been logged out successfully',
+	device_verification: 'Your device has been verified. You can now log in.',
+	password_reset: 'Password has been reset. You can now log in with the new password.',
+}
+
 export const load: PageServerLoad = (event) => {
 	const from = event.url.searchParams.get('from') ?? ''
 
-	const LOGIN_MESSAGES: Record<string, undefined | string> = {
-		logout: 'You have been logged out successfully',
-		device_verification: 'Your device has been verified. You can now log in.',
-		password_reset: 'Password has been reset. You can now log in with the new password.',
-	}
-
-	const username = event.url.searchParams.get('username') ?? ''
-
-	return { message: LOGIN_MESSAGES[from], username }
+	return { message: LOGIN_MESSAGES[from] }
 }
 
 const limiter = new RateLimiter({ limit: 5, window_ms: 60_000 })

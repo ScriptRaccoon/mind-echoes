@@ -1,16 +1,14 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import type { Device } from '$lib/types'
 	import { localize_date } from '$lib/utils'
-	import { Monitor, MonitorPlay, X } from 'lucide-svelte'
+	import { Monitor, MonitorPlay, Settings } from 'lucide-svelte'
 
 	type Props = {
 		devices: Device[]
 		current_device_id: string | undefined
-		remove_device: (id: string) => void
 	}
 
-	let { devices, current_device_id, remove_device }: Props = $props()
+	let { devices, current_device_id }: Props = $props()
 </script>
 
 <div class="table">
@@ -18,59 +16,41 @@
 	<span class="head">Created</span>
 	<span class="head">Last login</span>
 	<span></span>
-	{#each devices as device (device.id)}
-		{@const is_current = device.id === current_device_id}
 
-		<form action="?/rename_device" method="POST" use:enhance>
-			{#if is_current}
-				<MonitorPlay size={18} />
+	{#each devices as device (device.id)}
+		<span class="name">
+			{#if device.id === current_device_id}
+				<MonitorPlay size={20} />
 			{:else}
-				<Monitor size={18} />
+				<Monitor size={20} />
 			{/if}
-			<input
-				type="text"
-				name="label"
-				aria-label="device label"
-				value={device.label}
-				defaultValue={device.label}
-				required
-			/>
-			<input type="hidden" name="id" value={device.id} />
-		</form>
+			&nbsp;{device.label}
+		</span>
 
 		<span class="date">
 			{localize_date(device.created_at)}
 		</span>
+
 		<span class="date">
 			{device.last_login_at ? localize_date(device.last_login_at) : ''}
 		</span>
 
-		<button
-			class="icon-button"
-			disabled={is_current}
-			aria-label="Remove device"
-			onclick={() => remove_device(device.id)}
-		>
-			<X size={18} />
-		</button>
+		<a aria-label="Manage device" href="/account/device/{device.id}">
+			<Settings size={20} />
+		</a>
 	{/each}
 </div>
 
 <style>
 	.table {
-		overflow-x: scroll;
 		display: grid;
 		grid-template-columns: 1fr auto auto auto;
 		align-items: center;
-		gap: 0.75rem 1rem;
-		padding: 1px;
+		gap: 1rem;
 	}
 
-	form {
-		display: grid;
-		gap: 0.5rem;
-		grid-template-columns: auto 1fr;
-		align-items: center;
+	.name {
+		word-break: break-all;
 	}
 
 	.head {

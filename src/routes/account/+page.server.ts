@@ -4,24 +4,23 @@ import { is_constraint_error, query } from '$lib/server/db'
 import { delete_auth_cookie, set_auth_cookie } from '$lib/server/auth'
 import type { PageServerLoad } from './$types'
 import * as v from 'valibot'
-import {
-	username_schema,
-	password_schema,
-	email_schema,
-	device_label_schema,
-} from '$lib/server/schemas'
-import { delete_device_cookie, delete_device_from_cache } from '$lib/server/devices'
+import { username_schema, password_schema, email_schema } from '$lib/server/schemas'
+import { delete_device_cookie } from '$lib/server/devices'
 import type { Device } from '$lib/types'
 import { send_email_change_email } from '$lib/server/email'
 import { generate_token } from '$lib/server/utils'
+
+const ACCOUNT_MESSAGES: Record<string, string | undefined> = {
+	email_change: 'Your email has been updated successfully',
+	remove_device: 'Device has been removed successfully',
+}
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user
 	if (!user) error(401, 'Unauthorized')
 
-	const from = event.url.searchParams.get('from')
-	const message =
-		from === 'email_change' ? 'Your email has been updated successfully' : null
+	const from = event.url.searchParams.get('from') ?? ''
+	const message = ACCOUNT_MESSAGES[from]
 
 	const sql = `
 		SELECT id, label, created_at, last_login_at
@@ -170,72 +169,5 @@ export const actions: Actions = {
 		delete_device_cookie(event)
 
 		redirect(302, '/')
-	},
-
-	remove_device: async (event) => {
-		const user = event.locals.user
-		if (!user) error(401, 'Unauthorized')
-
-		const form = await event.request.formData()
-
-		const device_id = form.get('id') as string
-
-		if (!device_id) {
-			return fail(400, { type: 'device', error: 'Device ID is required' })
-		}
-
-		if (device_id === event.locals.device_id) {
-			return fail(403, { type: 'device', error: 'You cannot remove the current device' })
-		}
-
-		const sql = `
-			DELETE FROM devices
-			WHERE user_id = ? AND id = ?
-			RETURNING token_hash`
-
-		const { rows, err } = await query<{ token_hash: string }>(sql, [user.id, device_id])
-
-		if (err || !rows.length) {
-			return fail(400, { type: 'device', error: 'Database error' })
-		}
-
-		const { token_hash } = rows[0]
-
-		delete_device_from_cache(token_hash)
-
-		return { type: 'device', message: 'Device has been removed' }
-	},
-
-	rename_device: async (event) => {
-		const user = event.locals.user
-		if (!user) error(401, 'Unauthorized')
-
-		const form = await event.request.formData()
-		const device_label = form.get('label') as string
-		const device_id = form.get('id') as string
-
-		const device_label_parsed = v.safeParse(device_label_schema, device_label)
-
-		if (!device_label_parsed.success) {
-			return fail(400, {
-				type: 'device',
-				error: device_label_parsed.issues[0].message,
-			})
-		}
-
-		if (!device_id) {
-			return fail(400, { type: 'device', error: 'Device ID is required' })
-		}
-
-		const sql = `
-			UPDATE devices
-			SET label = ?
-			WHERE user_id = ? AND id = ?`
-
-		const { err } = await query(sql, [device_label, user.id, device_id])
-
-		if (err) return fail(400, { type: 'device', error: 'Database error' })
-
-		return { type: 'device', message: 'Device has been renamed' }
 	},
 }

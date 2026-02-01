@@ -7,13 +7,14 @@ import * as v from 'valibot'
 import { device_label_schema } from '$lib/server/schemas'
 import { send_device_verification_email } from '$lib/server/email'
 import { get_device_label } from '$lib/server/utils'
+import { dev } from '$app/environment'
 
 export const load: PageServerLoad = async (event) => {
 	const device_label = get_device_label(event.request.headers)
 	return { device_label }
 }
 
-const limiter = new RateLimiter({ limit: 1, window_ms: 60_000 })
+const limiter = new RateLimiter({ limit: dev ? 10 : 1, window_ms: 60_000 })
 
 export const actions: Actions = {
 	default: async (event) => {
