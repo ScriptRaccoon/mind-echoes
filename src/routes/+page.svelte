@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>{APP_TITLE} - Home</title>
+	<title>{APP_TITLE}</title>
 </svelte:head>
 
 <header>
