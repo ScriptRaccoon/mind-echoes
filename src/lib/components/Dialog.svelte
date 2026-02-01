@@ -75,6 +75,7 @@
 		padding: 1rem;
 		border-radius: 1rem;
 		border: 1px solid var(--outline-color);
+		box-shadow: 0 0 2rem #0007;
 	}
 
 	dialog::backdrop {

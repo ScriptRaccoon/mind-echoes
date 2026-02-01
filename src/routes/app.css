@@ -22,7 +22,7 @@
 	--input-bg-color: hsl(226, 34%, 10%);
 	--input-focus-color: hsl(226, 34%, 7%);
 	--button-color: rgb(166, 60, 190);
-	--danger-color: #c00;
+	--button-danger-color: rgb(186, 52, 78);
 	--heading-color: #bfdaf2;
 	--loading-bar-color: #ffff00;
 }
@@ -127,7 +127,7 @@ fieldset {
 }
 
 .button.danger {
-	background-color: var(--danger-color);
+	background-color: var(--button-danger-color);
 }
 
 a.button {
