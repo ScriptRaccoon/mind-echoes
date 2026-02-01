@@ -25,6 +25,14 @@
 	<meta property="og:url" content={APP_DOMAIN} />
 	<meta property="og:site_name" content={APP_TITLE} />
 	<meta property="og:image" content="{APP_DOMAIN}/screenshot.png" />
+
+	<link
+		rel="preload"
+		href="/fonts/Nunito/Nunito-VariableFont_wght.ttf"
+		as="font"
+		type="font/woff2"
+		crossorigin="anonymous"
+	/>
 </svelte:head>
 
 <Nav />
