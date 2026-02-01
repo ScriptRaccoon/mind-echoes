@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import BlockError from '$lib/components/BlockError.svelte'
 	import BlockMessage from '$lib/components/BlockMessage.svelte'
 	import DeviceTable from '$lib/components/DeviceTable.svelte'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
@@ -123,7 +124,7 @@
 	<button class="button danger" onclick={open_delete_account_dialog}>Delete</button>
 
 	{#if form?.type === 'delete_account' && form.error}
-		<p class="error">{form.error}</p>
+		<BlockError content={form.error} />
 	{/if}
 </section>
 
