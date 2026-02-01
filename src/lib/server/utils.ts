@@ -19,10 +19,8 @@ export function hash_token(token: string): string {
 
 export function get_device_label(headers: Headers) {
 	const ua = headers.get('user-agent') ?? ''
-	const { browser, os, device } = parser(ua)
-	return device.vendor
-		? `${browser.name} on ${os.name} (${device.vendor})`
-		: `${browser.name} on ${os.name}`
+	const { browser, os } = parser(ua)
+	return `${browser.name} on ${os.name}`
 }
 
 export function log_bold(text: string) {
