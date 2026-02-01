@@ -31,7 +31,7 @@
 	--error-bg-color: #f001;
 	--message-color: #0f0;
 	--message-bg-color: #0f01;
-	--outline-color: hsl(226, 20%, 60%);
+	--outline-color: hsl(226, 20%, 70%);
 	--dark-outline-color: hsl(226, 20%, 30%);
 	--input-bg-color: hsl(226, 34%, 10%);
 	--input-focus-color: hsl(226, 34%, 7%);
@@ -88,6 +88,7 @@ textarea {
 
 button {
 	transition: opacity 120ms;
+	outline-offset: 2px;
 }
 
 button:not(:disabled) {
@@ -138,6 +139,7 @@ fieldset {
 	background-color: var(--button-color);
 	padding: 0.25rem 1.25rem;
 	border-radius: 100vw;
+	outline-offset: 2px;
 }
 
 .button.danger {

@@ -83,6 +83,7 @@
 		width: 4.5rem;
 		background-color: var(--button-color);
 		border-radius: 100vw;
+		outline-offset: 2px;
 	}
 
 	section {
