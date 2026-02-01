@@ -14,7 +14,6 @@
 
 <style>
 	p {
-		color: var(--error-color);
 		background-color: var(--error-bg-color);
 		padding: 0.5rem 0.75rem;
 		border-radius: 0.5rem;
