@@ -11,7 +11,6 @@ import { send_email_change_email } from '$lib/server/email'
 import { generate_token } from '$lib/server/utils'
 
 const ACCOUNT_MESSAGES: Record<string, string | undefined> = {
-	email_change: 'Your email has been updated successfully',
 	remove_device: 'Device has been removed successfully',
 }
 

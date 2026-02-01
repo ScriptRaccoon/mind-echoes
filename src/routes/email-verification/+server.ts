@@ -58,5 +58,5 @@ export const GET: RequestHandler = async (event) => {
 		send_email_inform_changed_email(username, email, new_email)
 	} catch (_) {}
 
-	redirect(303, '/account?from=email_change')
+	redirect(303, '/login?from=email_change')
 }

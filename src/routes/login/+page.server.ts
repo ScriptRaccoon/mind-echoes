@@ -10,6 +10,7 @@ const LOGIN_MESSAGES: Record<string, undefined | string> = {
 	logout: 'You have been logged out successfully',
 	device_verification: 'Your device has been verified. You can now log in.',
 	password_reset: 'Password has been reset. You can now log in with the new password.',
+	email_change: 'Your email has been updated successfully',
 }
 
 export const load: PageServerLoad = (event) => {
