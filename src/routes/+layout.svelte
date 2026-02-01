@@ -24,7 +24,7 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={APP_DOMAIN} />
 	<meta property="og:site_name" content={APP_TITLE} />
-	<meta property="og:image" content="{APP_DOMAIN}/screenshot.png" />
+	<meta property="og:image" content="{APP_DOMAIN}/screenshot.webp" />
 
 	<link
 		rel="preload"
