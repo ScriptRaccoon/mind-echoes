@@ -39,8 +39,9 @@
 	<FormWrapper form={form?.type === 'username' ? form : null} action="?/username">
 		{#snippet content()}
 			<div class="form-group">
-				<label for="username">New username</label>
+				<label class="label" for="username">New username</label>
 				<input
+					class="input"
 					type="text"
 					name="username"
 					id="username"
@@ -63,8 +64,9 @@
 	<FormWrapper form={form?.type === 'email' ? form : null} action="?/email">
 		{#snippet content()}
 			<div class="form-group">
-				<label for="email">New email</label>
+				<label class="label" for="email">New email</label>
 				<input
+					class="input"
 					type="email"
 					name="email"
 					id="email"
@@ -87,13 +89,25 @@
 	<FormWrapper form={form?.type === 'password' ? form : null} action="?/password">
 		{#snippet content()}
 			<div class="form-group">
-				<label for="current_password">Current password</label>
-				<input type="password" name="current_password" id="current_password" required />
+				<label class="label" for="current_password">Current password</label>
+				<input
+					class="input"
+					type="password"
+					name="current_password"
+					id="current_password"
+					required
+				/>
 			</div>
 
 			<div class="form-group">
-				<label for="new_password">New password</label>
-				<input type="password" name="new_password" id="new_password" required />
+				<label class="label" for="new_password">New password</label>
+				<input
+					class="input"
+					type="password"
+					name="new_password"
+					id="new_password"
+					required
+				/>
 			</div>
 		{/snippet}
 

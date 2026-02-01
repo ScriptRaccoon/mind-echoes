@@ -13,8 +13,15 @@
 <FormWrapper {form}>
 	{#snippet content()}
 		<div class="form-group">
-			<label for="email">Email</label>
-			<input type="email" name="email" id="email" required value={form?.email ?? ''} />
+			<label class="label" for="email">Email</label>
+			<input
+				class="input"
+				type="email"
+				name="email"
+				id="email"
+				required
+				value={form?.email ?? ''}
+			/>
 		</div>
 	{/snippet}
 

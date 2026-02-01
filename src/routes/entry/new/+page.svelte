@@ -15,8 +15,15 @@
 <FormWrapper {form}>
 	{#snippet content()}
 		<div class="form-group">
-			<label for="date">Choose a date</label>
-			<input type="date" name="date" id="date" bind:value={selected_date} required />
+			<label class="label" for="date">Choose a date</label>
+			<input
+				class="input"
+				type="date"
+				name="date"
+				id="date"
+				bind:value={selected_date}
+				required
+			/>
 		</div>
 	{/snippet}
 

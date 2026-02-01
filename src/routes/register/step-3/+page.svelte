@@ -19,8 +19,8 @@
 <FormWrapper {form}>
 	{#snippet content()}
 		<div class="form-group">
-			<label for="code">Registration Code</label>
-			<input type="number" name="code" id="code" required />
+			<label class="label" for="code">Registration Code</label>
+			<input class="input" type="number" name="code" id="code" required />
 		</div>
 	{/snippet}
 

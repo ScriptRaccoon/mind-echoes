@@ -59,10 +59,6 @@
 		text-align: center;
 	}
 
-	h2 {
-		color: var(--heading-color);
-	}
-
 	nav {
 		display: flex;
 		justify-content: space-between;

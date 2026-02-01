@@ -53,9 +53,6 @@ header:has(h1) {
 h1,
 h2 {
 	font-weight: 500;
-}
-
-h1 {
 	color: var(--heading-color);
 	text-wrap: balance;
 }
@@ -96,48 +93,32 @@ textarea {
 	resize: vertical;
 }
 
-/* FORMS */
-
-.form-group {
-	margin-bottom: 1rem;
-
-	label {
-		display: block;
-		margin-bottom: 0.1rem;
-		font-size: 0.875rem;
-		color: var(--secondary-font-color);
-	}
-
-	label:has(+ :focus-visible) {
-		color: var(--font-color);
-	}
-
-	input,
-	textarea {
-		width: 100%;
-		background-color: var(--input-bg-color);
-		padding: 0.2rem 0.5rem;
-		border-radius: 0.25rem;
-		outline: 1px solid var(--dark-outline-color);
-
-		&:focus-visible {
-			background-color: var(--input-focus-color);
-		}
-	}
-}
-
 fieldset {
 	border: none;
 }
 
-/* WRITTEN TEXT IN DIARY */
-
-.text {
-	font-size: 1.125rem;
-	font-family: 'Klee One', cursive;
+.label {
+	display: block;
+	margin-bottom: 0.1rem;
+	font-size: 0.875rem;
+	color: var(--secondary-font-color);
 }
 
-/* BUTTONS */
+.label:has(+ :focus-visible) {
+	color: var(--font-color);
+}
+
+.input {
+	width: 100%;
+	background-color: var(--input-bg-color);
+	padding: 0.2rem 0.5rem;
+	border-radius: 0.25rem;
+	outline: 1px solid var(--dark-outline-color);
+
+	&:focus-visible {
+		background-color: var(--input-focus-color);
+	}
+}
 
 .button {
 	background-color: var(--button-color);
@@ -164,11 +145,6 @@ a.button {
 	border-radius: 50%;
 }
 
-a.vibrant-button {
-	text-decoration: none;
-	display: inline-block;
-}
-
 /* ICONS */
 
 .lucide {
@@ -191,4 +167,13 @@ a.vibrant-button {
 
 .opaque {
 	opacity: 0.5;
+}
+
+.form-group {
+	margin-bottom: 1rem;
+}
+
+.text {
+	font-size: 1.125rem;
+	font-family: 'Klee One', cursive;
 }

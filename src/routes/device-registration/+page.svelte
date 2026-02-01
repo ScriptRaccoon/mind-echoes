@@ -13,8 +13,9 @@
 <FormWrapper {form}>
 	{#snippet content()}
 		<div class="form-group">
-			<label for="device_label">Name this new device</label>
+			<label class="label" for="device_label">Name this new device</label>
 			<input
+				class="input"
 				type="text"
 				name="device_label"
 				id="device_label"

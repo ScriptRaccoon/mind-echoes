@@ -16,8 +16,9 @@
 <FormWrapper {form}>
 	{#snippet content()}
 		<div class="form-group">
-			<label for="identifier">Username or Email</label>
+			<label class="label" for="identifier">Username or Email</label>
 			<input
+				class="input"
 				type="text"
 				id="identifier"
 				name="identifier"
@@ -27,8 +28,8 @@
 		</div>
 
 		<div class="form-group">
-			<label for="password">Password</label>
-			<input type="password" id="password" name="password" required />
+			<label class="label" for="password">Password</label>
+			<input class="input" type="password" id="password" name="password" required />
 		</div>
 	{/snippet}
 
