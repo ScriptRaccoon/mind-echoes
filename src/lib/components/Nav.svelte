@@ -57,6 +57,7 @@
 		border-bottom: 1px solid var(--dark-outline-color);
 		position: sticky;
 		top: 0;
+		box-shadow: 1rem 0rem 2rem #0004;
 	}
 
 	ul {
@@ -69,10 +70,17 @@
 	}
 
 	a {
+		padding-inline: 0.5rem;
 		text-decoration: none;
 		display: flex;
 		gap: 0.25rem;
 		flex-direction: column;
 		align-items: center;
+		transition: color 120ms ease;
+		color: var(--secondary-font-color);
+	}
+
+	a[aria-current='true'] {
+		color: var(--font-color);
 	}
 </style>
