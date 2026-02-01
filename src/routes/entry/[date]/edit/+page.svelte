@@ -3,8 +3,8 @@
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import EntryInputs from '$lib/components/EntryInputs.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
-	import { APP_TITLE } from '$lib/config'
-	import { format_date } from '$lib/utils'
+	import { APP_TITLE } from '$lib/client/config'
+	import { format_date } from '$lib/client/utils.js'
 
 	let { form, data } = $props()
 

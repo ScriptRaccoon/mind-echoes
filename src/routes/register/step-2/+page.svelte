@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 	import RegistrationHeader from '$lib/components/RegistrationHeader.svelte'
-	import { APP_TITLE } from '$lib/config'
+	import { APP_TITLE } from '$lib/client/config'
 
 	let { form } = $props()
 </script>

@@ -1,7 +1,7 @@
 import { query } from '$lib/server/db'
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
-import type { Entry, Entry_DB } from '$lib/types'
+import type { Entry, Entry_DB } from '$lib/client/types'
 import { decrypt_entry, encrypt } from '$lib/server/encryption'
 import * as v from 'valibot'
 import {

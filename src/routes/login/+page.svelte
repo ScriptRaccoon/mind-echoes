@@ -1,7 +1,7 @@
 <script lang="ts">
 	import BlockMessage from '$lib/components/BlockMessage.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
-	import { APP_TITLE } from '$lib/config'
+	import { APP_TITLE } from '$lib/client/config'
 
 	let { form, data } = $props()
 </script>

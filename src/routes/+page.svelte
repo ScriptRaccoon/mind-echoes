@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { APP_TITLE } from '$lib/config'
+	import { APP_TITLE } from '$lib/client/config'
 </script>
 
 <svelte:head>

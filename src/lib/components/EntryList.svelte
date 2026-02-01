@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Entry_Summary } from '$lib/types'
-	import { format_date_short } from '$lib/utils'
+	import type { Entry_Summary } from '$lib/client/types'
+	import { format_date_short } from '$lib/client/utils'
 	import { ChevronRight } from 'lucide-svelte'
 
 	type Props = {

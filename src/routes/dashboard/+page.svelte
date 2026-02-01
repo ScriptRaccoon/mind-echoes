@@ -2,7 +2,7 @@
 	import { page } from '$app/state'
 	import EntryList from '$lib/components/EntryList.svelte'
 	import YearSelector from '$lib/components/YearSelector.svelte'
-	import { APP_TITLE } from '$lib/config'
+	import { APP_TITLE } from '$lib/client/config'
 
 	let { data } = $props()
 

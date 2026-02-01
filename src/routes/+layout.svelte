@@ -2,7 +2,7 @@
 	import './app.css'
 	import Nav from '$lib/components/Nav.svelte'
 	import Dialog from '$lib/components/Dialog.svelte'
-	import { APP_DESCRIPTION, APP_DOMAIN, APP_TITLE } from '$lib/config'
+	import { APP_DESCRIPTION, APP_DOMAIN, APP_TITLE } from '$lib/client/config'
 	import LoadingBar from '$lib/components/LoadingBar.svelte'
 
 	let { children } = $props()

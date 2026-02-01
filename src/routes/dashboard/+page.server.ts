@@ -1,5 +1,5 @@
 import { batched_query } from '$lib/server/db'
-import { type Entry_DB_Summary, type Entry_Summary } from '$lib/types'
+import { type Entry_DB_Summary, type Entry_Summary } from '$lib/client/types'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { decrypt_entry_summary } from '$lib/server/encryption'

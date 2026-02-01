@@ -4,7 +4,7 @@ import { query } from '$lib/server/db'
 import { delete_device_from_cache } from '$lib/server/devices'
 import { device_label_schema } from '$lib/server/schemas'
 import * as v from 'valibot'
-import type { Device } from '$lib/types'
+import type { Device } from '$lib/client/types'
 
 export const load: PageServerLoad = async (event) => {
 	const user = event.locals.user

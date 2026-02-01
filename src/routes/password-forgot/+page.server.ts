@@ -6,7 +6,7 @@ import { query } from '$lib/server/db'
 import { send_password_reset_email } from '$lib/server/email'
 import { RateLimiter } from '$lib/server/ratelimit'
 import { generate_token } from '$lib/server/utils'
-import { sleep } from '$lib/utils'
+import { sleep } from '$lib/client/utils'
 
 const msg =
 	'If you have an account with that email address, ' +

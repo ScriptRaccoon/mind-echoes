@@ -1,5 +1,5 @@
 import { EMAIL_ADDRESS, EMAIL_PASSWORD, ENABLE_EMAILS } from '$env/static/private'
-import { APP_TITLE } from '$lib/config'
+import { APP_TITLE } from '$lib/client/config'
 import nodemailer from 'nodemailer'
 import { combine_paragraphs, log_bold } from './utils'
 

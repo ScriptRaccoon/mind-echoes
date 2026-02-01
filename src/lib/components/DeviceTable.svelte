@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Device } from '$lib/types'
-	import { localize_date } from '$lib/utils'
+	import type { Device } from '$lib/client/types'
+	import { localize_date } from '$lib/client/utils'
 	import { Monitor, MonitorPlay, Settings } from 'lucide-svelte'
 
 	type Props = {
