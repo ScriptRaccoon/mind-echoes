@@ -92,4 +92,8 @@
 		display: flex;
 		justify-content: center;
 	}
+
+	.text {
+		white-space: pre-wrap;
+	}
 </style>
