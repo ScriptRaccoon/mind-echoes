@@ -18,7 +18,7 @@ export const GET: RequestHandler = async (event) => {
 	const token = event.url.searchParams.get('token')
 	if (!token) error(400, 'Token is missing')
 
-	const { rows: requests, err: err_request } = await query<{ device_id: number }>(
+	const { rows: requests, err: err_request } = await query<{ device_id: string }>(
 		sql_request,
 		[token],
 	)

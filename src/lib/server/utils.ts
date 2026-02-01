@@ -9,6 +9,10 @@ export function generate_token(): string {
 	return crypto.randomBytes(32).toString('hex')
 }
 
+export function generate_id(): string {
+	return crypto.randomUUID()
+}
+
 export function hash_token(token: string): string {
 	return crypto.createHash('sha256').update(token).digest('hex')
 }

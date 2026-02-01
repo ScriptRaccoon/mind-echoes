@@ -7,6 +7,6 @@ export const registration_cache: Map<
 		username: string
 		email: string
 		user_id?: number
-		device_id?: number
+		device_id?: string
 	}
 > = new Map()

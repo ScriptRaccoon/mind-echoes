@@ -3,7 +3,7 @@
 		open: boolean
 		question: string
 		action: string
-		id?: number
+		id?: number | string
 	}
 
 	export const dialog_state = $state<DialogState>({
@@ -28,7 +28,6 @@
 </script>
 
 <script lang="ts">
-	import { enhance } from '$app/forms'
 	import FormWrapper from './FormWrapper.svelte'
 
 	let dialog_element = $state<HTMLDialogElement | null>(null)

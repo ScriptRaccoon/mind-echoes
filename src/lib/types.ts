@@ -17,7 +17,7 @@ export type Entry_Summary = Pick<Entry, 'id' | 'date' | 'title'>
 export type Entry_DB_Summary = Pick<Entry_DB, 'id' | 'date' | 'title_enc'>
 
 export type Device = {
-	id: number
+	id: string
 	label: string
 	created_at: string
 	last_login_at: string | null

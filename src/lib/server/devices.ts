@@ -1,6 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import { query } from './db'
-import { generate_token, hash_token } from './utils'
+import { generate_id, generate_token, hash_token } from './utils'
 
 const COOKIE_DEVICE_TOKEN = 'device_token'
 
@@ -17,39 +17,40 @@ export async function save_device(
 	user_id: number,
 	label: string,
 	options: { verify: boolean },
-): Promise<{ device_id: number | null }> {
+): Promise<{ device_id: string | null }> {
 	const token = generate_token()
 
 	const token_hash = hash_token(token)
 
+	const device_id = generate_id()
+
 	const sql_verified = `
 		INSERT INTO devices
-			(user_id, label, token_hash, verified_at)
-		VALUES (?,?,?, CURRENT_TIMESTAMP)
-		RETURNING id`
+			(id, user_id, label, token_hash, verified_at)
+		VALUES (?,?,?,?, CURRENT_TIMESTAMP)`
 
 	const sql_unverified = `
 		INSERT INTO devices
-			(user_id, label, token_hash)
-		VALUES (?,?,?)
-		RETURNING id`
+			(id, user_id, label, token_hash)
+		VALUES (?,?,?,?)`
 
 	const sql = options.verify ? sql_verified : sql_unverified
+	const args = [device_id, user_id, label, token_hash]
 
-	const { rows, err } = await query<{ id: number }>(sql, [user_id, label, token_hash])
+	const { err } = await query(sql, args)
 
-	if (err || !rows.length) return { device_id: null }
+	if (err) return { device_id: null }
 
 	event.cookies.set(COOKIE_DEVICE_TOKEN, token, DEVICE_COOKIE_OPTIONS)
 
-	return { device_id: rows[0].id }
+	return { device_id }
 }
 
 export function delete_device_cookie(event: RequestEvent): void {
 	event.cookies.delete(COOKIE_DEVICE_TOKEN, { path: '/' })
 }
 
-const device_cache: Map<string, number> = new Map()
+const device_cache: Map<string, string> = new Map()
 
 export async function check_device(event: RequestEvent): Promise<void> {
 	const user = event.locals.user
@@ -72,7 +73,7 @@ export async function check_device(event: RequestEvent): Promise<void> {
 		FROM devices
 		WHERE user_id = ? AND verified_at IS NOT NULL AND token_hash = ?`
 
-	const { rows: devices } = await query<{ id: number }>(sql, [user.id, token_hash])
+	const { rows: devices } = await query<{ id: string }>(sql, [user.id, token_hash])
 
 	if (!devices?.length) return
 
@@ -86,7 +87,7 @@ export function delete_device_from_cache(token_hash: string) {
 	device_cache.delete(token_hash)
 }
 
-export async function create_device_verification_request(device_id: number) {
+export async function create_device_verification_request(device_id: string) {
 	const token = generate_token()
 
 	const sql = `INSERT INTO device_verification_requests (token, device_id) VALUES (?,?)`

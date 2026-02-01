@@ -6,8 +6,8 @@
 
 	type Props = {
 		devices: Device[]
-		current_device_id: number | undefined
-		remove_device: (id: number) => void
+		current_device_id: string | undefined
+		remove_device: (id: string) => void
 	}
 
 	let { devices, current_device_id, remove_device }: Props = $props()

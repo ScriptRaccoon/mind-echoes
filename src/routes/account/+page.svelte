@@ -15,7 +15,7 @@
 		})
 	}
 
-	function open_remove_device_dialog(device_id: number) {
+	function open_remove_device_dialog(device_id: string) {
 		open_dialog({
 			question: 'Do you want to remove this device?',
 			action: '?/remove_device',
