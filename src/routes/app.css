@@ -1,6 +1,20 @@
 /* GLOBAL STUFF */
 
-@import url('https://fonts.googleapis.com/css2?family=Klee+One&family=Nunito:wght@200..1000&display=swap');
+@font-face {
+	font-family: 'Nunito';
+	font-weight: 200 1000;
+	font-style: normal;
+	font-display: swap;
+	src: url('/fonts/Nunito/Nunito-VariableFont_wght.ttf') format('woff2');
+}
+
+@font-face {
+	font-family: 'Klee One';
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+	src: url('/fonts/Klee_One/KleeOne-Regular.ttf') format('woff2');
+}
 
 * {
 	margin: 0;
