@@ -1,8 +1,13 @@
 <script lang="ts">
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { APP_TITLE } from '$lib/config'
 
 	let { form } = $props()
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - Forgot password</title>
+</svelte:head>
 
 <header>
 	<h1>Forgot your password?</h1>

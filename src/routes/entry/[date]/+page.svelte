@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state'
+	import { APP_TITLE } from '$lib/config'
 	import { format_date } from '$lib/utils'
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte'
 
@@ -9,6 +10,10 @@
 
 	const icon_size = 26
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - {entry.title}</title>
+</svelte:head>
 
 <header>
 	<h1>{entry.title}</h1>

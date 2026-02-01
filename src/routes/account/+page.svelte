@@ -5,6 +5,7 @@
 	import DeviceTable from '$lib/components/DeviceTable.svelte'
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { APP_TITLE } from '$lib/config'
 
 	let { data, form } = $props()
 
@@ -15,6 +16,10 @@
 		})
 	}
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - Account</title>
+</svelte:head>
 
 <header>
 	<h1>Account</h1>

@@ -3,6 +3,7 @@
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import EntryInputs from '$lib/components/EntryInputs.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { APP_TITLE } from '$lib/config'
 	import { format_date } from '$lib/utils'
 
 	let { form, data } = $props()
@@ -16,6 +17,10 @@
 		})
 	}
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - {entry.title}</title>
+</svelte:head>
 
 <DateHeader title="Edit Echo" date={format_date(entry.date)} />
 

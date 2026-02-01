@@ -2,6 +2,10 @@
 	import { APP_TITLE } from '$lib/config'
 </script>
 
+<svelte:head>
+	<title>{APP_TITLE} - Home</title>
+</svelte:head>
+
 <header>
 	<h1>Welcome to {APP_TITLE}</h1>
 </header>

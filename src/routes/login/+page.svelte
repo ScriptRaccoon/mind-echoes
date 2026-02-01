@@ -1,9 +1,14 @@
 <script lang="ts">
 	import BlockMessage from '$lib/components/BlockMessage.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { APP_TITLE } from '$lib/config'
 
 	let { form, data } = $props()
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - Login</title>
+</svelte:head>
 
 <header>
 	<h1>Login</h1>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { APP_TITLE } from '$lib/config'
 
 	let { form } = $props()
 
@@ -7,6 +8,10 @@
 
 	let selected_date = $derived<string>(form?.date ?? today)
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - New Echo</title>
+</svelte:head>
 
 <header>
 	<h1>New Echo</h1>

@@ -1,8 +1,13 @@
 <script lang="ts">
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { APP_TITLE } from '$lib/config'
 
 	let { data, form } = $props()
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - Device registration</title>
+</svelte:head>
 
 <header>
 	<h1>Device registration</h1>

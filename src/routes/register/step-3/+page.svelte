@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 	import RegistrationHeader from '$lib/components/RegistrationHeader.svelte'
+	import { APP_TITLE } from '$lib/config'
 
 	let { form } = $props()
 
@@ -8,6 +9,10 @@
 		window.location.reload()
 	}
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - Register</title>
+</svelte:head>
 
 <RegistrationHeader step={3} />
 

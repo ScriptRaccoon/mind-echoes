@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
+	import { APP_TITLE } from '$lib/config'
 	import { localize_date } from '$lib/utils'
 	import { Monitor, MonitorPlay } from 'lucide-svelte'
 
@@ -14,6 +15,10 @@
 		})
 	}
 </script>
+
+<svelte:head>
+	<title>{APP_TITLE} - Manage Device</title>
+</svelte:head>
 
 <p>
 	<a class="back" href="/account">Back to Account Page</a>
