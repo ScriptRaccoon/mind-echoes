@@ -28,7 +28,7 @@
 
 	<link
 		rel="preload"
-		href="/fonts/Nunito/Nunito-VariableFont_wght.ttf"
+		href="/fonts/Nunito/Nunito-VariableFont_wght.woff2"
 		as="font"
 		type="font/woff2"
 		crossorigin="anonymous"
