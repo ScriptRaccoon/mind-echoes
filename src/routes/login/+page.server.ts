@@ -6,6 +6,15 @@ import { RateLimiter } from '$lib/server/ratelimit'
 import { set_auth_cookie } from '$lib/server/auth'
 import { save_login_date_for_device } from '$lib/server/devices'
 
+type UserComplete = {
+	id: number
+	username: string
+	email: string
+	password_hash: string
+	email_verified_at: string | null
+	disabled: number
+}
+
 const LOGIN_MESSAGES: Record<string, undefined | string> = {
 	logout: 'You have been logged out successfully',
 	device_verification: 'Your device has been verified. You can now log in.',
@@ -15,7 +24,6 @@ const LOGIN_MESSAGES: Record<string, undefined | string> = {
 
 export const load: PageServerLoad = (event) => {
 	const from = event.url.searchParams.get('from') ?? ''
-
 	return { message: LOGIN_MESSAGES[from] }
 }
 
@@ -40,25 +48,16 @@ export const actions: Actions = {
 			return fail(400, { identifier, error: 'Both fields are required' })
 		}
 
-		const identifier_name = identifier.includes('@') ? 'email' : 'username'
+		const identifier_type = identifier.includes('@') ? 'email' : 'username'
 
 		const sql = `
 			SELECT id, username, email, password_hash, email_verified_at, disabled
 			FROM users
-			WHERE ${identifier_name} = ?`
+			WHERE ${identifier_type} = ?`
 
-		const { rows, err } = await query<{
-			id: number
-			username: string
-			email: string
-			password_hash: string
-			email_verified_at: string | null
-			disabled: number
-		}>(sql, [identifier])
+		const { rows, err } = await query<UserComplete>(sql, [identifier])
 
-		if (err) {
-			return fail(500, { identifier, error: 'Database error' })
-		}
+		if (err) return fail(500, { identifier, error: 'Database error' })
 
 		if (!rows.length) {
 			limiter.record(ip)

@@ -22,9 +22,7 @@ export const actions: Actions = {
 
 		const { rows: entries, err } = await query<{ id: number }>(sql, [date, user.id])
 
-		if (err) {
-			return fail(500, { date, error: 'Database error' })
-		}
+		if (err) return fail(500, { date, error: 'Database error' })
 
 		if (entries.length) {
 			return fail(409, { date, error: 'An echo already exists for this date' })

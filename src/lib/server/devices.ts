@@ -19,9 +19,7 @@ export async function save_device(
 	options: { verify: boolean },
 ): Promise<{ device_id: string | null }> {
 	const token = generate_token()
-
 	const token_hash = hash_token(token)
-
 	const device_id = generate_id()
 
 	const sql_verified = `

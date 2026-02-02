@@ -31,13 +31,11 @@ export const actions: Actions = {
 		const email_parsed = v.safeParse(email_schema, email)
 
 		if (!email_parsed.success) {
-			return fail(400, {
-				email,
-				error: email_parsed.issues[0].message,
-			})
+			return fail(400, { email, error: email_parsed.issues[0].message })
 		}
 
 		const sql_user = `SELECT id, username FROM users WHERE email = ?`
+
 		const { rows: users, err: err_user } = await query<{ id: number; username: string }>(
 			sql_user,
 			[email],
@@ -46,7 +44,7 @@ export const actions: Actions = {
 		if (err_user) return fail(500, { email, error: 'Database error' })
 
 		if (!users.length) {
-			await sleep(200) // fake delay
+			await sleep(500) // fake delay
 			limiter.record(ip)
 			return { email, message: msg }
 		}
@@ -65,7 +63,6 @@ export const actions: Actions = {
 			await send_password_reset_email(user.username, email, link)
 		} catch (err) {
 			console.error(err)
-
 			return fail(500, { email, error: 'Failed to send email' })
 		}
 

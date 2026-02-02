@@ -29,9 +29,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const { rows: devices, err } = await query<Device>(sql, [user.id])
 
-	if (err) {
-		error(500, 'Database error')
-	}
+	if (err) error(500, 'Database error')
 
 	return { devices, current_device_id: event.locals.device_id, message }
 }
@@ -94,9 +92,7 @@ export const actions: Actions = {
 
 		const { err } = await query(sql, [token, user.id, email])
 
-		if (err) {
-			return fail(500, { type: 'email', error: 'Database error' })
-		}
+		if (err) return fail(500, { type: 'email', error: 'Database error' })
 
 		const link = `${event.url.origin}/email-verification?token=${token}`
 

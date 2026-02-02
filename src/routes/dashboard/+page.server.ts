@@ -31,7 +31,7 @@ export const load: PageServerLoad = async (event) => {
 	const year_str = `${year.toString().padStart(4, '0')}-01-01`
 	const next_year_str = `${(year + 1).toString().padStart(4, '0')}-01-01`
 
-	type T = [{ min_date: string | null; max_date: string | null }[], Entry_DB_Summary[]]
+	type T = [{ min_date: string | null; max_date: string | null }, Entry_DB_Summary]
 	const { rows_list, err } = await batched_query<T>(
 		[
 			{ sql: sql_range, args: [user.id] },

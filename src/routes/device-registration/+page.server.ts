@@ -59,7 +59,7 @@ export const actions: Actions = {
 		const link = `${event.url.origin}/device-verification?token=${token}`
 
 		try {
-			await send_device_verification_email(user.username, device_label, user.email, link)
+			await send_device_verification_email(user.username, user.email, device_label, link)
 		} catch (err) {
 			console.error(err)
 

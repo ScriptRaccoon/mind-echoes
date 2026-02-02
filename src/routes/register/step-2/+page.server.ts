@@ -3,14 +3,14 @@ import bcrypt from 'bcrypt'
 import type { Actions, PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { password_schema } from '$lib/server/schemas'
-import { REGISTER_COOKIE_NAME, registration_cache } from '$lib/server/registration-cache'
+import { COOKIE_REGISTER, registration_cache } from '$lib/server/registration'
 import { query, is_constraint_error } from '$lib/server/db'
 import { RateLimiter } from '$lib/server/ratelimit'
 import { get_device_label } from '$lib/server/utils'
 import { save_device } from '$lib/server/devices'
 
 export const load: PageServerLoad = async (event) => {
-	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
+	const register_id = event.cookies.get(COOKIE_REGISTER)
 	if (!register_id) error(403, 'Forbidden')
 
 	const progress = registration_cache.get(register_id)
@@ -29,19 +29,18 @@ export const actions: Actions = {
 
 		if (!limiter.is_allowed(ip)) {
 			return fail(429, {
-				device_label: '',
 				error: 'Too many registrations. Try again later.',
 			})
 		}
 
-		const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
-		if (!register_id) error(403, 'Forbidden')
+		const register_id = event.cookies.get(COOKIE_REGISTER)
+		if (!register_id) return fail(403, { error: 'Forbidden' })
 
 		const progress = registration_cache.get(register_id)
-		if (!progress) error(403, 'Forbidden')
+		if (!progress) return fail(403, { error: 'Forbidden' })
 
 		if (progress.expires_at <= Date.now()) {
-			error(403, 'Session expired')
+			return fail(403, { error: 'Session expired' })
 		}
 
 		const { username, email } = progress
@@ -96,7 +95,7 @@ export const actions: Actions = {
 		})
 
 		if (!device_id) {
-			return fail(500, { device_label, error: 'Database error' })
+			return fail(500, { error: 'Database error' })
 		}
 
 		registration_cache.set(register_id, { ...progress, user_id, device_id })

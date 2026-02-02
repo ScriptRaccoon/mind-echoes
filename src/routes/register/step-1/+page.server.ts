@@ -3,7 +3,7 @@ import type { Actions } from './$types'
 import * as v from 'valibot'
 import { email_schema, username_schema } from '$lib/server/schemas'
 import crypto from 'node:crypto'
-import { REGISTER_COOKIE_NAME, registration_cache } from '$lib/server/registration-cache'
+import { COOKIE_REGISTER, registration_cache } from '$lib/server/registration'
 import { query } from '$lib/server/db'
 
 export const actions: Actions = {
@@ -60,7 +60,7 @@ export const actions: Actions = {
 			email,
 		})
 
-		event.cookies.set(REGISTER_COOKIE_NAME, register_session_id, {
+		event.cookies.set(COOKIE_REGISTER, register_session_id, {
 			path: '/',
 			sameSite: 'strict',
 			httpOnly: true,

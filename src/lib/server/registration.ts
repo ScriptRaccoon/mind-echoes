@@ -1,4 +1,4 @@
-export const REGISTER_COOKIE_NAME = 'register_session_id'
+export const COOKIE_REGISTER = 'register_session_id'
 
 type ResitrationState = {
 	expires_at: number

@@ -32,3 +32,7 @@ export function log_bold(text: string) {
 export function combine_paragraphs(texts: string[]): string {
 	return texts.join('\n\n')
 }
+
+export type Arrayed<T extends readonly unknown[]> = {
+	[K in keyof T]: T[K][]
+}

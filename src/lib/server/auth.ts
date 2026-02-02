@@ -1,6 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import jwt from 'jsonwebtoken'
-
 import { JWT_SECRET } from '$env/static/private'
 
 const COOKIE_JWT = 'auth_token'

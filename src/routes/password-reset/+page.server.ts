@@ -11,8 +11,8 @@ export const load: PageServerLoad = async (event) => {
 }
 
 const sql_request = `
-        SELECT user_id FROM password_reset_requests
-        WHERE token = ? AND expires_at > CURRENT_TIMESTAMP`
+	SELECT user_id FROM password_reset_requests
+	WHERE token = ? AND expires_at > CURRENT_TIMESTAMP`
 
 const sql_pw = `UPDATE users SET password_hash = ? WHERE id = ?`
 

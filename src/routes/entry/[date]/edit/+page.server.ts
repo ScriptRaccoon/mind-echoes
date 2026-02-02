@@ -27,9 +27,7 @@ export const load: PageServerLoad = async (event) => {
 
 	const { rows: entries, err } = await query<Entry_DB>(sql, [date, user.id])
 
-	if (err) {
-		error(500, 'Database error')
-	}
+	if (err) error(500, 'Database error')
 
 	const entry_enc = entries[0]
 
@@ -94,9 +92,7 @@ export const actions: Actions = {
 
 		const { err } = await query(sql, [title_enc, content_enc, thanks_enc, date, user.id])
 
-		if (err) {
-			return fail(500, { error: 'Database error' })
-		}
+		if (err) return fail(500, { error: 'Database error' })
 
 		redirect(303, `/entry/${date}`)
 	},
@@ -111,9 +107,7 @@ export const actions: Actions = {
 
 		const { err } = await query(sql, [date, user.id])
 
-		if (err) {
-			return fail(500, { error: 'Database error' })
-		}
+		if (err) return fail(500, { error: 'Database error' })
 
 		redirect(302, '/dashboard')
 	},

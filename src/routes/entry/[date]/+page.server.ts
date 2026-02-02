@@ -30,9 +30,9 @@ export const load: PageServerLoad = async (event) => {
 
 	const args = [date, user.id]
 
-	type Res = [Entry_DB[], { date: string }[], { date: string }[]]
+	type T = [Entry_DB, { date: string }, { date: string }]
 
-	const { rows_list, err } = await batched_query<Res>(
+	const { rows_list, err } = await batched_query<T>(
 		[
 			{ sql: sql_entry, args },
 			{ sql: sql_next, args },
@@ -41,9 +41,7 @@ export const load: PageServerLoad = async (event) => {
 		'read',
 	)
 
-	if (err) {
-		error(500, 'Database error')
-	}
+	if (err) error(500, 'Database error')
 
 	const [entries, next_entries, prev_entries] = rows_list
 

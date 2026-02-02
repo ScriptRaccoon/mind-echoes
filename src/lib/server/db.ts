@@ -1,5 +1,6 @@
 import { DB_AUTH_TOKEN, DB_URL } from '$env/static/private'
 import { createClient, type LibsqlError } from '@libsql/client'
+import type { Arrayed } from './utils'
 
 export const db = createClient({
 	authToken: DB_AUTH_TOKEN,
@@ -35,7 +36,7 @@ export async function batched_query<T extends any[]>(
 ) {
 	try {
 		const res_list = await db.batch(input, mode)
-		return { rows_list: res_list.map((res) => res.rows) as T, err: null }
+		return { rows_list: res_list.map((res) => res.rows) as Arrayed<T>, err: null }
 	} catch (err) {
 		const libsql_error = err as LibsqlError
 		console.error(libsql_error)

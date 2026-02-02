@@ -3,7 +3,11 @@ import { APP_TITLE } from '$lib/client/config'
 import nodemailer from 'nodemailer'
 import { combine_paragraphs, log_bold } from './utils'
 
-type Email = { to: string; subject: string; text: string }
+type Email = {
+	to: string
+	subject: string
+	text: string
+}
 
 const transporter = nodemailer.createTransport({
 	host: 'smtp.gmail.com',
@@ -53,8 +57,8 @@ export async function send_registration_email(
 
 export async function send_device_verification_email(
 	username: string,
-	device_label: string,
 	to: string,
+	device_label: string,
 	link: string,
 ) {
 	const subject = `${APP_TITLE} - Verify your new device`

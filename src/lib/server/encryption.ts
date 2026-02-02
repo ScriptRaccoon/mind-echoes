@@ -3,8 +3,6 @@ import { ENCRYPTION_KEY } from '$env/static/private'
 
 import type { Entry, Entry_DB, Entry_DB_Summary, Entry_Summary } from '$lib/client/types'
 
-if (!ENCRYPTION_KEY) throw new Error('ENCRYPTION_KEY not set')
-
 const key = crypto.createHash('sha256').update(ENCRYPTION_KEY).digest()
 
 export function encrypt(plain_text: string): string {

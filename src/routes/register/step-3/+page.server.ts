@@ -1,21 +1,21 @@
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
-import { REGISTER_COOKIE_NAME } from '$lib/server/registration-cache'
-import { registration_cache } from '$lib/server/registration-cache'
+import { COOKIE_REGISTER } from '$lib/server/registration'
+import { registration_cache } from '$lib/server/registration'
 import { batched_query, query } from '$lib/server/db'
 import { send_registration_email } from '$lib/server/email'
 import { generate_code } from '$lib/server/utils'
 import { RateLimiter } from '$lib/server/ratelimit'
 import { set_auth_cookie } from '$lib/server/auth'
 
-const limiter = new RateLimiter({ limit: 2, window_ms: 60_000 })
-
 export const load: PageServerLoad = async (event) => {
-	const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
+	const register_id = event.cookies.get(COOKIE_REGISTER)
 	if (!register_id) error(403, 'Forbidden')
 
 	const progress = registration_cache.get(register_id)
-	if (!progress || !progress.user_id || !progress.device_id) error(403, 'Forbidden')
+	if (!progress || !progress.user_id || !progress.device_id) {
+		error(403, 'Forbidden')
+	}
 
 	if (progress.expires_at <= Date.now()) {
 		error(403, 'Session expired')
@@ -39,25 +39,28 @@ export const load: PageServerLoad = async (event) => {
 	}
 }
 
+const limiter = new RateLimiter({ limit: 2, window_ms: 60_000 })
+
 export const actions: Actions = {
 	default: async (event) => {
 		const ip = event.getClientAddress()
 
 		if (!limiter.is_allowed(ip)) {
 			return fail(429, {
-				device_label: '',
 				error: 'Too many invalid codes detected. Try again later.',
 			})
 		}
 
-		const register_id = event.cookies.get(REGISTER_COOKIE_NAME)
-		if (!register_id) error(403, 'Forbidden')
+		const register_id = event.cookies.get(COOKIE_REGISTER)
+		if (!register_id) return fail(403, { error: 'Forbidden' })
 
 		const progress = registration_cache.get(register_id)
-		if (!progress || !progress.user_id || !progress.device_id) error(403, 'Forbidden')
+		if (!progress || !progress.user_id || !progress.device_id) {
+			return fail(403, { error: 'Forbidden' })
+		}
 
 		if (progress.expires_at <= Date.now()) {
-			error(403, 'Session expired')
+			return fail(403, { error: 'Session expired' })
 		}
 
 		const { user_id, username, email, device_id } = progress
@@ -112,7 +115,7 @@ export const actions: Actions = {
 
 		limiter.clear(ip)
 
-		event.cookies.delete(REGISTER_COOKIE_NAME, { path: '/' })
+		event.cookies.delete(COOKIE_REGISTER, { path: '/' })
 
 		set_auth_cookie(event, { id: user_id, email, username })
 
