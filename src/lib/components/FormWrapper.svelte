@@ -4,6 +4,7 @@
 	import BlockError from './BlockError.svelte'
 	import BlockMessage from './BlockMessage.svelte'
 	import LoadingSpinner from './LoadingSpinner.svelte'
+	import { fade } from 'svelte/transition'
 
 	type Props = {
 		action?: string
@@ -67,12 +68,16 @@
 	</fieldset>
 </form>
 
-{#if form}
-	{#if 'error' in form}
+{#if !sending && form && 'error' in form}
+	<div in:fade={{ duration: 160 }}>
 		<BlockError content={form.error} />
-	{:else if 'message' in form}
+	</div>
+{/if}
+
+{#if !sending && form && 'message' in form}
+	<div in:fade={{ duration: 160 }}>
 		<BlockMessage content={form.message} />
-	{/if}
+	</div>
 {/if}
 
 <style>
