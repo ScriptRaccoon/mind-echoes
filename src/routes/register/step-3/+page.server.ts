@@ -65,7 +65,10 @@ export const actions: Actions = {
 
 		if (err_requests) return fail(500, { error: 'Database error' })
 
-		if (!requests.length) return fail(403, { error: 'Forbidden' })
+		if (!requests.length) {
+			limiter.record(ip)
+			return fail(403, { error: 'Forbidden' })
+		}
 
 		const { user_id, username, email, code: actual_code, device_id } = requests[0]
 
@@ -76,6 +79,7 @@ export const actions: Actions = {
 		if (!code) return fail(400, { error: 'Code required' })
 
 		if (parseInt(code) !== actual_code) {
+			limiter.record(ip)
 			return fail(401, { error: 'Invalid code' })
 		}
 
