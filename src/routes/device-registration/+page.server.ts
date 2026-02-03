@@ -69,6 +69,7 @@ export const actions: Actions = {
 		limiter.record(ip)
 
 		return {
+			device_label,
 			message:
 				'Your device has been added and marked for verification. To proceed, check your email inbox and verify the new device.',
 		}
