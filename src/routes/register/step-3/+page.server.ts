@@ -49,7 +49,7 @@ export const actions: Actions = {
 		if (!registration_id) error(403, 'Forbidden')
 
 		const sql_request = `
-			SELECT user_id, username, email, device_id, code
+			SELECT user_id, username, email, code, device_id
 			FROM registration_requests
 			WHERE id = ? AND expires_at < CURRENT_TIMESTAMP
 			AND user_id IS NOT NULL
@@ -89,8 +89,7 @@ export const actions: Actions = {
 		const sql_login_date = `
 			UPDATE devices
 			SET last_login_at = CURRENT_TIMESTAMP
-			WHERE id = ?
-		`
+			WHERE id = ?`
 
 		const sql_clean = `DELETE FROM registration_requests WHERE id = ?`
 

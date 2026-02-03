@@ -67,10 +67,10 @@ export const actions: Actions = {
 
 		const args_user = [username, email, password_hash]
 
-		const { rows: users, err } = await query<{ id: number }>(sql, args_user)
+		const { rows: users, err: err_user } = await query<{ id: number }>(sql, args_user)
 
-		if (err) {
-			if (is_constraint_error(err)) {
+		if (err_user) {
+			if (is_constraint_error(err_user)) {
 				return fail(409, { error: 'Username or email is already taken' })
 			}
 			return fail(500, { error: 'Database error' })
@@ -90,14 +90,14 @@ export const actions: Actions = {
 
 		const code = generate_code()
 
-		const sql_update_request = `
+		const sql_update = `
 			UPDATE registration_requests
 			SET user_id = ?, device_id = ?, code = ?
 			WHERE id = ?`
 
-		const args = [user_id, device_id, code, registration_id]
+		const args_update = [user_id, device_id, code, registration_id]
 
-		const { err: err_update } = await query(sql_update_request, args)
+		const { err: err_update } = await query(sql_update, args_update)
 
 		if (err_update) return fail(500, { error: 'Database error' })
 
