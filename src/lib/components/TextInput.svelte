@@ -2,7 +2,7 @@
 	type Props = {
 		name: string
 		label: string
-		type?: 'text' | 'password' | 'email' | 'date'
+		type?: 'text' | 'password' | 'email' | 'date' | 'number'
 		value?: string
 		defaultValue?: string
 		required?: boolean

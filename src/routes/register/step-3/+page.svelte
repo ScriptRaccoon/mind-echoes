@@ -24,7 +24,7 @@
 
 <FormWrapper {form}>
 	{#snippet content()}
-		<TextInput name="code" label="Registration Code" />
+		<TextInput name="code" label="Registration Code" type="number" />
 	{/snippet}
 
 	{#snippet buttons()}
