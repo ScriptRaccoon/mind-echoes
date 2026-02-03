@@ -16,7 +16,7 @@ _Capture your thoughts, reflect on your gratitude, and explore your mind, all in
 
 ## Description
 
-This diary application is built with SvelteKit and SQLite. Diary entries, referred to as "echoes", can be created on a per-day basis. All entries are encrypted at rest in the database. The encryption is not zero-knowledge: decryption occurs on the application server using a fixed encryption key.
+This diary application is built with SvelteKit and SQLite. Diary entries, referred to as "echoes", can be created on a per-day basis. All entries are encrypted at rest in the database. The encryption is currently not zero-knowledge: decryption occurs on the application server using a fixed encryption key (https://github.com/ScriptRaccoon/mind-echoes/issues/1).
 
 The application provides a full overview of all entries, with support for editing and straightforward navigation between days and entries.
 
