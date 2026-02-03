@@ -27,11 +27,12 @@
 		<TextInput name="code" label="Registration Code" type="number" />
 	{/snippet}
 
-	{#snippet buttons()}
-		<button type="button" class="button" onclick={send_mail_again}>
-			Send email again
-		</button>
-
+	{#snippet buttons(sending)}
+		{#if !sending}
+			<button type="button" class="button" onclick={send_mail_again}>
+				Send email again
+			</button>
+		{/if}
 		<button class="button">Submit</button>
 	{/snippet}
 </FormWrapper>
