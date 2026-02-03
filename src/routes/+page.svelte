@@ -39,6 +39,13 @@
 		To get started, <a href="/login">log in</a> or
 		<a href="/register/step-1">create an account</a>.
 	</p>
+
+	<p>
+		The code for this application can be found on <a
+			href="https://github.com/ScriptRaccoon/mind-echoes"
+			target="_blank">GitHub</a
+		>.
+	</p>
 </main>
 
 <style>
