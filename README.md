@@ -77,11 +77,13 @@ erDiagram
     }
 
     registration_requests {
-        id int PK
+        id text PK
+        username text
+        email text
+        user_id int
         code int
-        user_id int FK
-        created_at text
-        expires_at text
+        device_id text
+        expires_at int
     }
 
     email_change_requests {
