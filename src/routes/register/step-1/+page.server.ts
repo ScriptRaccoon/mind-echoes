@@ -18,41 +18,23 @@ export const actions: Actions = {
 		const username_parsed = v.safeParse(username_schema, username)
 
 		if (!username_parsed.success) {
-			return fail(400, {
-				username,
-				email,
-				error: username_parsed.issues[0].message,
-			})
+			return fail(400, { username, email, error: username_parsed.issues[0].message })
 		}
 
 		const email_parsed = v.safeParse(email_schema, email)
 
 		if (!email_parsed.success) {
-			return fail(400, {
-				username,
-				email,
-				error: email_parsed.issues[0].message,
-			})
+			return fail(400, { username, email, error: email_parsed.issues[0].message })
 		}
 
 		const sql_user = `SELECT id FROM users WHERE username = ? OR email = ?`
 
 		const { rows: users, err: err_users } = await query(sql_user, [username, email])
 
-		if (err_users) {
-			return fail(500, {
-				username,
-				email,
-				error: 'Datebase error',
-			})
-		}
+		if (err_users) return fail(500, { username, email, error: 'Datebase error' })
 
 		if (users.length) {
-			return fail(409, {
-				username,
-				email,
-				error: 'Username or email is already taken',
-			})
+			return fail(409, { username, email, error: 'Username or email is already taken' })
 		}
 
 		const registration_id = generate_id()
@@ -67,17 +49,9 @@ export const actions: Actions = {
 
 		if (err) {
 			if (is_constraint_error(err)) {
-				return fail(409, {
-					username,
-					email,
-					error: 'Username or email is already taken',
-				})
+				return fail(409, { username, email, error: 'Username or email is already taken' })
 			}
-			return fail(500, {
-				username,
-				email,
-				error: 'Datebase error',
-			})
+			return fail(500, { username, email, error: 'Datebase error' })
 		}
 
 		event.cookies.set(COOKIE_REGISTRATION, registration_id, COOKIE_REGISTRATION_OPTIONS)

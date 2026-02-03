@@ -42,9 +42,7 @@ export const actions: Actions = {
 		const ip = event.getClientAddress()
 
 		if (!limiter.is_allowed(ip)) {
-			return fail(429, {
-				error: 'Too many invalid codes detected. Try again later.',
-			})
+			return fail(429, { error: 'Too many invalid codes detected. Try again later.' })
 		}
 
 		const registration_id = event.cookies.get(COOKIE_REGISTRATION)

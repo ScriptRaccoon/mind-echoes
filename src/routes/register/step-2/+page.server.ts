@@ -65,24 +65,18 @@ export const actions: Actions = {
 			VALUES (?,?,?)
 			RETURNING id`
 
-		const { rows: users, err } = await query<{ id: number }>(sql, [
-			username,
-			email,
-			password_hash,
-		])
+		const args_user = [username, email, password_hash]
+
+		const { rows: users, err } = await query<{ id: number }>(sql, args_user)
 
 		if (err) {
 			if (is_constraint_error(err)) {
-				return fail(409, {
-					error: 'Username or email is already taken',
-				})
+				return fail(409, { error: 'Username or email is already taken' })
 			}
 			return fail(500, { error: 'Database error' })
 		}
 
-		if (!users.length) {
-			return fail(500, { error: 'Database error' })
-		}
+		if (!users.length) return fail(500, { error: 'Database error' })
 
 		const user_id = users[0].id
 
@@ -92,9 +86,7 @@ export const actions: Actions = {
 			verify: true,
 		})
 
-		if (!device_id) {
-			return fail(500, { error: 'Database error' })
-		}
+		if (!device_id) return fail(500, { error: 'Database error' })
 
 		const code = generate_code()
 
