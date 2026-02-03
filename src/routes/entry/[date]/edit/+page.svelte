@@ -24,7 +24,7 @@
 
 <DateHeader title="Edit Echo" date={format_date(entry.date)} />
 
-<FormWrapper {form} action="?/update" buttons_reversed>
+<FormWrapper {form} action="?/update" button_direction="row-reverse">
 	{#snippet content()}
 		<EntryInputs {entry} />
 	{/snippet}

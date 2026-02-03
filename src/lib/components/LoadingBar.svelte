@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { navigating } from '$app/state'
+	import { TRANSITION_DURATION } from '$lib/client/config'
 	import { fade } from 'svelte/transition'
 </script>
 
 {#if navigating.to}
-	<div transition:fade={{ duration: 120 }}></div>
+	<div transition:fade={{ duration: TRANSITION_DURATION }}></div>
 {/if}
 
 <style>

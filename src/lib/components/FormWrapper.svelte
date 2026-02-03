@@ -5,6 +5,7 @@
 	import BlockMessage from './BlockMessage.svelte'
 	import LoadingSpinner from './LoadingSpinner.svelte'
 	import { fade } from 'svelte/transition'
+	import { TRANSITION_DURATION } from '$lib/client/config'
 
 	type Props = {
 		action?: string
@@ -13,7 +14,7 @@
 		buttons: Snippet<[sending?: boolean]>
 		callback?: () => void
 		button_alignment?: 'space-between' | 'center'
-		buttons_reversed?: boolean
+		button_direction?: 'row' | 'row-reverse'
 	}
 
 	let {
@@ -22,8 +23,8 @@
 		content,
 		buttons,
 		callback,
-		buttons_reversed = false,
 		button_alignment = 'space-between',
+		button_direction = 'row',
 	}: Props = $props()
 
 	let sending = $state(false)
@@ -57,25 +58,27 @@
 
 	<fieldset
 		class="buttons"
-		class:reversed={buttons_reversed}
 		style:--button-alignment={button_alignment}
+		style:--button-direction={button_direction}
 		disabled={sending}
 	>
 		{@render buttons(sending)}
 		{#if show_spinner}
-			<LoadingSpinner />
+			<div transition:fade={{ duration: TRANSITION_DURATION }}>
+				<LoadingSpinner />
+			</div>
 		{/if}
 	</fieldset>
 </form>
 
 {#if !sending && form && 'error' in form}
-	<div in:fade={{ duration: 160 }}>
+	<div in:fade={{ duration: TRANSITION_DURATION }}>
 		<BlockError content={form.error} />
 	</div>
 {/if}
 
 {#if !sending && form && 'message' in form}
-	<div in:fade={{ duration: 160 }}>
+	<div in:fade={{ duration: TRANSITION_DURATION }}>
 		<BlockMessage content={form.message} />
 	</div>
 {/if}
@@ -86,10 +89,7 @@
 		display: flex;
 		gap: 0.5rem;
 		justify-content: var(--button-alignment);
+		flex-direction: var(--button-direction);
 		align-items: center;
-	}
-
-	.buttons.reversed {
-		flex-direction: row-reverse;
 	}
 </style>

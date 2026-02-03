@@ -2,7 +2,7 @@
 	import { User, SquarePlus, House, LogIn, UserPlus, BookOpen } from 'lucide-svelte'
 	import { page } from '$app/state'
 
-	let is_echo_page = $derived(
+	let is_entry_page = $derived(
 		page.url.pathname == '/dashboard' ||
 			(page.url.pathname.startsWith('/entry') &&
 				!page.url.pathname.startsWith('/entry/new')),
@@ -13,7 +13,7 @@
 	<ul>
 		{#if page.data.user}
 			<li>
-				<a href="/dashboard" aria-current={is_echo_page}>
+				<a href="/dashboard" aria-current={is_entry_page}>
 					<BookOpen /> <span>Echoes</span>
 				</a>
 			</li>
@@ -76,7 +76,7 @@
 		gap: 0.25rem;
 		flex-direction: column;
 		align-items: center;
-		transition: color 120ms ease;
+		transition: color var(--transition-duration);
 		color: var(--secondary-font-color);
 	}
 

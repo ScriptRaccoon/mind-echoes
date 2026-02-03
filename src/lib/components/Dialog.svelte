@@ -6,7 +6,7 @@
 		id?: number | string
 	}
 
-	export const dialog_state = $state<DialogState>({
+	const dialog_state = $state<DialogState>({
 		open: false,
 		question: '',
 		action: '',
@@ -42,7 +42,9 @@
 </script>
 
 <dialog bind:this={dialog_element} onclose={close_dialog} closedby="any">
-	<div class="question">{dialog_state.question}</div>
+	<div class="question">
+		{dialog_state.question}
+	</div>
 
 	<FormWrapper
 		action={dialog_state.action}

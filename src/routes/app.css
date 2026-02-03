@@ -38,6 +38,7 @@
 	--button-danger-color: rgb(186, 52, 78);
 	--heading-color: #bfdaf2;
 	--loading-bar-color: #ffff00;
+	--transition-duration: 160ms;
 }
 
 body {
@@ -86,7 +87,7 @@ textarea {
 }
 
 button {
-	transition: opacity 120ms;
+	transition: opacity var(--transition-duration);
 	outline-offset: 2px;
 }
 
