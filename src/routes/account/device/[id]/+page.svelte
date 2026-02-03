@@ -4,6 +4,7 @@
 	import { APP_TITLE } from '$lib/client/config'
 	import { localize_date } from '$lib/client/utils'
 	import { Monitor, MonitorPlay } from 'lucide-svelte'
+	import TextInput from '$lib/components/TextInput.svelte'
 
 	let { data, form } = $props()
 
@@ -58,17 +59,12 @@
 
 	<FormWrapper {form} action="?/rename_device">
 		{#snippet content()}
-			<div class="form-group">
-				<label for="label" class="label">Label</label>
-				<input
-					class="input"
-					type="text"
-					id="label"
-					name="label"
-					value={data.label}
-					defaultValue={data.label}
-				/>
-			</div>
+			<TextInput
+				name="label"
+				label="Label"
+				value={data.label}
+				defaultValue={data.label}
+			/>
 		{/snippet}
 
 		{#snippet buttons()}

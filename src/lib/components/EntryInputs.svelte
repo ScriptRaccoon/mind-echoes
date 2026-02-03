@@ -14,11 +14,11 @@
 
 	<input
 		aria-labelledby="title"
+		class="input text"
 		type="text"
 		name="title"
 		id="title"
 		value={entry?.title}
-		class="input text"
 	/>
 </section>
 
@@ -26,8 +26,8 @@
 	<h2 id="content">This is on my mind</h2>
 
 	<textarea
-		class="text input"
 		aria-labelledby="content"
+		class="input text"
 		name="content"
 		id="content"
 		{@attach resize_textarea}
@@ -40,7 +40,7 @@
 
 	<textarea
 		aria-labelledby="thanks"
-		class="text input"
+		class="input text"
 		name="thanks"
 		id="thanks"
 		{@attach resize_textarea}

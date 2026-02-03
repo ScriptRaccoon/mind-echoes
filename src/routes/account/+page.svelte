@@ -6,6 +6,7 @@
 	import { open_dialog } from '$lib/components/Dialog.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 	import { APP_TITLE } from '$lib/client/config'
+	import TextInput from '$lib/components/TextInput.svelte'
 
 	let { data, form } = $props()
 
@@ -35,18 +36,12 @@
 
 	<FormWrapper form={form?.type === 'username' ? form : null} action="?/username">
 		{#snippet content()}
-			<div class="form-group">
-				<label class="label" for="username">New username</label>
-				<input
-					class="input"
-					type="text"
-					name="username"
-					id="username"
-					value={page.data.user?.username ?? ''}
-					defaultValue={page.data.user?.username ?? ''}
-					required
-				/>
-			</div>
+			<TextInput
+				name="username"
+				label="New username"
+				value={page.data.user?.username ?? ''}
+				defaultValue={page.data.user?.username ?? ''}
+			/>
 		{/snippet}
 
 		{#snippet buttons()}
@@ -60,18 +55,13 @@
 
 	<FormWrapper form={form?.type === 'email' ? form : null} action="?/email">
 		{#snippet content()}
-			<div class="form-group">
-				<label class="label" for="email">New email</label>
-				<input
-					class="input"
-					type="email"
-					name="email"
-					id="email"
-					required
-					value={page.data.user?.email}
-					defaultValue={page.data.user?.email}
-				/>
-			</div>
+			<TextInput
+				name="email"
+				type="email"
+				label="New email"
+				value={page.data.user?.email}
+				defaultValue={page.data.user?.email}
+			/>
 		{/snippet}
 
 		{#snippet buttons()}
@@ -85,27 +75,8 @@
 
 	<FormWrapper form={form?.type === 'password' ? form : null} action="?/password">
 		{#snippet content()}
-			<div class="form-group">
-				<label class="label" for="current_password">Current password</label>
-				<input
-					class="input"
-					type="password"
-					name="current_password"
-					id="current_password"
-					required
-				/>
-			</div>
-
-			<div class="form-group">
-				<label class="label" for="new_password">New password</label>
-				<input
-					class="input"
-					type="password"
-					name="new_password"
-					id="new_password"
-					required
-				/>
-			</div>
+			<TextInput name="current_password" label="Current password" type="password" />
+			<TextInput name="new_password" label="New password" type="password" />
 		{/snippet}
 
 		{#snippet buttons()}

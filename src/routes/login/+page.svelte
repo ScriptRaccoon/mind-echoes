@@ -2,6 +2,7 @@
 	import BlockMessage from '$lib/components/BlockMessage.svelte'
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 	import { APP_TITLE } from '$lib/client/config'
+	import TextInput from '$lib/components/TextInput.svelte'
 
 	let { form, data } = $props()
 </script>
@@ -20,22 +21,12 @@
 
 <FormWrapper {form}>
 	{#snippet content()}
-		<div class="form-group">
-			<label class="label" for="identifier">Username or Email</label>
-			<input
-				class="input"
-				type="text"
-				id="identifier"
-				name="identifier"
-				required
-				value={form?.identifier ?? ''}
-			/>
-		</div>
-
-		<div class="form-group">
-			<label class="label" for="password">Password</label>
-			<input class="input" type="password" id="password" name="password" required />
-		</div>
+		<TextInput
+			name="identifier"
+			label="Username or Email"
+			value={form?.identifier ?? ''}
+		/>
+		<TextInput name="password" label="Password" type="password" />
 	{/snippet}
 
 	{#snippet buttons()}

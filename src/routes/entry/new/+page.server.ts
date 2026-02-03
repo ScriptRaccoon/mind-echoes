@@ -15,17 +15,17 @@ export const actions: Actions = {
 		const date_parsed = v.safeParse(date_string_schema, date)
 
 		if (!date_parsed.success) {
-			return fail(400, { date, error: date_parsed.issues[0].message })
+			return fail(400, { error: date_parsed.issues[0].message })
 		}
 
 		const sql = 'SELECT id FROM entries WHERE date = ? AND user_id = ?'
 
 		const { rows: entries, err } = await query<{ id: number }>(sql, [date, user.id])
 
-		if (err) return fail(500, { date, error: 'Database error' })
+		if (err) return fail(500, { error: 'Database error' })
 
 		if (entries.length) {
-			return fail(409, { date, error: 'An echo already exists for this date' })
+			return fail(409, { error: 'An echo already exists for this date' })
 		}
 
 		redirect(303, `/entry/new/${date}`)

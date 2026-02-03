@@ -1,12 +1,11 @@
 <script lang="ts">
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 	import { APP_TITLE } from '$lib/client/config'
+	import TextInput from '$lib/components/TextInput.svelte'
 
 	let { form } = $props()
 
 	const today = new Date().toLocaleDateString('en-CA')
-
-	let selected_date = $derived<string>(form?.date ?? today)
 </script>
 
 <svelte:head>
@@ -19,17 +18,7 @@
 
 <FormWrapper {form}>
 	{#snippet content()}
-		<div class="form-group">
-			<label class="label" for="date">Choose a date</label>
-			<input
-				class="input"
-				type="date"
-				name="date"
-				id="date"
-				bind:value={selected_date}
-				required
-			/>
-		</div>
+		<TextInput name="date" label="Choose a date" type="date" value={today} />
 	{/snippet}
 
 	{#snippet buttons()}

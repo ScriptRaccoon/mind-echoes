@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 	import { APP_TITLE } from '$lib/client/config'
+	import TextInput from '$lib/components/TextInput.svelte'
 
 	let { data, form } = $props()
 </script>
@@ -17,17 +18,11 @@
 
 <FormWrapper {form}>
 	{#snippet content()}
-		<div class="form-group">
-			<label class="label" for="device_label">Name this new device</label>
-			<input
-				class="input"
-				type="text"
-				name="device_label"
-				id="device_label"
-				required
-				value={form?.device_label ?? data.device_label}
-			/>
-		</div>
+		<TextInput
+			name="device_label"
+			label="Name this device"
+			value={form?.device_label ?? data.device_label}
+		/>
 	{/snippet}
 
 	{#snippet buttons()}

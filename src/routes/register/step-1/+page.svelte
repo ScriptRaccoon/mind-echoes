@@ -2,6 +2,7 @@
 	import FormWrapper from '$lib/components/FormWrapper.svelte'
 	import RegistrationHeader from '$lib/components/RegistrationHeader.svelte'
 	import { APP_TITLE } from '$lib/client/config'
+	import TextInput from '$lib/components/TextInput.svelte'
 
 	let { form } = $props()
 </script>
@@ -14,29 +15,8 @@
 
 <FormWrapper {form}>
 	{#snippet content()}
-		<div class="form-group">
-			<label class="label" for="email">Email</label>
-			<input
-				class="input"
-				type="email"
-				name="email"
-				id="email"
-				value={form?.email ?? ''}
-				required
-			/>
-		</div>
-
-		<div class="form-group">
-			<label class="label" for="username">Username</label>
-			<input
-				class="input"
-				type="text"
-				name="username"
-				id="username"
-				value={form?.username ?? ''}
-				required
-			/>
-		</div>
+		<TextInput name="email" type="email" label="Email" value={form?.email ?? ''} />
+		<TextInput name="username" label="Username" value={form?.username ?? ''} />
 	{/snippet}
 
 	{#snippet buttons()}
