@@ -1,11 +1,9 @@
-export const COOKIE_REGISTER = 'register_session_id'
+export const COOKIE_REGISTRATION = 'registration_id'
 
-type ResitrationState = {
-	expires_at: number
-	username: string
-	email: string
-	user_id?: number
-	device_id?: string
-}
-
-export const registration_cache: Map<string, ResitrationState> = new Map()
+export const COOKIE_REGISTRATION_OPTIONS = {
+	path: '/',
+	sameSite: 'strict',
+	httpOnly: true,
+	secure: true,
+	maxAge: 60 * 60, // 1 hour
+} as const

@@ -2,9 +2,12 @@ import { fail, redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 import * as v from 'valibot'
 import { email_schema, username_schema } from '$lib/server/schemas'
-import crypto from 'node:crypto'
-import { COOKIE_REGISTER, registration_cache } from '$lib/server/registration'
-import { query } from '$lib/server/db'
+import { is_constraint_error, query } from '$lib/server/db'
+import { generate_id } from '$lib/server/utils'
+import {
+	COOKIE_REGISTRATION,
+	COOKIE_REGISTRATION_OPTIONS,
+} from '$lib/server/registration'
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -32,19 +35,19 @@ export const actions: Actions = {
 			})
 		}
 
-		const sql = `SELECT id FROM users WHERE username = ? OR email = ?`
+		const sql_user = `SELECT id FROM users WHERE username = ? OR email = ?`
 
-		const { rows, err } = await query(sql, [username, email])
+		const { rows: users, err: err_users } = await query(sql_user, [username, email])
 
-		if (err) {
-			return fail(400, {
+		if (err_users) {
+			return fail(500, {
 				username,
 				email,
 				error: 'Datebase error',
 			})
 		}
 
-		if (rows.length) {
+		if (users.length) {
 			return fail(409, {
 				username,
 				email,
@@ -52,21 +55,32 @@ export const actions: Actions = {
 			})
 		}
 
-		const register_session_id = crypto.randomUUID()
+		const registration_id = generate_id()
+		const expires_at = Date.now() + 1000 * 60 * 60 // after 1 hour
 
-		registration_cache.set(register_session_id, {
-			expires_at: Date.now() + 1000 * 60 * 60, // after 1 hour
-			username,
-			email,
-		})
+		const sql = `
+			INSERT INTO registration_requests
+				(id, username, email, expires_at)
+			VALUES (?, ?, ?, ?)`
 
-		event.cookies.set(COOKIE_REGISTER, register_session_id, {
-			path: '/',
-			sameSite: 'strict',
-			httpOnly: true,
-			secure: true,
-			maxAge: 60 * 60, // 1 hour
-		})
+		const { err } = await query(sql, [registration_id, username, email, expires_at])
+
+		if (err) {
+			if (is_constraint_error(err)) {
+				return fail(409, {
+					username,
+					email,
+					error: 'Username or email is already taken',
+				})
+			}
+			return fail(500, {
+				username,
+				email,
+				error: 'Datebase error',
+			})
+		}
+
+		event.cookies.set(COOKIE_REGISTRATION, registration_id, COOKIE_REGISTRATION_OPTIONS)
 
 		redirect(303, '/register/step-2')
 	},

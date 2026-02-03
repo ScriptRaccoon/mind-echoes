@@ -8,6 +8,16 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS registration_requests (
+    id TEXT PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    expires_at INTEGER NOT NULL,
+    user_id INTEGER,
+    device_id TEXT,
+    code INTEGER
+);
+
 CREATE TABLE IF NOT EXISTS devices (
     id TEXT PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -34,15 +44,6 @@ CREATE TABLE IF NOT EXISTS entries (
 );
 
 CREATE INDEX IF NOT EXISTS idx_entries_user ON entries (user_id);
-
-CREATE TABLE IF NOT EXISTS registration_requests (
-    id INTEGER PRIMARY KEY,
-    code INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expires_at TEXT NOT NULL DEFAULT (datetime ('now', '+10 minutes')),
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-);
 
 CREATE TABLE IF NOT EXISTS email_change_requests (
     token TEXT PRIMARY KEY,

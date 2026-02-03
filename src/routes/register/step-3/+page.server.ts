@@ -1,50 +1,43 @@
 import { error, fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
-import { COOKIE_REGISTER } from '$lib/server/registration'
-import { registration_cache } from '$lib/server/registration'
 import { batched_query, query } from '$lib/server/db'
 import { send_registration_email } from '$lib/server/email'
-import { generate_code } from '$lib/server/utils'
 import { RateLimiter } from '$lib/server/ratelimit'
+import type { RegistrationRequest } from '$lib/client/types'
+import { COOKIE_REGISTRATION } from '$lib/server/registration'
 import { set_auth_cookie } from '$lib/server/auth'
 
 export const load: PageServerLoad = async (event) => {
-	const register_id = event.cookies.get(COOKIE_REGISTER)
-	if (!register_id) {
-		console.error('no register id')
-		error(403, 'Forbidden')
-	}
+	const registration_id = event.cookies.get(COOKIE_REGISTRATION)
+	if (!registration_id) error(403, 'Forbidden')
 
-	const progress = registration_cache.get(register_id)
-	if (!progress || !progress.user_id || !progress.device_id) {
-		console.error('insufficient progress:', progress)
-		error(403, 'Forbidden')
-	}
+	const sql_request = `
+		SELECT username, email, code
+		FROM registration_requests
+		WHERE id = ? AND expires_at < CURRENT_TIMESTAMP
+		AND user_id IS NOT NULL
+		AND device_id IS NOT NULL
+		AND code IS NOT NULL`
 
-	if (progress.expires_at <= Date.now()) {
-		console.error('session expired')
-		error(403, 'Session expired')
-	}
-
-	const { username, email, user_id } = progress
-
-	const code = generate_code()
-
-	const sql = 'INSERT INTO registration_requests (code, user_id) VALUES (?,?)'
-
-	const { err } = await query(sql, [code, user_id])
+	const { rows, err } = await query<RegistrationRequest>(sql_request, [registration_id])
 
 	if (err) error(500, 'Database error')
 
+	if (!rows.length) error(403, 'Forbidden')
+
+	const { username, email, code } = rows[0]
+
 	try {
-		await send_registration_email(username, email, code)
+		await send_registration_email(username, email, code!)
 	} catch (err) {
 		console.error(err)
 		error(500, 'Failed to send verification email')
 	}
 }
 
-const limiter = new RateLimiter({ limit: 2, window_ms: 60_000 })
+// TODO: change back to 2
+
+const limiter = new RateLimiter({ limit: 200, window_ms: 60_000 })
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -56,24 +49,27 @@ export const actions: Actions = {
 			})
 		}
 
-		const register_id = event.cookies.get(COOKIE_REGISTER)
-		if (!register_id) {
-			console.error('no register id')
-			return fail(403, { error: 'Forbidden' })
-		}
+		const registration_id = event.cookies.get(COOKIE_REGISTRATION)
+		if (!registration_id) error(403, 'Forbidden')
 
-		const progress = registration_cache.get(register_id)
-		if (!progress || !progress.user_id || !progress.device_id) {
-			console.error('in sufficient progress:', progress)
-			return fail(403, { error: 'Forbidden' })
-		}
+		const sql_request = `
+			SELECT user_id, username, email, device_id, code
+			FROM registration_requests
+			WHERE id = ? AND expires_at < CURRENT_TIMESTAMP
+			AND user_id IS NOT NULL
+			AND device_id IS NOT NULL
+			AND code IS NOT NULL`
 
-		if (progress.expires_at <= Date.now()) {
-			console.error('session expired')
-			return fail(403, { error: 'Session expired' })
-		}
+		const { rows: requests, err: err_requests } = await query<RegistrationRequest>(
+			sql_request,
+			[registration_id],
+		)
 
-		const { user_id, username, email, device_id } = progress
+		if (err_requests) return fail(500, { error: 'Database error' })
+
+		if (!requests.length) return fail(403, { error: 'Forbidden' })
+
+		const { user_id, username, email, code: actual_code, device_id } = requests[0]
 
 		const form = await event.request.formData()
 
@@ -81,23 +77,9 @@ export const actions: Actions = {
 
 		if (!code) return fail(400, { error: 'Code required' })
 
-		const sql_request = `
-			SELECT id FROM registration_requests
-			WHERE user_id = ? AND code = ? AND expires_at > CURRENT_TIMESTAMP`
-
-		const { rows: requests, err: err_request } = await query<{ id: number }>(
-			sql_request,
-			[user_id, code],
-		)
-
-		if (err_request) return fail(500, { error: 'Database error' })
-
-		if (!requests.length) {
-			limiter.record(ip)
+		if (parseInt(code) !== actual_code) {
 			return fail(401, { error: 'Invalid code' })
 		}
-
-		const request_id = requests[0].id
 
 		const sql_verify = `
 			UPDATE users
@@ -116,7 +98,7 @@ export const actions: Actions = {
 			[
 				{ sql: sql_verify, args: [user_id] },
 				{ sql: sql_login_date, args: [device_id] },
-				{ sql: sql_clean, args: [request_id] },
+				{ sql: sql_clean, args: [registration_id] },
 			],
 			'write',
 		)
@@ -125,9 +107,9 @@ export const actions: Actions = {
 
 		limiter.clear(ip)
 
-		event.cookies.delete(COOKIE_REGISTER, { path: '/' })
+		event.cookies.delete(COOKIE_REGISTRATION, { path: '/' })
 
-		set_auth_cookie(event, { id: user_id, email, username })
+		set_auth_cookie(event, { id: user_id!, email, username })
 
 		redirect(303, `/dashboard`)
 	},

@@ -22,3 +22,11 @@ export type Device = {
 	created_at: string
 	last_login_at: string | null
 }
+
+export type RegistrationRequest = {
+	username: string
+	email: string
+	user_id?: number
+	device_id?: string
+	code?: number
+}

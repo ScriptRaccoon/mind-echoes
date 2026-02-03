@@ -3,29 +3,16 @@ import bcrypt from 'bcrypt'
 import type { Actions, PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { password_schema } from '$lib/server/schemas'
-import { COOKIE_REGISTER, registration_cache } from '$lib/server/registration'
 import { query, is_constraint_error } from '$lib/server/db'
 import { RateLimiter } from '$lib/server/ratelimit'
-import { get_device_label } from '$lib/server/utils'
+import { generate_code, get_device_label } from '$lib/server/utils'
 import { save_device } from '$lib/server/devices'
+import { COOKIE_REGISTRATION } from '$lib/server/registration'
+import type { RegistrationRequest } from '$lib/client/types'
 
 export const load: PageServerLoad = async (event) => {
-	const register_id = event.cookies.get(COOKIE_REGISTER)
-	if (!register_id) {
-		console.error('no register id')
-		error(403, 'Forbidden')
-	}
-
-	const progress = registration_cache.get(register_id)
-	if (!progress) {
-		console.error('no progress')
-		error(403, 'Forbidden')
-	}
-
-	if (progress.expires_at <= Date.now()) {
-		console.error('session expired')
-		error(403, 'Session expired')
-	}
+	const register_id = event.cookies.get(COOKIE_REGISTRATION)
+	if (!register_id) error(403, 'Forbidden')
 }
 
 const limiter = new RateLimiter({ limit: 1, window_ms: 30_000 })
@@ -35,29 +22,26 @@ export const actions: Actions = {
 		const ip = event.getClientAddress()
 
 		if (!limiter.is_allowed(ip)) {
-			return fail(429, {
-				error: 'Too many registrations. Try again later.',
-			})
+			return fail(429, { error: 'Too many registrations. Try again later.' })
 		}
 
-		const register_id = event.cookies.get(COOKIE_REGISTER)
-		if (!register_id) {
-			console.error('no register id')
-			return fail(403, { error: 'Forbidden' })
-		}
+		const registration_id = event.cookies.get(COOKIE_REGISTRATION)
+		if (!registration_id) return fail(403, { error: 'Forbidden' })
 
-		const progress = registration_cache.get(register_id)
-		if (!progress) {
-			console.error('no progress')
-			return fail(403, { error: 'Forbidden' })
-		}
+		const sql_request = `
+			SELECT username, email FROM registration_requests
+			WHERE id = ? AND expires_at < CURRENT_TIMESTAMP`
 
-		if (progress.expires_at <= Date.now()) {
-			console.error('session expired')
-			return fail(403, { error: 'Session expired' })
-		}
+		const { rows: requests, err: err_requests } = await query<RegistrationRequest>(
+			sql_request,
+			[registration_id],
+		)
 
-		const { username, email } = progress
+		if (err_requests) return fail(500, { error: 'Database error' })
+
+		if (!requests.length) return fail(403, { error: 'Forbidden' })
+
+		const { username, email } = requests[0]
 
 		const form = await event.request.formData()
 		const password = form.get('password') as string
@@ -112,7 +96,18 @@ export const actions: Actions = {
 			return fail(500, { error: 'Database error' })
 		}
 
-		registration_cache.set(register_id, { ...progress, user_id, device_id })
+		const code = generate_code()
+
+		const sql_update_request = `
+			UPDATE registration_requests
+			SET user_id = ?, device_id = ?, code = ?
+			WHERE id = ?`
+
+		const args = [user_id, device_id, code, registration_id]
+
+		const { err: err_update } = await query(sql_update_request, args)
+
+		if (err_update) return fail(500, { error: 'Database error' })
 
 		limiter.record(ip)
 
