@@ -11,12 +11,19 @@ import { save_device } from '$lib/server/devices'
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(COOKIE_REGISTER)
-	if (!register_id) error(403, 'Forbidden')
+	if (!register_id) {
+		console.error('no register id')
+		error(403, 'Forbidden')
+	}
 
 	const progress = registration_cache.get(register_id)
-	if (!progress) error(403, 'Forbidden')
+	if (!progress) {
+		console.error('no progress')
+		error(403, 'Forbidden')
+	}
 
 	if (progress.expires_at <= Date.now()) {
+		console.error('session expired')
 		error(403, 'Session expired')
 	}
 }
@@ -34,12 +41,19 @@ export const actions: Actions = {
 		}
 
 		const register_id = event.cookies.get(COOKIE_REGISTER)
-		if (!register_id) return fail(403, { error: 'Forbidden' })
+		if (!register_id) {
+			console.error('no register id')
+			return fail(403, { error: 'Forbidden' })
+		}
 
 		const progress = registration_cache.get(register_id)
-		if (!progress) return fail(403, { error: 'Forbidden' })
+		if (!progress) {
+			console.error('no progress')
+			return fail(403, { error: 'Forbidden' })
+		}
 
 		if (progress.expires_at <= Date.now()) {
+			console.error('session expired')
 			return fail(403, { error: 'Session expired' })
 		}
 
