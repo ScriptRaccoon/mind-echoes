@@ -44,6 +44,10 @@
 		border-radius: 100vw;
 		font-size: 0.75rem;
 		color: var(--secondary-font-color);
+		transition:
+			color var(--transition-duration),
+			background-color var(--transition-duration),
+			border-color var(--transition-duration);
 	}
 
 	.year[aria-current='true'] {
