@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Entry } from '$lib/client/types'
+	import type { Entry } from '$lib/shared/types'
 	import { resize_textarea } from '$lib/client/utils'
 
 	type Props = {

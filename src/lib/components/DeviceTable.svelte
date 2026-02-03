@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Device } from '$lib/client/types'
+	import type { Device } from '$lib/shared/types'
 	import { localize_date } from '$lib/client/utils'
 	import { Monitor, MonitorPlay, Settings } from 'lucide-svelte'
 

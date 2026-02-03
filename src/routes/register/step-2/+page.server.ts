@@ -8,7 +8,7 @@ import { RateLimiter } from '$lib/server/ratelimit'
 import { generate_code, get_device_label } from '$lib/server/utils'
 import { save_device } from '$lib/server/devices'
 import { COOKIE_REGISTRATION } from '$lib/server/registration'
-import type { RegistrationRequest } from '$lib/client/types'
+import type { RegistrationRequest } from '$lib/shared/types'
 
 export const load: PageServerLoad = async (event) => {
 	const register_id = event.cookies.get(COOKIE_REGISTRATION)

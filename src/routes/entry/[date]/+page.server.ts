@@ -1,7 +1,7 @@
 import { batched_query } from '$lib/server/db'
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
-import type { Entry, Entry_DB } from '$lib/client/types'
+import type { Entry, Entry_DB } from '$lib/shared/types'
 import { decrypt_entry } from '$lib/server/encryption'
 import { is_valid_date } from '$lib/server/schemas'
 

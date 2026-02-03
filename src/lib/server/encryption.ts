@@ -1,7 +1,7 @@
 import crypto from 'node:crypto'
 import { ENCRYPTION_KEY } from '$env/static/private'
 
-import type { Entry, Entry_DB, Entry_DB_Summary, Entry_Summary } from '$lib/client/types'
+import type { Entry, Entry_DB, Entry_DB_Summary, Entry_Summary } from '$lib/shared/types'
 
 const key = crypto.createHash('sha256').update(ENCRYPTION_KEY).digest()
 

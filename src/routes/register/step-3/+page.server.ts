@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types'
 import { batched_query, query } from '$lib/server/db'
 import { send_registration_email } from '$lib/server/email'
 import { RateLimiter } from '$lib/server/ratelimit'
-import type { RegistrationRequest } from '$lib/client/types'
+import type { RegistrationRequest } from '$lib/shared/types'
 import { COOKIE_REGISTRATION } from '$lib/server/registration'
 import { set_auth_cookie } from '$lib/server/auth'
 

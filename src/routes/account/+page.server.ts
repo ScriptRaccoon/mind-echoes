@@ -6,7 +6,7 @@ import type { PageServerLoad } from './$types'
 import * as v from 'valibot'
 import { username_schema, password_schema, email_schema } from '$lib/server/schemas'
 import { delete_device_cookie } from '$lib/server/devices'
-import type { Device } from '$lib/client/types'
+import type { Device } from '$lib/shared/types'
 import { send_email_change_email } from '$lib/server/email'
 import { generate_token } from '$lib/server/utils'
 
