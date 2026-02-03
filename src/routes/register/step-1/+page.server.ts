@@ -27,31 +27,30 @@ export const actions: Actions = {
 			return fail(400, { username, email, error: email_parsed.issues[0].message })
 		}
 
-		const sql_user = `SELECT id FROM users WHERE username = ? OR email = ?`
-
-		const { rows: users, err: err_users } = await query(sql_user, [username, email])
-
-		if (err_users) return fail(500, { username, email, error: 'Datebase error' })
-
-		if (users.length) {
-			return fail(409, { username, email, error: 'Username or email is already taken' })
-		}
-
 		const registration_id = generate_id()
 		const expires_at = Date.now() + 1000 * 60 * 60 // after 1 hour
 
 		const sql = `
 			INSERT INTO registration_requests
 				(id, username, email, expires_at)
-			VALUES (?, ?, ?, ?)`
+			SELECT ?, ?, ?, ?
+			WHERE NOT EXISTS
+				(SELECT 1 FROM users WHERE username = ? OR email = ?)`
 
-		const { err } = await query(sql, [registration_id, username, email, expires_at])
+		const args = [registration_id, username, email, expires_at, username, email]
+		const { rows_affected, err } = await query(sql, args)
 
 		if (err) {
 			if (is_constraint_error(err)) {
+				// someone else is currently registering with the same name / email
 				return fail(409, { username, email, error: 'Username or email is already taken' })
 			}
-			return fail(500, { username, email, error: 'Datebase error' })
+			return fail(500, { username, email, error: 'Database error' })
+		}
+
+		if (!rows_affected) {
+			// someone else has registered with the same name / email
+			return fail(409, { username, email, error: 'Username or email is already taken' })
 		}
 
 		event.cookies.set(COOKIE_REGISTRATION, registration_id, COOKIE_REGISTRATION_OPTIONS)

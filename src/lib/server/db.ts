@@ -22,11 +22,11 @@ export function is_constraint_error(err: LibsqlError): boolean {
 export async function query<T = any>(sql: string, args?: any[]) {
 	try {
 		const res = args ? await db.execute(sql, args) : await db.execute(sql)
-		return { rows: res.rows as T[], err: null }
+		return { rows: res.rows as T[], err: null, rows_affected: res.rowsAffected }
 	} catch (err) {
 		const libsql_error = err as LibsqlError
 		console.error(libsql_error)
-		return { rows: null, err: libsql_error }
+		return { rows: null, err: libsql_error, rows_affected: 0 }
 	}
 }
 
