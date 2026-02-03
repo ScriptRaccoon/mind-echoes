@@ -40,6 +40,7 @@ The following third-party libraries are used:
 - `my-ua-parser` - generates human-readable device labels
 - `nodemailer` - handles email delivery
 - `valibot` - performs schema-based validation of all user input
+- `@netlify/functions` — runs scheduled background tasks for regular database cleanup
 
 ## Database structure
 
