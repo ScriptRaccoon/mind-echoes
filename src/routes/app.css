@@ -5,7 +5,7 @@
 	font-weight: 200 1000;
 	font-style: normal;
 	font-display: swap;
-	src: url('/fonts/Nunito/Nunito-VariableFont_wght.woff2') format('woff2');
+	src: url('/fonts/Nunito-VariableFont_wght.woff2') format('woff2');
 }
 
 @font-face {
@@ -13,7 +13,7 @@
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
-	src: url('/fonts/Klee_One/KleeOne-Regular.woff2') format('woff2');
+	src: url('/fonts/KleeOne-Regular.woff2') format('woff2');
 }
 
 * {
