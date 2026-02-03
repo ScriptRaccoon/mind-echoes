@@ -49,7 +49,6 @@ export async function send_registration_email(
 		`Thank you for registering with ${APP_TITLE}.`,
 		'Please use the following code to complete your registration:',
 		String(code),
-		'This code is valid for 10 minutes.',
 	])
 
 	await send_email({ to, subject, text })
